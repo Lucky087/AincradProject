@@ -1,6 +1,8 @@
 class_name InventoryUI
 extends CanvasLayer
 
+# gdlint: disable=max-returns
+
 ## Keyboard-controlled presentation for PlayerInventory.
 ##
 ## The UI owns only selection and visibility state. All item ownership and
@@ -44,6 +46,7 @@ var _damage_label: Label = null
 var _setup_is_valid: bool = false
 var _is_open: bool = false
 var _previous_mouse_mode: Input.MouseMode = Input.MOUSE_MODE_CAPTURED
+var _external_open_blocked: bool = false
 
 
 func _ready() -> void:
@@ -68,6 +71,11 @@ func _exit_tree() -> void:
 
 func _input(event: InputEvent) -> void:
 	if not _setup_is_valid:
+		return
+
+	if _external_open_blocked:
+		if event.is_action_pressed(TOGGLE_INVENTORY_ACTION):
+			get_viewport().set_input_as_handled()
 		return
 
 	if event is InputEventKey:
@@ -128,6 +136,13 @@ func close_inventory() -> void:
 
 func is_inventory_open() -> bool:
 	return _is_open
+
+
+## Blocks the inventory hotkey while another modal UI owns player input.
+func set_external_open_blocked(is_blocked: bool) -> void:
+	_external_open_blocked = is_blocked
+	if is_blocked and _is_open:
+		close_inventory()
 
 
 func _refresh_inventory() -> void:

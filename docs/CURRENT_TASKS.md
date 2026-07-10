@@ -1,8 +1,8 @@
 # Current Tasks
 
 **Project:** Aincrad-Inspired RPG  
-**Current milestone:** M8 — Inventory, Items, and Weapon Equipment  
-**Current phase:** Inventory/equipment implementation package created; local Godot verification remains  
+**Current milestone:** M9 — Gold, Loot Drops, and Shop NPC
+**Current phase:** Gold/loot/shop implementation package created; local Godot verification remains
 **Last updated:** 2026-07-11
 
 ---
@@ -21,28 +21,29 @@
 
 ## 2. Current Milestone Goal
 
-Add one player-owned inventory and weapon-equipment component without replacing
-movement, interaction, combat, health, progression, quest, or save systems.
+Add one reusable player wallet, per-death boar gold and material loot, and one
+primitive weapon shop without replacing inventory, combat, interaction, quest,
+or save ownership boundaries.
 
 The milestone should prove that:
 
-- Item design data is stored in reusable `ItemDefinition` resources.
-- Runtime quantities and equipment remain owned by `PlayerInventory`.
-- A new player starts with one Training Sword equipped.
-- The Training Sword deals 25 damage through the existing combat hit window.
-- The existing chest grants one Bronze Sword and cannot duplicate it.
-- The Bronze Sword can be selected and equipped through a keyboard UI.
-- Equipping Bronze Sword changes sword damage to 35 immediately.
-- Unequipping prevents sword attacks from applying damage.
-- Opening inventory disables movement, attacks, and interactions.
-- Escape closes inventory before changing mouse capture.
-- Save version 2 stores stable item IDs, quantities, and equipped weapon ID.
-- Save version 1 remains loadable and receives safe starter inventory defaults.
-- Every M1–M7 feature remains functional.
+- `PlayerWallet` owns all player gold and prevents negative balances.
+- A valid wild-boar death grants the killing player 12 gold exactly once.
+- Existing 40 XP and Boar Hunt progress still occur independently.
+- Each boar life performs one configurable 50-percent Boar Tusk drop roll.
+- Temporary world pickups add stable item IDs to `PlayerInventory` automatically.
+- Pickups disappear after loading and are not part of persistent save data.
+- Boar Tusks stack up to 99 through the existing inventory rules.
+- The shopkeeper opens a modal shop through the existing E interaction system.
+- Iron Sword costs 50 gold, cannot duplicate, and deals 45 damage when equipped.
+- Purchases validate ownership, inventory capacity, and gold before spending.
+- Save version 3 stores wallet data while versions 1 and 2 remain loadable.
+- Every M1–M8 feature remains functional.
 
-Armour, consumable effects, crafting, shops, gold, random loot, drag-and-drop,
-multiple equipment slots, multiplayer inventory, item icons, and external assets
-remain outside this milestone.
+Selling, armour, crafting, consumable effects, multiple currencies, random shop
+inventories, multiplayer trading, detailed graphics, and external assets remain
+outside this milestone.
+
 ---
 
 ## 3. M0 — Project Foundation
@@ -641,45 +642,125 @@ M8 is complete after all local checks pass.
 
 ---
 
-## 12. Current Work Limit
+## 12. M9 — Gold, Loot Drops, and Shop NPC
 
-Do not add the following during M8:
+### Player wallet and HUD
 
-- Armour or additional equipment slots.
-- Consumable effects, item weight, crafting, shops, or gold.
-- Random loot tables or enemy item drops.
-- Drag-and-drop inventory controls.
-- Detailed icons, models, or external assets.
-- Multiplayer inventory or server authority.
-- Additional quests or item-based quest objectives.
-- A main menu or multiple save slots.
+- [x] Create `scripts/components/player_wallet.gd`.
+- [x] Add `PlayerWallet` as a direct player child with zero starting gold.
+- [x] Add non-negative add, spend, affordability, save, and load interfaces.
+- [x] Add a typed gold-changed signal.
+- [x] Create `scenes/ui/gold_ui.tscn` and `scripts/ui/gold_ui.gd`.
+- [x] Place the gold display at the upper-right without replacing existing HUD.
 
-M8 is only reusable item definitions, player-owned inventory stacks, one weapon
-slot, existing chest reward integration, keyboard inventory UI, combat damage
-integration, and version-2 save compatibility.
+### Boar rewards and loot
+
+- [x] Preserve the existing 40 XP and quest-progress paths.
+- [x] Add a configurable 12-gold reward to the killing player.
+- [x] Limit gold to one award per spawned boar life.
+- [x] Reset the gold gate only when the boar respawns.
+- [x] Create the `boar_tusk` material definition with maximum stack 99.
+- [x] Create one primitive `WorldItemPickup` Area3D scene.
+- [x] Add a configurable 50-percent per-life drop roll.
+- [x] Add deterministic seed injection for repeatable local testing.
+- [x] Restrict a spawned drop to the player responsible for the killing hit.
+- [x] Remove pickups only after inventory insertion succeeds.
+- [x] Remove active temporary pickups after a successful save load.
+
+### Shop and Iron Sword
+
+- [x] Create the 45-damage `iron_sword` item definition.
+- [x] Register Boar Tusk and Iron Sword in `PlayerInventory`.
+- [x] Add `PlayerInventory.can_add_item()` for full transaction validation.
+- [x] Create a primitive shopkeeper without replacing existing NPCs.
+- [x] Open the shop through the existing E interaction system.
+- [x] Create a keyboard-controlled modal shop UI.
+- [x] Display player gold, price, damage, description, and purchase status.
+- [x] Disable movement, combat, interaction, and inventory opening while shopping.
+- [x] Close the shop with Escape before mouse capture changes.
+- [x] Validate ownership, slot capacity, and affordability before spending.
+- [x] Remove exactly 50 gold and add exactly one Iron Sword on success.
+- [x] Refund gold if the final inventory insertion unexpectedly fails.
+- [x] Prevent duplicate purchases and repeated-key transactions.
+
+### Save compatibility
+
+- [x] Increase the save writer to version 3.
+- [x] Save wallet data through `PlayerWallet.get_save_data()`.
+- [x] Restore wallet data through `PlayerWallet.load_save_data()`.
+- [x] Continue accepting versions 1 and 2.
+- [x] Use zero gold when an older save has no wallet section.
+- [x] Preserve existing player, health, progression, quest, inventory, and equipment data.
+
+### File safety and documentation
+
+- [x] Preserve every existing file and folder path.
+- [x] Create only files inside approved existing folders.
+- [x] Do not manually create, edit, or delete `.uid` files.
+- [x] Add `docs/MILESTONE_9_SETUP.md`.
+- [x] Update `docs/CURRENT_TASKS.md` and `docs/DECISION_LOG.md`.
+
+### Local verification still required
+
+- [~] Open the project in Godot 4.7 and allow new script UIDs to be generated.
+- [ ] Confirm the player starts with Gold: 0.
+- [ ] Confirm each boar death grants exactly 12 gold once.
+- [ ] Confirm existing 40 XP and quest progress still work.
+- [ ] Confirm the deterministic 50-percent sequence produces drops and non-drops.
+- [ ] Confirm Boar Tusk pickups collect automatically and stack correctly.
+- [ ] Confirm pickups remain when inventory insertion fails.
+- [ ] Confirm existing pickups disappear after loading.
+- [ ] Confirm the shop blocks gameplay controls and inventory opening.
+- [ ] Confirm an unaffordable purchase removes no gold.
+- [ ] Confirm Iron Sword costs exactly 50 gold and cannot duplicate.
+- [ ] Confirm Iron Sword deals 45 damage through existing combat.
+- [ ] Save and reload gold, tusks, Iron Sword, and equipped weapon.
+- [ ] Load version-1 and version-2 saves without crashing and confirm zero-gold fallback.
+- [ ] Confirm all M1–M8 behavior remains functional.
+- [ ] Confirm no critical debugger errors appear.
+
+M9 is complete after all local checks pass.
 
 ---
 
-## 13. Next Milestone Preview
+## 13. Current Work Limit
 
-## M9 — Floor 1 Vertical Slice
+Do not add the following during M9:
+
+- Selling items or player-to-player trading.
+- Armour, extra equipment slots, or consumable effects.
+- Crafting, item weight, gold sinks, or multiple currencies.
+- Random or rotating shop inventories.
+- Persistent world-drop state or loot containers.
+- Detailed item icons, models, animation, or external assets.
+- Multiplayer authority for gold, loot, or transactions.
+- Additional enemies, shops, or currencies.
+
+M9 is only one wallet, boar gold, one material drop, one temporary pickup, one
+shopkeeper, one purchasable sword, HUD updates, and save-version compatibility.
+
+---
+
+## 14. Next Milestone Preview
+
+## M10 — Floor 1 Vertical Slice
 
 Planned tasks:
 
 - [ ] Replace the single test-space layout with a small Starting City section,
   road, and field while preserving reusable systems.
-- [ ] Place the Road Warden, chest, sign, test NPC, training target, and boar
-  encounters into a readable route.
+- [ ] Place the Road Warden, shopkeeper, chest, sign, test NPC, training target,
+  and boar encounters into a readable route.
 - [ ] Add landmarks and blocked future paths using primitive greybox geometry.
-- [ ] Preserve the complete combat, progression, quest, inventory, and save loop.
+- [ ] Preserve the complete combat, progression, quest, inventory, economy, and save loop.
 - [ ] Keep future floor zones and streaming boundaries in mind without building
   all 100 floors.
 
-Begin M9 only after M8 passes local testing.
+Begin M10 only after M9 passes local testing.
 
 ---
 
-## 14. Updated Milestone Order
+## 15. Updated Milestone Order
 
 ### M0 — Project Foundation
 
@@ -699,7 +780,7 @@ Reusable health, player HUD, primitive sword, attack hitbox, training-dummy hurt
 
 ### M4 — First Enemy
 
-One hostile primitive boar with detection, chase, attack, hit, death, return, and respawn behaviour.
+One hostile primitive boar with detection, chase, attack, hit, death, return, and respawn behavior.
 
 ### M5 — Progression
 
@@ -715,54 +796,59 @@ Versioned JSON save data and reliable restore flow.
 
 ### M8 — Inventory, Items, and Weapon Equipment
 
-Resource-driven item definitions, player inventory, one weapon slot, keyboard UI,
+Resource-driven definitions, player inventory, one weapon slot, keyboard UI,
 chest reward, combat integration, and save version 2.
 
-### M9 — Floor 1 Vertical Slice
+### M9 — Gold, Loot Drops, and Shop NPC
 
-Starting City section, road, field, landmarks, and complete route.
+Player wallet, boar gold, Boar Tusk pickup, weapon shop, Iron Sword, and save version 3.
 
-### M10 — Prototype Polish
+### M10 — Floor 1 Vertical Slice
+
+Starting City section, road, field, landmarks, economy placement, and complete route.
+
+### M11 — Prototype Polish
 
 Feedback, audio, bug fixing, performance review, and full playthrough testing.
 
-### M11 — Multiplayer Technical Test
+### M12 — Multiplayer Technical Test
 
 Only after the complete local prototype works.
 
 ---
 
-## 15. Definition of Done for Any Task
+## 16. Definition of Done for Any Task
 
 A task is done when:
 
-- The requested behaviour or document exists.
+- The requested behavior or document exists.
 - Names follow the project rules or an accepted decision-log exception.
 - Typed GDScript is used.
 - Required scene references are validated.
 - The result has been tested in Godot 4.7.
 - No new critical errors are present.
-- Existing completed behaviour still works.
+- Existing completed behavior still works.
 - Relevant documentation is updated.
 - The change is ready for a focused Git commit.
 
 ---
 
-## 16. Next Action
+## 17. Next Action
 
-Open the project in Godot 4.7 and complete the M8 test sequence in
-`docs/MILESTONE_8_SETUP.md`.
+Open the project in Godot 4.7 and complete the M9 test sequence in
+`docs/MILESTONE_9_SETUP.md`.
 
 Prioritize these exact checks:
 
 ```text
-New game:              one Training Sword owned and equipped; 25 damage
-Existing chest:        grants one Bronze Sword and never duplicates it
-Inventory I:           keyboard selection works and gameplay input is disabled
-Bronze Sword equipped: attacks deal 35 damage immediately
-U unequip:             attacks apply no damage
-Version 2 save:        both swords and Bronze equipment survive restart/load
-Version 1 save:        loads without crashing and applies starter defaults
+One boar death:        +40 XP, +12 gold, active quest +1
+Loot sequence:         both tusk drops and non-drops occur
+Pickup:                automatic collection and correct stacking
+Shop below 50 gold:    purchase fails with no gold removed
+Shop at 50+ gold:      exactly 50 removed and one Iron Sword added
+Iron Sword equipped:   attacks deal 45 damage
+Version 3 save:        gold, tusks, sword, and equipment survive restart/load
+Versions 1 and 2:      load without crashing and use zero gold
 ```
 
-Run the complete M1–M7 regression checklist before considering M8 complete.
+Run the complete M1–M8 regression checklist before considering M9 complete.

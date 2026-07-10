@@ -1,0 +1,60 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://AincradProject/scripts/items/world_item_pickup.gd" id="1_pickup"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tusk"]
+albedo_color = Color(0.88, 0.82, 0.64, 1)
+roughness = 0.55
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_glow"]
+albedo_color = Color(0.95, 0.68, 0.16, 0.72)
+emission_enabled = true
+emission = Color(0.65, 0.32, 0.03, 1)
+emission_energy_multiplier = 1.2
+transparency = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tusk"]
+material = SubResource("StandardMaterial3D_tusk")
+top_radius = 0.035
+bottom_radius = 0.16
+height = 0.8
+radial_segments = 14
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_glow"]
+material = SubResource("StandardMaterial3D_glow")
+top_radius = 0.38
+bottom_radius = 0.38
+height = 0.04
+radial_segments = 24
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_pickup"]
+radius = 0.75
+
+[node name="WorldItemPickup" type="Area3D"]
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+monitorable = false
+script = ExtResource("1_pickup")
+item_id = &"boar_tusk"
+quantity = 1
+
+[node name="GlowBase" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.05, 0)
+mesh = SubResource("CylinderMesh_glow")
+
+[node name="ItemMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.5, 0)
+rotation = Vector3(1.5707964, 0, 0.35)
+mesh = SubResource("CylinderMesh_tusk")
+
+[node name="ItemLabel" type="Label3D" parent="."]
+position = Vector3(0, 1.25, 0)
+text = "Boar Tusk"
+font_size = 24
+outline_size = 6
+billboard = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.55, 0)
+shape = SubResource("SphereShape3D_pickup")

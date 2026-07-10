@@ -1,0 +1,64 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://AincradProject/scripts/interactions/shop_npc.gd" id="1_shop_npc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
+albedo_color = Color(0.22, 0.34, 0.66, 1)
+roughness = 0.82
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_head"]
+albedo_color = Color(0.92, 0.7, 0.52, 1)
+roughness = 0.82
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_apron"]
+albedo_color = Color(0.62, 0.2, 0.12, 1)
+roughness = 0.88
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_body"]
+material = SubResource("StandardMaterial3D_body")
+radius = 0.4
+height = 1.42
+
+[sub_resource type="SphereMesh" id="SphereMesh_head"]
+material = SubResource("StandardMaterial3D_head")
+radius = 0.31
+height = 0.62
+
+[sub_resource type="BoxMesh" id="BoxMesh_apron"]
+material = SubResource("StandardMaterial3D_apron")
+size = Vector3(0.58, 0.72, 0.12)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_npc"]
+radius = 0.44
+height = 1.95
+
+[node name="ShopNpc" type="StaticBody3D"]
+collision_layer = 3
+collision_mask = 1
+script = ExtResource("1_shop_npc")
+interaction_prompt = "Press E to browse shop"
+speaker_name = "Shopkeeper"
+welcome_dialogue = "Welcome. Take a look at my wares."
+
+[node name="BodyMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.8, 0)
+mesh = SubResource("CapsuleMesh_body")
+
+[node name="HeadMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.75, 0)
+mesh = SubResource("SphereMesh_head")
+
+[node name="ApronMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.92, -0.38)
+mesh = SubResource("BoxMesh_apron")
+
+[node name="NameLabel" type="Label3D" parent="."]
+position = Vector3(0, 2.45, 0)
+text = "Shopkeeper\nWeapon Shop"
+font_size = 24
+outline_size = 6
+billboard = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.98, 0)
+shape = SubResource("CapsuleShape3D_npc")

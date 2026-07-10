@@ -14,7 +14,7 @@ signal save_completed(save_path: String)
 signal load_completed(save_path: String)
 
 const SAVE_FILE_PATH: String = "user://savegame.json"
-const SAVE_VERSION: int = 2
+const SAVE_VERSION: int = 3
 const OLDEST_SUPPORTED_SAVE_VERSION: int = 1
 const PLAYER_GROUP: StringName = &"players"
 
@@ -47,8 +47,9 @@ func save_game() -> bool:
 	var progression_component: PlayerProgression = _find_progression_component(player)
 	var quest_log: PlayerQuestLog = _find_quest_log(player)
 	var inventory: PlayerInventory = _find_inventory(player)
+	var wallet: PlayerWallet = _find_wallet(player)
 	if not _validate_required_components(
-		health_component, progression_component, quest_log, inventory, "saved"
+		health_component, progression_component, quest_log, inventory, wallet, "saved"
 	):
 		return false
 
@@ -68,6 +69,7 @@ func save_game() -> bool:
 		"progression": progression_component.get_save_data(),
 		"quests": quest_log.get_save_data(),
 		"inventory": inventory.get_save_data(),
+		"wallet": wallet.get_save_data(),
 	}
 
 	var json_text: String = JSON.stringify(save_data, "\t")
@@ -191,8 +193,9 @@ func load_game() -> bool:
 	var progression_component: PlayerProgression = _find_progression_component(player)
 	var quest_log: PlayerQuestLog = _find_quest_log(player)
 	var inventory: PlayerInventory = _find_inventory(player)
+	var wallet: PlayerWallet = _find_wallet(player)
 	if not _validate_required_components(
-		health_component, progression_component, quest_log, inventory, "loaded"
+		health_component, progression_component, quest_log, inventory, wallet, "loaded"
 	):
 		return false
 
@@ -207,11 +210,20 @@ func load_game() -> bool:
 			"SaveManager is loading version 1 without inventory data; starter defaults will be used."
 		)
 
+	var wallet_data: Dictionary = {}
+	if save_version >= 3:
+		wallet_data = _read_dictionary(save_data, "wallet", "save root")
+	else:
+		push_warning(
+			"SaveManager is loading an older save without wallet data; zero gold will be used."
+		)
+
 	_restore_player_position(player, player_data)
 	health_component.load_save_data(player_data)
 	progression_component.load_save_data(progression_data)
 	quest_log.load_save_data(quest_data)
 	inventory.load_save_data(inventory_data)
+	wallet.load_save_data(wallet_data)
 
 	print("Game loaded from: %s" % ProjectSettings.globalize_path(SAVE_FILE_PATH))
 	status_message_requested.emit("Game loaded")
@@ -264,11 +276,20 @@ func _find_inventory(player: Node) -> PlayerInventory:
 	return null
 
 
+func _find_wallet(player: Node) -> PlayerWallet:
+	for child_node: Node in player.get_children():
+		if child_node is PlayerWallet:
+			return child_node as PlayerWallet
+
+	return null
+
+
 func _validate_required_components(
 	health_component: HealthComponent,
 	progression_component: PlayerProgression,
 	quest_log: PlayerQuestLog,
 	inventory: PlayerInventory,
+	wallet: PlayerWallet,
 	operation_past_tense: String
 ) -> bool:
 	var missing_components: PackedStringArray = []
@@ -280,6 +301,8 @@ func _validate_required_components(
 		missing_components.append("PlayerQuestLog")
 	if inventory == null:
 		missing_components.append("PlayerInventory")
+	if wallet == null:
+		missing_components.append("PlayerWallet")
 
 	if missing_components.is_empty():
 		return true

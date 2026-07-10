@@ -178,6 +178,36 @@ func get_used_slot_count() -> int:
 	return _slots.size()
 
 
+## Returns whether the complete quantity can be added without partial insertion.
+func can_add_item(item_id: StringName, quantity: int = 1) -> bool:
+	if quantity <= 0:
+		return true
+
+	var definition: ItemDefinition = get_item_definition(item_id)
+	if definition == null or not definition.is_valid_definition():
+		return false
+
+	if (
+		definition.is_equippable_weapon()
+		and definition.maximum_stack_size == 1
+		and has_item(item_id)
+	):
+		return false
+
+	var available_capacity: int = 0
+	var maximum_stack: int = maxi(definition.maximum_stack_size, 1)
+	for slot: Dictionary in _slots:
+		if _get_slot_item_id(slot) == item_id:
+			available_capacity += maxi(
+				maximum_stack - _get_slot_quantity(slot),
+				0
+			)
+
+	var empty_slot_count: int = maxi(maximum_slots - _slots.size(), 0)
+	available_capacity += empty_slot_count * maximum_stack
+	return available_capacity >= quantity
+
+
 ## Restores the configured new-game starter weapon without creating duplicates.
 func reset_to_starter_inventory(emit_signals: bool = true) -> void:
 	_slots.clear()

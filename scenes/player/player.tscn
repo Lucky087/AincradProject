@@ -17,6 +17,11 @@
 [ext_resource type="Resource" path="res://AincradProject/data/items/training_sword.tres" id="15_training_sword"]
 [ext_resource type="Resource" path="res://AincradProject/data/items/bronze_sword.tres" id="16_bronze_sword"]
 [ext_resource type="PackedScene" path="res://AincradProject/scenes/ui/inventory_ui.tscn" id="17_inventory_ui"]
+[ext_resource type="Script" path="res://AincradProject/scripts/components/player_wallet.gd" id="18_player_wallet"]
+[ext_resource type="Resource" path="res://AincradProject/data/items/boar_tusk.tres" id="19_boar_tusk"]
+[ext_resource type="Resource" path="res://AincradProject/data/items/iron_sword.tres" id="20_iron_sword"]
+[ext_resource type="PackedScene" path="res://AincradProject/scenes/ui/gold_ui.tscn" id="21_gold_ui"]
+[ext_resource type="PackedScene" path="res://AincradProject/scenes/ui/shop_ui.tscn" id="22_shop_ui"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.45
@@ -95,9 +100,14 @@ initial_quest_definition = ExtResource("10_boar_hunt")
 unique_name_in_owner = true
 script = ExtResource("13_player_inventory")
 maximum_slots = 16
-item_definitions = Array[ExtResource("14_item_definition")]([ExtResource("15_training_sword"), ExtResource("16_bronze_sword")])
+item_definitions = Array[ExtResource("14_item_definition")]([ExtResource("15_training_sword"), ExtResource("16_bronze_sword"), ExtResource("19_boar_tusk"), ExtResource("20_iron_sword")])
 starter_weapon_id = &"training_sword"
 equip_starter_weapon = true
+
+[node name="PlayerWallet" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("18_player_wallet")
+starting_gold = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0.9, 0)
@@ -196,6 +206,11 @@ tracked_quest_id = &"boar_hunt"
 
 [node name="SaveStatusUI" parent="." instance=ExtResource("12_save_status_ui")]
 
+[node name="GoldUI" parent="." instance=ExtResource("21_gold_ui")]
+wallet_path = NodePath("../PlayerWallet")
+
 [node name="InventoryUI" parent="." instance=ExtResource("17_inventory_ui")]
+
+[node name="ShopUI" parent="." instance=ExtResource("22_shop_ui")]
 
 [node name="InteractionUI" parent="." instance=ExtResource("3_interaction_ui")]

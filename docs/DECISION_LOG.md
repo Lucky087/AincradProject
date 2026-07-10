@@ -2052,3 +2052,192 @@ For version 2:
 Add explicit migration helpers before version 3 changes the meaning of existing
 inventory fields.
 
+## D-048 — Let PlayerWallet Own Gold as a Separate Player Component
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Gold must be available to enemy rewards, HUD, shops, and saving without putting
+currency inside the inventory UI, SaveManager, boar, or shop code.
+
+### Decision
+
+Add one direct-child `PlayerWallet` component. It owns the non-negative integer
+balance and exposes add, spend, affordability, save, and load methods plus one
+typed `gold_changed` signal.
+
+A new game starts with zero gold. UI and transaction systems observe the wallet
+instead of copying its balance.
+
+### Consequences
+
+- Gold has one runtime owner.
+- Negative balances are rejected.
+- SaveManager coordinates persistence without owning currency state.
+- Additional currencies require deliberate new components or an explicit wallet
+  redesign rather than untyped dictionary fields.
+
+### Alternatives considered
+
+- Store gold in `PlayerInventory`.
+- Put gold on the player controller.
+- Let ShopUI own and save the balance.
+- Use SaveManager as the live wallet.
+
+### Follow-up
+
+Introduce a broader currency model only when the design genuinely needs more
+than one currency.
+
+---
+
+## D-049 — Award Boar Gold and Spawn Temporary Player-Reserved Loot Per Life
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The boar already has separate per-life gates for XP and quest progress. Gold and
+loot must preserve those existing rewards while preventing duplicate results
+from repeated death callbacks or attacks on a defeated body.
+
+### Decision
+
+Extend the existing boar death callback with two additional independent gates:
+
+- 12 gold awarded through the killing player's `PlayerWallet`.
+- One 50-percent Boar Tusk drop roll using an injectable random seed.
+
+A successful drop creates the reusable `WorldItemPickup` scene near the boar and
+reserves it for the player responsible for the killing hit. Each gate resets
+only when the boar respawns.
+
+Temporary pickups are not serialized. They subscribe to SaveManager's successful
+load signal and remove themselves after loading.
+
+### Consequences
+
+- XP, gold, quest progress, and loot remain independently testable.
+- A single boar life cannot duplicate any reward.
+- A respawned boar can reward again.
+- The training dummy remains unrewarded.
+- World drops remain prototype-session objects rather than persistent world state.
+
+### Alternatives considered
+
+- Put loot directly into inventory on death.
+- Save every active pickup.
+- Use the global random functions with no deterministic test option.
+- Make the pickup available to any future player regardless of killing ownership.
+
+### Follow-up
+
+Persistent world loot and server-authoritative ownership are postponed until the
+multiplayer and world-persistence architecture is designed.
+
+---
+
+## D-050 — Validate Complete Shop Transactions Before Spending Gold
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The first shop sells one non-stackable Iron Sword. A failed inventory insertion
+must never consume gold, and the shop must coexist with the existing inventory
+modal and gameplay input gates.
+
+### Decision
+
+Add `PlayerInventory.can_add_item()` so the shop can validate the complete
+quantity before spending.
+
+The purchase order is:
+
+1. Resolve the definition.
+2. Reject existing ownership.
+3. Confirm full inventory capacity.
+4. Confirm affordability.
+5. Spend exactly 50 gold.
+6. Add exactly one Iron Sword.
+7. Refund the full amount if the final add unexpectedly fails.
+
+`ShopUI` uses the existing player-controller, combat, and interaction input gates.
+It also blocks InventoryUI opening while the shop is active. Escape closes the
+shop in `_input()` before the player controller receives its mouse-capture action.
+
+### Consequences
+
+- Failed transactions do not lose gold.
+- Iron Sword cannot duplicate.
+- Wallet and inventory signals refresh all relevant UI immediately.
+- Existing combat derives 45 damage from the equipped Iron Sword without a new
+  combat implementation.
+
+### Alternatives considered
+
+- Spend first with no rollback.
+- Let ShopUI modify inventory arrays directly.
+- Pause the entire scene tree.
+- Create a second inventory dedicated to shops.
+
+### Follow-up
+
+Selling, rotating stock, quantities, and confirmation dialogs remain outside the
+prototype scope.
+
+---
+
+## D-051 — Advance Save Format to Version 3 for Wallet Data
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Milestone 9 adds persistent gold. Version 1 has no inventory or wallet, and
+version 2 has inventory but no wallet. Both existing formats must remain safe.
+
+### Decision
+
+Write save version 3 and add:
+
+```text
+wallet.current_gold
+```
+
+Continue accepting versions 1, 2, and 3.
+
+- Version 1 keeps the existing starter-inventory fallback and uses zero gold.
+- Version 2 restores its existing inventory data and uses zero gold.
+- Version 3 restores wallet data through `PlayerWallet.load_save_data()`.
+- Missing or invalid wallet values safely become zero.
+
+The inventory schema remains unchanged because new items already persist through
+stable item IDs.
+
+### Consequences
+
+- Milestone 7 and 8 saves remain loadable.
+- Gold, Boar Tusks, Iron Sword, and equipment survive new saves.
+- SaveManager still coordinates component interfaces rather than duplicating live data.
+
+### Alternatives considered
+
+- Add wallet data without changing the declared version.
+- Reject older saves.
+- Store gold inside the inventory dictionary.
+- Attempt to persist temporary world pickups.
+
+### Follow-up
+
+Before version 4, add explicit migration helpers if any existing field changes
+meaning rather than only adding an optional component section.

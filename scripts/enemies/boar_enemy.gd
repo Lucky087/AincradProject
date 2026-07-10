@@ -1,6 +1,8 @@
 class_name BoarEnemy
 extends CharacterBody3D
 
+# gdlint: disable=max-returns
+
 ## Controls the first hostile primitive enemy.
 ##
 ## The boar idles near its spawn, detects one player through the `players`
@@ -43,6 +45,13 @@ enum EnemyState {
 
 @export_category("Rewards")
 @export_range(0, 1000000, 1) var experience_reward: int = 40
+@export_range(0, 1000000, 1) var gold_reward: int = 12
+@export var loot_item_id: StringName = &"boar_tusk"
+@export_range(1, 999, 1) var loot_quantity: int = 1
+@export_range(0.0, 1.0, 0.01) var loot_drop_chance: float = 0.5
+@export var loot_pickup_scene: PackedScene
+@export var loot_spawn_offset: Vector3 = Vector3(0.0, 0.15, 0.0)
+@export var loot_random_seed: int = 1337
 
 @export_category("Reaction and Respawn")
 @export_range(0.05, 2.0, 0.05) var hit_reaction_seconds: float = 0.18
@@ -82,7 +91,10 @@ var _feedback_tween: Tween = null
 var _attack_is_active: bool = false
 var _is_dead: bool = false
 var _experience_reward_granted: bool = false
+var _gold_reward_granted: bool = false
 var _quest_progress_reported: bool = false
+var _loot_drop_processed: bool = false
+var _loot_random: RandomNumberGenerator = RandomNumberGenerator.new()
 var _setup_is_valid: bool = false
 
 
@@ -112,6 +124,10 @@ func _ready() -> void:
 	_gravity = float(
 		ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
 	)
+	if loot_random_seed == 0:
+		_loot_random.randomize()
+	else:
+		_loot_random.seed = loot_random_seed
 
 	_health_component.health_changed.connect(_on_health_changed)
 	_health_component.damage_taken.connect(_on_damage_taken)
@@ -556,7 +572,9 @@ func _on_died(source: Node) -> void:
 	_hurtbox.monitorable = false
 	_body_collision.set_deferred("disabled", true)
 	_award_experience_to_killing_player(source)
+	_award_gold_to_killing_player(source)
 	_report_quest_progress_to_killing_player(source)
+	_try_spawn_loot_for_killing_player(source)
 	_play_death_feedback()
 	_respawn_timer.start(respawn_delay_seconds)
 
@@ -572,7 +590,9 @@ func _on_hit_reaction_timer_timeout() -> void:
 func _on_respawn_timer_timeout() -> void:
 	_is_dead = false
 	_experience_reward_granted = false
+	_gold_reward_granted = false
 	_quest_progress_reported = false
+	_loot_drop_processed = false
 	global_transform = _spawn_transform
 	velocity = Vector3.ZERO
 	_attack_pivot.transform = _attack_pivot_rest_transform
@@ -607,6 +627,82 @@ func _award_experience_to_killing_player(source: Node) -> void:
 		"Wild Boar reward: requested %d XP, applied %d XP."
 		% [experience_reward, applied_experience]
 	)
+
+
+func _award_gold_to_killing_player(source: Node) -> void:
+	if _gold_reward_granted or gold_reward <= 0:
+		return
+
+	_gold_reward_granted = true
+	var wallet: PlayerWallet = _find_player_wallet_from_source(source)
+	if wallet == null:
+		push_warning(
+			"BoarEnemy could not resolve the killing player's PlayerWallet. No gold awarded."
+		)
+		return
+
+	var applied_gold: int = wallet.add_gold(gold_reward)
+	print(
+		"Wild Boar reward: requested %d gold, applied %d gold."
+		% [gold_reward, applied_gold]
+	)
+
+
+func _try_spawn_loot_for_killing_player(source: Node) -> void:
+	if _loot_drop_processed:
+		return
+	_loot_drop_processed = true
+
+	if loot_drop_chance <= 0.0 or loot_item_id.is_empty() or loot_quantity <= 0:
+		return
+	if _loot_random.randf() >= loot_drop_chance:
+		return
+	if loot_pickup_scene == null:
+		push_warning("BoarEnemy rolled loot but has no loot_pickup_scene configured.")
+		return
+
+	var player_root: Node = _find_player_root_from_source(source)
+	if player_root == null:
+		push_warning("BoarEnemy rolled loot but could not resolve the killing player.")
+		return
+
+	var pickup_node: Node = loot_pickup_scene.instantiate()
+	if not pickup_node is WorldItemPickup:
+		push_warning("BoarEnemy loot_pickup_scene root is not WorldItemPickup.")
+		pickup_node.queue_free()
+		return
+
+	var pickup: WorldItemPickup = pickup_node as WorldItemPickup
+	pickup.configure_pickup(loot_item_id, loot_quantity, player_root)
+	var pickup_parent: Node = get_parent()
+	if pickup_parent == null:
+		pickup_parent = get_tree().current_scene
+	if pickup_parent == null:
+		push_warning("BoarEnemy could not find a parent for its loot pickup.")
+		pickup.queue_free()
+		return
+
+	pickup_parent.add_child(pickup)
+	pickup.global_position = global_position + loot_spawn_offset
+
+
+func set_loot_random_seed(seed_value: int) -> void:
+	loot_random_seed = seed_value
+	if seed_value == 0:
+		_loot_random.randomize()
+	else:
+		_loot_random.seed = seed_value
+
+
+func _find_player_wallet_from_source(source: Node) -> PlayerWallet:
+	var player_root: Node = _find_player_root_from_source(source)
+	if player_root == null:
+		return null
+
+	for child_node: Node in player_root.get_children():
+		if child_node is PlayerWallet:
+			return child_node as PlayerWallet
+	return null
 
 
 func _report_quest_progress_to_killing_player(source: Node) -> void:

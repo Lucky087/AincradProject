@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://AincradProject/scripts/items/item_definition.gd" id="1_item_definition"]
+
+[resource]
+script = ExtResource("1_item_definition")
+item_id = &"iron_sword"
+display_name = "Iron Sword"
+description = "A dependable iron sword sold to experienced beginners."
+item_category = 0
+maximum_stack_size = 1
+can_be_equipped = true
+equipment_slot = 1
+weapon_damage = 45.0

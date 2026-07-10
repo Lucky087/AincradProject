@@ -1,0 +1,45 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://AincradProject/scripts/ui/gold_ui.gd" id="1_gold_ui"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gold_panel"]
+bg_color = Color(0.035, 0.045, 0.06, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.95, 0.76, 0.2, 0.95)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="GoldUI" type="CanvasLayer"]
+layer = 5
+script = ExtResource("1_gold_ui")
+
+[node name="GoldPanel" type="PanelContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -224.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = 74.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gold_panel")
+
+[node name="MarginContainer" type="MarginContainer" parent="GoldPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 10
+
+[node name="GoldLabel" type="Label" parent="GoldPanel/MarginContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.32, 1)
+theme_override_font_sizes/font_size = 20
+text = "Gold: 0"
+horizontal_alignment = 1

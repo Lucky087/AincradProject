@@ -1,0 +1,118 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://AincradProject/scripts/ui/shop_ui.gd" id="1_shop_ui"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shop_panel"]
+bg_color = Color(0.035, 0.045, 0.065, 0.98)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.82, 0.46, 0.18, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="ShopUI" type="CanvasLayer"]
+layer = 31
+script = ExtResource("1_shop_ui")
+shop_item_id = &"iron_sword"
+purchase_price = 50
+wallet_path = NodePath("../PlayerWallet")
+inventory_path = NodePath("../PlayerInventory")
+player_controller_path = NodePath("..")
+player_combat_path = NodePath("../PlayerCombat")
+player_interactor_path = NodePath("../PlayerInteractor")
+inventory_ui_path = NodePath("../InventoryUI")
+
+[node name="ShopRoot" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="DimBackground" type="ColorRect" parent="ShopRoot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+color = Color(0, 0, 0, 0.62)
+
+[node name="CenterContainer" type="CenterContainer" parent="ShopRoot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="ShopPanel" type="PanelContainer" parent="ShopRoot/CenterContainer"]
+custom_minimum_size = Vector2(640, 470)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_shop_panel")
+
+[node name="MarginContainer" type="MarginContainer" parent="ShopRoot/CenterContainer/ShopPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 26
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 26
+theme_override_constants/margin_bottom = 20
+
+[node name="MainVBox" type="VBoxContainer" parent="ShopRoot/CenterContainer/ShopPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="ShopRoot/CenterContainer/ShopPanel/MarginContainer/MainVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Weapon Shop"
+horizontal_alignment = 1
+
+[node name="GoldLabel" type="Label" parent="ShopRoot/CenterContainer/ShopPanel/MarginContainer/MainVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.32, 1)
+theme_override_font_sizes/font_size = 20
+text = "Your Gold: 0"
+horizontal_alignment = 1
+
+[node name="ItemList" type="ItemList" parent="ShopRoot/CenterContainer/ShopPanel/MarginContainer/MainVBox"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+allow_reselect = true
+
+[node name="PriceLabel" type="Label" parent="ShopRoot/CenterContainer/ShopPanel/MarginContainer/MainVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Price: 50 gold"
+
+[node name="DamageLabel" type="Label" parent="ShopRoot/CenterContainer/ShopPanel/MarginContainer/MainVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Damage: 45"
+
+[node name="DescriptionLabel" type="Label" parent="ShopRoot/CenterContainer/ShopPanel/MarginContainer/MainVBox"]
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+text = "A dependable iron sword sold to experienced beginners."
+autowrap_mode = 2
+
+[node name="MessageLabel" type="Label" parent="ShopRoot/CenterContainer/ShopPanel/MarginContainer/MainVBox"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.75, 0.28, 1)
+text = ""
+horizontal_alignment = 1
+
+[node name="InstructionsLabel" type="Label" parent="ShopRoot/CenterContainer/ShopPanel/MarginContainer/MainVBox"]
+layout_mode = 2
+text = "↑ / ↓: Select    Enter: Purchase    Esc: Close"
+horizontal_alignment = 1
