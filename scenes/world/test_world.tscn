@@ -1,0 +1,148 @@
+[gd_scene load_steps=19 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
+
+[sub_resource type="Environment" id="Environment_test"]
+background_mode = 1
+background_color = Color(0.52, 0.68, 0.86, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.62, 0.68, 0.78, 1)
+ambient_light_energy = 0.55
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
+albedo_color = Color(0.39, 0.41, 0.44, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor"]
+material = SubResource("StandardMaterial3D_floor")
+size = Vector3(40, 0.5, 40)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
+size = Vector3(40, 0.5, 40)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_obstacle"]
+albedo_color = Color(0.58, 0.6, 0.64, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_small_cube"]
+material = SubResource("StandardMaterial3D_obstacle")
+size = Vector3(2, 1, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_small_cube"]
+size = Vector3(2, 1, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tall_cube"]
+material = SubResource("StandardMaterial3D_obstacle")
+size = Vector3(3, 3, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tall_cube"]
+size = Vector3(3, 3, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_platform"]
+material = SubResource("StandardMaterial3D_obstacle")
+size = Vector3(5, 0.5, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_platform"]
+size = Vector3(5, 0.5, 5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ramp"]
+material = SubResource("StandardMaterial3D_obstacle")
+size = Vector3(4, 0.5, 8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ramp"]
+size = Vector3(4, 0.5, 8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall"]
+material = SubResource("StandardMaterial3D_obstacle")
+size = Vector3(8, 1.5, 0.75)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall"]
+size = Vector3(8, 1.5, 0.75)
+
+[sub_resource type="BoxMesh" id="BoxMesh_narrow_ramp"]
+material = SubResource("StandardMaterial3D_obstacle")
+size = Vector3(3, 0.5, 6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_narrow_ramp"]
+size = Vector3(3, 0.5, 6)
+
+[node name="TestWorld" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_test")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.872665, -0.610865, 0)
+light_energy = 1.2
+shadow_enabled = true
+
+[node name="GreyboxGeometry" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="GreyboxGeometry"]
+position = Vector3(0, -0.25, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/Floor"]
+mesh = SubResource("BoxMesh_floor")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/Floor"]
+shape = SubResource("BoxShape3D_floor")
+
+[node name="SmallCube" type="StaticBody3D" parent="GreyboxGeometry"]
+position = Vector3(-4, 0.5, 6)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/SmallCube"]
+mesh = SubResource("BoxMesh_small_cube")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/SmallCube"]
+shape = SubResource("BoxShape3D_small_cube")
+
+[node name="TallCube" type="StaticBody3D" parent="GreyboxGeometry"]
+position = Vector3(5, 1.5, 1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/TallCube"]
+mesh = SubResource("BoxMesh_tall_cube")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/TallCube"]
+shape = SubResource("BoxShape3D_tall_cube")
+
+[node name="RaisedPlatform" type="StaticBody3D" parent="GreyboxGeometry"]
+position = Vector3(-7, 2.25, -3)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/RaisedPlatform"]
+mesh = SubResource("BoxMesh_platform")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/RaisedPlatform"]
+shape = SubResource("BoxShape3D_platform")
+
+[node name="WideRamp" type="StaticBody3D" parent="GreyboxGeometry"]
+position = Vector3(-7, 1.16, 1.25)
+rotation = Vector3(0.261799, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/WideRamp"]
+mesh = SubResource("BoxMesh_ramp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/WideRamp"]
+shape = SubResource("BoxShape3D_ramp")
+
+[node name="LowWall" type="StaticBody3D" parent="GreyboxGeometry"]
+position = Vector3(5, 0.75, -7)
+rotation = Vector3(0, 0.261799, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/LowWall"]
+mesh = SubResource("BoxMesh_wall")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/LowWall"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="NarrowRamp" type="StaticBody3D" parent="GreyboxGeometry"]
+position = Vector3(8, 1.15, 7)
+rotation = Vector3(-0.349066, 0.349066, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/NarrowRamp"]
+mesh = SubResource("BoxMesh_narrow_ramp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/NarrowRamp"]
+shape = SubResource("BoxShape3D_narrow_ramp")
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+position = Vector3(0, 0.05, 14)

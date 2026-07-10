@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://b2va76ouithuu"]
+
+[ext_resource type="Script" uid="uid://b8mjk5af27wql" path="res://AincradProject/scripts/player/player_controller.gd" id="1_player_controller"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
+radius = 0.45
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_player"]
+albedo_color = Color(0.18, 0.42, 0.82, 1)
+roughness = 0.8
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_player"]
+material = SubResource("StandardMaterial3D_player")
+radius = 0.45
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_facing"]
+albedo_color = Color(1, 0.45, 0.08, 1)
+roughness = 0.65
+
+[sub_resource type="BoxMesh" id="BoxMesh_facing"]
+material = SubResource("StandardMaterial3D_facing")
+size = Vector3(0.22, 0.22, 0.18)
+
+[node name="Player" type="CharacterBody3D" unique_id=1285910323]
+floor_snap_length = 0.3
+script = ExtResource("1_player_controller")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=7353211]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_player")
+
+[node name="VisualRoot" type="Node3D" parent="." unique_id=2022686124]
+unique_name_in_owner = true
+
+[node name="BodyMesh" type="MeshInstance3D" parent="VisualRoot" unique_id=545062863]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+mesh = SubResource("CapsuleMesh_player")
+
+[node name="FacingMarker" type="MeshInstance3D" parent="VisualRoot" unique_id=486426497]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08, -0.43)
+mesh = SubResource("BoxMesh_facing")
+
+[node name="CameraYaw" type="Node3D" parent="." unique_id=1571772331]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.45, 0)
+
+[node name="CameraPitch" type="Node3D" parent="CameraYaw" unique_id=819736473]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.96592593, 0.2588187, 0, -0.2588187, 0.96592593, 0, 0, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraYaw/CameraPitch" unique_id=1347899277]
+spring_length = 5.5
+margin = 0.15
+
+[node name="Camera3D" type="Camera3D" parent="CameraYaw/CameraPitch/SpringArm3D" unique_id=889716984]
+current = true
+fov = 72.0
+near = 0.1
+far = 250.0
