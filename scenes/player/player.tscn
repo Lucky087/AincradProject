@@ -57,7 +57,7 @@ size = Vector3(0.52, 0.1, 0.12)
 [sub_resource type="BoxShape3D" id="BoxShape3D_attack"]
 size = Vector3(1.4, 1.5, 0.85)
 
-[node name="Player" type="CharacterBody3D"]
+[node name="Player" type="CharacterBody3D" groups=["players"]]
 floor_snap_length = 0.3
 floor_stop_on_slope = true
 script = ExtResource("1_player_controller")

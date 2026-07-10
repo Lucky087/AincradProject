@@ -991,3 +991,227 @@ Do not add health controls or health state to `InteractionUI`.
 ### Follow-up
 
 M5 may expand the HUD with experience and level displays while preserving separate feature responsibilities.
+
+---
+
+## D-025 — Preserve the Existing Folder Structure Through M4
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The current project already has working movement, interaction, health, sword combat, a training dummy, established `scenes/` and `scripts/` folders, and Godot-generated `.uid` files. Reorganising these files while adding the first enemy would create unnecessary risk and conflict with the explicit file-safety requirements.
+
+### Decision
+
+Preserve the existing folder structure exactly during M4.
+
+Create the boar only at:
+
+```text
+res://AincradProject/scenes/enemies/boar_enemy.tscn
+res://AincradProject/scripts/enemies/boar_enemy.gd
+```
+
+Modify only the existing player scene, test world, current-tasks document, and decision log where required. Do not manually edit or delete `.uid` files.
+
+### Consequences
+
+- Existing resource paths remain stable.
+- The player scripts and interaction system remain untouched.
+- Godot may generate a new `.uid` file for `boar_enemy.gd` when the project opens.
+- Any future reorganisation still requires a separate explicit migration task.
+
+### Alternatives considered
+
+- Move enemies into a new `game/actors/` hierarchy before M4.
+- Duplicate the current project into a second structure.
+- Manually generate or edit script UID files.
+
+### Follow-up
+
+Keep using the current paths until the user explicitly requests and approves a tested migration.
+
+---
+
+## D-026 — Use a Small State Controller Without an Enemy Base Class Yet
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The first hostile enemy requires idle, chase, attack, hurt, return, dead, and respawn behaviour. Only one moving enemy type currently exists, so an inheritance hierarchy would not yet remove real duplication.
+
+### Decision
+
+Implement the boar with one typed state enum inside `boar_enemy.gd`.
+
+Do not create `enemy_base.gd` during M4. Reconsider a shared base only after a second moving enemy reveals genuinely repeated behaviour that composition cannot handle cleanly.
+
+### Consequences
+
+- The first enemy remains easy for a beginner to inspect in one file.
+- No premature inheritance contract is introduced.
+- Reusable health remains in `HealthComponent`, not copied into the boar.
+- A later refactor may extract common enemy behaviour after evidence exists.
+
+### Alternatives considered
+
+- Create an abstract enemy base before any duplicated enemy code exists.
+- Put enemy behaviour inside `HealthComponent`.
+- Add separate scripts for every small state immediately.
+
+### Follow-up
+
+Review duplication after the second hostile enemy is implemented.
+
+---
+
+## D-027 — Use Direct Greybox Movement and Delay Navigation
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The M4 test world is a small, mostly open greybox. Adding `NavigationRegion3D`, baking instructions, and path-recovery logic would increase setup complexity before the prototype has a real field layout that needs pathfinding.
+
+### Decision
+
+Use direct horizontal `CharacterBody3D` movement for the first boar.
+
+The boar collides with World-layer bodies, moves in `_physics_process()`, and returns directly toward its stored spawn position. No navigation mesh is required or baked in M4.
+
+### Consequences
+
+- M4 has no navigation setup step.
+- The boar can collide with large obstacles rather than intelligently walking around them.
+- Detection, chasing, attacking, returning, death, and respawn can be tested independently from pathfinding.
+- Navigation should be added when the real Floor 1 field contains routes and obstacles that require it.
+
+### Alternatives considered
+
+- Add and bake a navigation region immediately.
+- Use `_process()` for enemy movement.
+- Teleport the enemy instead of using physics movement.
+
+### Follow-up
+
+Add `NavigationAgent3D` and floor navigation only when the field layout demonstrates a real need.
+
+---
+
+## D-028 — Find Players by Group and Reuse Their Health Component
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The boar needs a target without depending on an absolute test-world node path. The player already has a reusable `HealthComponent`, and the architecture should avoid placing enemy-specific references inside the player scripts.
+
+### Decision
+
+Add the existing player root to the `players` group in `player.tscn`.
+
+The boar resolves the first available group member and finds its child `HealthComponent`. If the reference disappears, the boar searches again at a limited configurable interval.
+
+### Consequences
+
+- `player_controller.gd` and `player_combat.gd` remain unchanged.
+- The boar can locate the player even if the test-world hierarchy changes.
+- Incoming damage uses the same public `HealthComponent.apply_damage()` method already used by the sword system.
+- The group approach can later contain multiple players, but M4 still targets only one local player.
+
+### Alternatives considered
+
+- Export a hard-coded path from the boar to `../../Player`.
+- Add an enemy reference to the player controller.
+- Create a global game-manager autoload only to locate the player.
+
+### Follow-up
+
+A later multiplayer milestone must replace first-player selection with explicit authority and target-selection rules.
+
+---
+
+## D-029 — Validate Enemy Damage at the Hit Moment
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Starting an attack while the player is close does not guarantee the player remains close when the visible lunge reaches its hit moment. A permanent overlapping damage area could also apply damage repeatedly during one attack.
+
+### Decision
+
+Perform exactly one damage attempt per boar attack sequence.
+
+At the hit callback, verify that:
+
+- The boar and player are alive.
+- The player is still within `maximum_attack_hit_distance`.
+- A World-layer ray from the boar to the player is not blocked by another solid body.
+
+Only then call the player's existing `HealthComponent.apply_damage()` method. Start a cooldown after the attack completes.
+
+### Consequences
+
+- One attack cannot damage the player multiple times.
+- Moving out during windup can avoid the hit.
+- Solid greybox bodies can block the attack.
+- Attack animation, hit validation, and health state remain separate responsibilities.
+
+### Alternatives considered
+
+- Damage immediately when the attack begins.
+- Apply damage every physics frame while an Area3D overlaps.
+- Ignore distance after the attack starts.
+- Hard-code changes directly into the player health UI.
+
+### Follow-up
+
+Future animation-driven combat may replace the tween callback with animation events while preserving the same validation rules.
+
+---
+
+## D-030 — Respawn the Boar at Its Stored Scene Transform
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The first enemy must be repeatable for testing without requiring a scene restart. Returning to a guessed coordinate would break when the scene instance is moved in the editor.
+
+### Decision
+
+Store the boar's initial global transform during `_ready()` and use it as both the leash origin and respawn location.
+
+On death, stop movement and attacks, disable the body collision and hurtbox, and start a configurable respawn timer. On timeout, restore the saved transform, visuals, collision, hurtbox, state, and health.
+
+### Consequences
+
+- Designers can move the boar instance without editing the script.
+- The boar returns to and respawns at the same authored position.
+- The same scene can be instanced more than once later with independent spawn origins.
+- No loot, experience, or persistence is attached to respawn yet.
+
+### Alternatives considered
+
+- Use a hard-coded world coordinate.
+- Permanently delete the boar after death.
+- Reload the entire test world after every enemy defeat.
+
+### Follow-up
+
+Future world-state saving must decide whether defeated enemies should respawn immediately, after a timer, or after a session reload.

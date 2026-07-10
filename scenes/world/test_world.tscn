@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://AincradProject/scenes/interactions/test_npc.tscn" id="3_test_npc"]
 [ext_resource type="PackedScene" path="res://AincradProject/scenes/interactions/test_chest.tscn" id="4_test_chest"]
 [ext_resource type="PackedScene" path="res://AincradProject/scenes/enemies/training_dummy.tscn" id="5_training_dummy"]
+[ext_resource type="PackedScene" path="res://AincradProject/scenes/enemies/boar_enemy.tscn" id="6_boar_enemy"]
 
 [sub_resource type="Environment" id="Environment_test"]
 background_mode = 1
@@ -160,6 +161,11 @@ transform = Transform3D(-0.86602557, 0, 0.4999997, 0, 1, 0, -0.4999997, 0, -0.86
 
 [node name="TrainingDummy" parent="CombatTargets" instance=ExtResource("5_training_dummy")]
 position = Vector3(6, 0, 10.5)
+
+[node name="HostileEnemies" type="Node3D" parent="."]
+
+[node name="BoarEnemy" parent="HostileEnemies" instance=ExtResource("6_boar_enemy")]
+position = Vector3(-10, 0.05, -8)
 
 [node name="Player" parent="." unique_id=413033696 instance=ExtResource("1_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 14)

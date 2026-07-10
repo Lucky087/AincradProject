@@ -1,7 +1,7 @@
 # Current Tasks
 
 **Project:** Aincrad-Inspired RPG  
-**Current milestone:** M3 — Health and Basic Sword Combat  
+**Current milestone:** M4 — First Enemy  
 **Current phase:** Implementation package created; local Godot verification remains  
 **Last updated:** 2026-07-10
 
@@ -21,18 +21,20 @@
 
 ## 2. Current Milestone Goal
 
-Add reusable health and the first basic sword attack without replacing the working player controller or interaction system.
+Add one reusable hostile boar enemy without replacing the working player, interaction, health, or sword-combat systems.
 
 The milestone should prove that:
 
-- The player and future actors can use the same health component.
-- A primitive player sword can perform one basic attack.
-- A forward attack hitbox can find a dedicated hurtbox.
-- One target takes damage only once per swing.
-- A primitive training dummy can be defeated and reset for repeated testing.
-- The player has a reusable health HUD ready for future incoming damage.
+- One primitive enemy can idle, detect, chase, attack, return, die, and respawn.
+- Enemy damage reaches the player's existing `HealthComponent`.
+- The existing sword damages the enemy through the existing hurtbox system.
+- One enemy attack can damage the player at most once.
+- Attack damage is rejected when the player has moved too far away or a world body blocks the attack line.
+- The enemy stops moving and attacking after death.
+- The enemy returns to its exact original spawn after the respawn timer.
+- All earlier movement, camera, interaction, health UI, sword, and training-dummy behaviour remains available.
 
-Enemy movement, enemy attacks, experience, quests, inventory, saving, and multiplayer remain outside this milestone.
+Experience, loot, quests, inventory, saving, bosses, multiplayer, and detailed art remain outside this milestone.
 
 ---
 
@@ -192,46 +194,127 @@ M3 is complete after these local checks pass.
 
 ---
 
-## 7. Current Work Limit
+## 7. M4 — First Enemy
 
-Do not add the following during M3 testing:
+### Primitive boar scene
 
-- Enemy movement or artificial intelligence.
-- Enemy attacks or player death handling.
-- Experience or levels.
-- Quest state.
-- Inventory, equipment menus, or item rewards.
-- Saving or loading.
-- Multiplayer code.
-- Advanced combos.
-- Blocking, dodging, stamina, or lock-on targeting.
-- Damage numbers or advanced effects.
-- Blender models or external art packs.
+- [x] Create `res://AincradProject/scenes/enemies/boar_enemy.tscn`.
+- [x] Create `res://AincradProject/scripts/enemies/boar_enemy.gd`.
+- [x] Use `CharacterBody3D` as the root.
+- [x] Use only Godot primitive meshes and collision shapes.
+- [x] Reuse the existing `HealthComponent`.
+- [x] Reuse collision layer 3 for the boar hurtbox.
+- [x] Add body collision on the existing World layer.
+- [x] Add a test-facing health and state `Label3D`.
+- [x] Avoid creating an unnecessary enemy-base abstraction for only one moving enemy.
 
-The current combat system is only the smallest reusable damage test.
+### Targeting and movement
+
+- [x] Add the existing player root to the `players` group without changing its scripts.
+- [x] Resolve the player through the group instead of a fragile absolute scene path.
+- [x] Add configurable detection, disengage, and leash ranges.
+- [x] Keep the boar idle while the player is far away.
+- [x] Chase the player in `_physics_process()`.
+- [x] Stop at a configurable attack distance.
+- [x] Return toward the original spawn if the player escapes or the leash is exceeded.
+- [x] Stop at the spawn and return to idle.
+- [x] Use direct greybox movement without requiring a navigation mesh for this open test area.
+- [x] Search again at a limited interval if the player reference becomes unavailable.
+
+### Enemy attack
+
+- [x] Add a visible primitive lunge animation.
+- [x] Add an attack cooldown timer.
+- [x] Apply damage through the player's existing `HealthComponent`.
+- [x] Apply damage only once during each attack sequence.
+- [x] Recheck maximum hit distance at the actual damage moment.
+- [x] Ray-check the World layer so solid bodies can block the hit.
+- [x] Stop attacking if the target is dead, missing, too far away, or blocked.
+
+### Hit, death, and respawn
+
+- [x] Connect to the existing typed health signals.
+- [x] Add a brief hit reaction that interrupts the current attack.
+- [x] Stop movement and attacks after death.
+- [x] Disable body collision and the hurtbox while defeated.
+- [x] Add a configurable respawn timer.
+- [x] Restore the original transform, visuals, collision, hurtbox, and health on respawn.
+
+### World and file safety
+
+- [x] Add one boar beneath a new `HostileEnemies` node in the existing test world.
+- [x] Preserve the player, training dummy, interactables, greybox geometry, light, and environment.
+- [x] Leave `player_controller.gd`, `player_combat.gd`, and all existing public health methods and signals unchanged.
+- [x] Preserve all existing files and folders except the explicitly required modifications.
+- [x] Do not manually edit or delete any `.uid` file.
+- [x] Add `docs/MILESTONE_4_SETUP.md`.
+
+### Local verification still required
+
+- [~] Open the project in Godot 4.7 and let Godot generate the new script UID normally.
+- [ ] Confirm all scripts parse without errors.
+- [ ] Confirm the boar appears near `(-10, 0, -8)`.
+- [ ] Confirm the boar remains idle while the player is outside detection range.
+- [ ] Confirm the boar begins chasing after the player approaches.
+- [ ] Confirm the boar stops rather than standing directly inside the player.
+- [ ] Confirm the lunge damages the player once.
+- [ ] Confirm the health UI decreases by 12 HP for one successful attack.
+- [ ] Confirm one attack never applies repeated damage during the same lunge.
+- [ ] Move away during the windup and confirm excessive distance prevents damage.
+- [ ] Put a solid greybox object between the boar and player and confirm the hit is blocked.
+- [ ] Escape beyond disengage range and confirm the boar returns to spawn.
+- [ ] Hit the boar and confirm the brief reaction is visible.
+- [ ] Confirm each sword hit removes 25 HP through the existing combat system.
+- [ ] Defeat the boar with four sword hits.
+- [ ] Confirm it stops moving and attacking while defeated.
+- [ ] Wait five seconds and confirm it respawns at full health at its original position.
+- [ ] Confirm the training dummy still takes damage and resets.
+- [ ] Confirm sign, NPC, and chest interactions still work.
+- [ ] Confirm WASD, camera, jump, sprint, gravity, Escape, and the HP UI still work.
+- [ ] Confirm no critical debugger errors appear.
+
+M4 is complete after these local checks pass.
 
 ---
 
-## 8. Next Milestone Preview
+## 8. Current Work Limit
 
-## M4 — First Enemy
+Do not add the following during M4:
+
+- Loot or item drops.
+- Experience or level rewards.
+- Inventory or equipment systems.
+- Quest progress.
+- Boss phases or special mechanics.
+- Multiplayer or network authority code.
+- Saving or loading.
+- Advanced pathfinding or crowd avoidance.
+- Complex animation trees.
+- Blocking, dodging, stamina, or lock-on targeting.
+- Blender models, external assets, or detailed environments.
+
+The first boar is only a small hostile-enemy behaviour test.
+
+---
+
+## 9. Next Milestone Preview
+
+## M5 — Progression
 
 Planned tasks:
 
-- [ ] Create one primitive enemy type.
-- [ ] Add a small state-based behaviour controller.
-- [ ] Add idle, detection, chase, attack, hurt, and defeated states.
-- [ ] Reuse `HealthComponent`.
-- [ ] Reuse the existing hurtbox boundary.
-- [ ] Add an enemy attack boundary that can damage the player.
-- [ ] Add basic player death or reset behaviour only as required for testing.
-- [ ] Preserve movement, interaction, and M3 combat.
+- [ ] Add reusable experience data and level calculations.
+- [ ] Award experience only after a valid enemy defeat.
+- [ ] Add current level and experience to the HUD.
+- [ ] Prevent repeated rewards from one enemy death.
+- [ ] Keep progression separate from enemy movement and combat logic.
+- [ ] Preserve all M1–M4 behaviour.
 
-Begin M4 only after M3 passes local testing.
+Begin M5 only after M4 passes local testing.
 
 ---
 
-## 9. Updated Milestone Order
+## 10. Updated Milestone Order
 
 ### M0 — Project Foundation
 
@@ -251,7 +334,7 @@ Reusable health, player HUD, primitive sword, attack hitbox, training-dummy hurt
 
 ### M4 — First Enemy
 
-One enemy type with simple behaviour, attacks, and defeat handling.
+One hostile primitive boar with detection, chase, attack, hit, death, return, and respawn behaviour.
 
 ### M5 — Progression
 
@@ -279,7 +362,7 @@ Only after the complete local prototype works.
 
 ---
 
-## 10. Definition of Done for Any Task
+## 11. Definition of Done for Any Task
 
 A task is done when:
 
@@ -295,6 +378,6 @@ A task is done when:
 
 ---
 
-## 11. Next Action
+## 12. Next Action
 
-Open the project in Godot 4.7 and complete every M3 local-verification checkbox before beginning M4.
+Open the project in Godot 4.7 and complete every M4 local-verification checkbox, including regression tests for movement, interaction, sword combat, the training dummy, and the player health UI.

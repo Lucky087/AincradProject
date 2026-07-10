@@ -1,0 +1,170 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://AincradProject/scripts/enemies/boar_enemy.gd" id="1_boar_enemy"]
+[ext_resource type="Script" path="res://AincradProject/scripts/components/health_component.gd" id="2_health_component"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fur"]
+albedo_color = Color(0.31, 0.16, 0.07, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dark_fur"]
+albedo_color = Color(0.16, 0.07, 0.035, 1)
+roughness = 0.92
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eye"]
+albedo_color = Color(0.025, 0.02, 0.015, 1)
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tusk"]
+albedo_color = Color(0.87, 0.81, 0.65, 1)
+roughness = 0.65
+
+[sub_resource type="SphereMesh" id="SphereMesh_body"]
+material = SubResource("StandardMaterial3D_fur")
+radius = 0.72
+height = 1.35
+radial_segments = 24
+rings = 12
+
+[sub_resource type="SphereMesh" id="SphereMesh_head"]
+material = SubResource("StandardMaterial3D_dark_fur")
+radius = 0.48
+height = 0.9
+radial_segments = 20
+rings = 10
+
+[sub_resource type="BoxMesh" id="BoxMesh_snout"]
+material = SubResource("StandardMaterial3D_dark_fur")
+size = Vector3(0.58, 0.34, 0.58)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_leg"]
+material = SubResource("StandardMaterial3D_dark_fur")
+top_radius = 0.12
+bottom_radius = 0.14
+height = 0.52
+radial_segments = 12
+
+[sub_resource type="SphereMesh" id="SphereMesh_eye"]
+material = SubResource("StandardMaterial3D_eye")
+radius = 0.065
+height = 0.13
+radial_segments = 12
+rings = 6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tusk"]
+material = SubResource("StandardMaterial3D_tusk")
+top_radius = 0.015
+bottom_radius = 0.055
+height = 0.28
+radial_segments = 10
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_body"]
+size = Vector3(1.5, 1.2, 2.25)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hurtbox"]
+size = Vector3(1.8, 1.5, 2.75)
+
+[node name="BoarEnemy" type="CharacterBody3D" groups=["enemies"]]
+collision_layer = 1
+collision_mask = 1
+floor_snap_length = 0.3
+floor_stop_on_slope = true
+script = ExtResource("1_boar_enemy")
+
+[node name="HealthComponent" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_health_component")
+maximum_health = 100.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+unique_name_in_owner = true
+position = Vector3(0, 0.62, 0)
+shape = SubResource("BoxShape3D_body")
+
+[node name="AttackPivot" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="VisualRoot" type="Node3D" parent="AttackPivot"]
+unique_name_in_owner = true
+
+[node name="Body" type="MeshInstance3D" parent="AttackPivot/VisualRoot"]
+position = Vector3(0, 0.82, 0.12)
+scale = Vector3(1, 0.82, 1.35)
+mesh = SubResource("SphereMesh_body")
+
+[node name="Head" type="MeshInstance3D" parent="AttackPivot/VisualRoot"]
+position = Vector3(0, 0.84, -0.92)
+scale = Vector3(1, 0.9, 1.05)
+mesh = SubResource("SphereMesh_head")
+
+[node name="Snout" type="MeshInstance3D" parent="AttackPivot/VisualRoot"]
+position = Vector3(0, 0.72, -1.36)
+mesh = SubResource("BoxMesh_snout")
+
+[node name="FrontLeftLeg" type="MeshInstance3D" parent="AttackPivot/VisualRoot"]
+position = Vector3(-0.48, 0.27, -0.48)
+mesh = SubResource("CylinderMesh_leg")
+
+[node name="FrontRightLeg" type="MeshInstance3D" parent="AttackPivot/VisualRoot"]
+position = Vector3(0.48, 0.27, -0.48)
+mesh = SubResource("CylinderMesh_leg")
+
+[node name="BackLeftLeg" type="MeshInstance3D" parent="AttackPivot/VisualRoot"]
+position = Vector3(-0.48, 0.27, 0.62)
+mesh = SubResource("CylinderMesh_leg")
+
+[node name="BackRightLeg" type="MeshInstance3D" parent="AttackPivot/VisualRoot"]
+position = Vector3(0.48, 0.27, 0.62)
+mesh = SubResource("CylinderMesh_leg")
+
+[node name="LeftEye" type="MeshInstance3D" parent="AttackPivot/VisualRoot"]
+position = Vector3(-0.2, 0.98, -1.27)
+mesh = SubResource("SphereMesh_eye")
+
+[node name="RightEye" type="MeshInstance3D" parent="AttackPivot/VisualRoot"]
+position = Vector3(0.2, 0.98, -1.27)
+mesh = SubResource("SphereMesh_eye")
+
+[node name="LeftTusk" type="MeshInstance3D" parent="AttackPivot/VisualRoot"]
+position = Vector3(-0.25, 0.62, -1.62)
+rotation = Vector3(1.5707964, 0, -0.35)
+mesh = SubResource("CylinderMesh_tusk")
+
+[node name="RightTusk" type="MeshInstance3D" parent="AttackPivot/VisualRoot"]
+position = Vector3(0.25, 0.62, -1.62)
+rotation = Vector3(1.5707964, 0, 0.35)
+mesh = SubResource("CylinderMesh_tusk")
+
+[node name="Hurtbox" type="Area3D" parent="."]
+unique_name_in_owner = true
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+monitorable = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+position = Vector3(0, 0.75, 0)
+shape = SubResource("BoxShape3D_hurtbox")
+
+[node name="StatusLabel" type="Label3D" parent="."]
+unique_name_in_owner = true
+position = Vector3(0, 2.05, 0)
+text = "Wild Boar\nHP: 100 / 100\nIdle"
+font_size = 28
+outline_size = 7
+billboard = 1
+
+[node name="AttackCooldownTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 1.2
+one_shot = true
+
+[node name="HitReactionTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.18
+one_shot = true
+
+[node name="RespawnTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 5.0
+one_shot = true
