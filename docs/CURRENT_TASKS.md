@@ -1,7 +1,7 @@
 # Current Tasks
 
 **Project:** Aincrad-Inspired RPG  
-**Current milestone:** M2 — Reusable Third-Person Interaction  
+**Current milestone:** M3 — Health and Basic Sword Combat  
 **Current phase:** Implementation package created; local Godot verification remains  
 **Last updated:** 2026-07-10
 
@@ -21,17 +21,18 @@
 
 ## 2. Current Milestone Goal
 
-Add a reusable third-person interaction system without redesigning the working movement controller.
+Add reusable health and the first basic sword attack without replacing the working player controller or interaction system.
 
-The player should be able to aim the third-person camera at one nearby interactable, see a prompt, and press E to interact.
+The milestone should prove that:
 
-This milestone contains three primitive test objects:
+- The player and future actors can use the same health component.
+- A primitive player sword can perform one basic attack.
+- A forward attack hitbox can find a dedicated hurtbox.
+- One target takes damage only once per swing.
+- A primitive training dummy can be defeated and reset for repeated testing.
+- The player has a reusable health HUD ready for future incoming damage.
 
-- A readable sign.
-- A placeholder NPC with one dialogue line.
-- A one-use chest.
-
-Combat, inventory, quests, saving, multiplayer, and detailed dialogue remain outside this milestone.
+Enemy movement, enemy attacks, experience, quests, inventory, saving, and multiplayer remain outside this milestone.
 
 ---
 
@@ -42,10 +43,9 @@ Combat, inventory, quests, saving, multiplayer, and detailed dialogue remain out
 - [x] Define naming and architecture rules.
 - [x] Use Godot 4.7 and typed GDScript.
 - [x] Select the Compatibility renderer for early greybox work.
-- [x] Record the temporary beginner-facing path structure.
-- [ ] Initialise Git in the user's working copy.
-- [ ] Add the Godot `.gitignore`.
-- [ ] Make the first local commit.
+- [x] Record the beginner-facing path structure.
+- [x] Preserve the existing repository and project folder layout.
+- [ ] Make a focused local Git commit for the completed milestone.
 
 ---
 
@@ -60,144 +60,182 @@ Combat, inventory, quests, saving, multiplayer, and detailed dialogue remain out
 - [x] Add mouse camera control.
 - [x] Add gravity and jumping.
 - [x] Add hold-to-sprint.
-- [x] Add player facing rotation.
+- [x] Add player-facing rotation.
 - [x] Add Escape mouse capture toggling.
 - [x] Add collision floor, cubes, ramps, lighting, and environment.
 
 ### Local verification
 
-- [~] Open and test M1 in the user's Godot 4.7 editor.
-- [ ] Confirm movement and camera behaviour.
-- [ ] Confirm jumping, gravity, and sprinting.
-- [ ] Confirm collision on the floor, ramps, and cubes.
-- [ ] Confirm no critical debugger errors.
-
-The existing player controller remains unchanged during M2.
+- [~] Continue verifying M1 behaviour while testing later milestones.
+- [ ] Confirm movement, jumping, gravity, sprinting, camera, and collision remain correct.
+- [ ] Confirm no new critical debugger errors affect M1.
 
 ---
 
 ## 5. M2 — Reusable Third-Person Interaction
 
-### Base interaction architecture
+### Implementation
 
-- [x] Create `res://scripts/interactions/interactable.gd`.
-- [x] Use a reusable `Interactable` base class.
-- [x] Add typed availability, prompt, and interaction methods.
-- [x] Return optional display text from interactions.
-- [x] Keep quest, inventory, combat, saving, and networking logic out.
+- [x] Create the reusable `Interactable` base class.
+- [x] Add camera-targeted interaction detection.
+- [x] Add maximum interaction distance.
+- [x] Add the interaction prompt and short-message UI.
+- [x] Add the readable sign.
+- [x] Add the primitive NPC.
+- [x] Add the one-use chest.
+- [x] Bind `interact` to E.
+- [x] Preserve `player_controller.gd`.
 
-### Player interaction detection
+### Local verification
 
-- [x] Create `res://scripts/interactions/player_interactor.gd`.
-- [x] Add one camera-mounted `RayCast3D`.
-- [x] Limit interaction using player-to-object distance.
-- [x] Allow only the ray's closest valid object to be targeted.
-- [x] Ignore the player's own collision body.
-- [x] Stop world geometry from being interacted through.
-- [x] Validate required scene nodes.
-- [x] Validate the `interact` Input Map action.
-- [x] Press E to call the target's interaction method.
+- [~] Continue verifying M2 while testing M3.
+- [ ] Confirm sign, NPC, and chest interactions still work.
+- [ ] Confirm the prompt still appears and disappears correctly.
+- [ ] Confirm the chest still opens only once.
+- [ ] Confirm no new critical debugger errors affect M2.
+
+---
+
+## 6. M3 — Health and Basic Sword Combat
+
+### Reusable health component
+
+- [x] Create `res://AincradProject/scripts/components/health_component.gd`.
+- [x] Use typed current-health and maximum-health values.
+- [x] Add typed health-changed, damage-taken, health-restored, and died signals.
+- [x] Add damage, healing, reset, health-ratio, and alive-state methods.
+- [x] Keep the component independent from player, enemy, UI, saving, and multiplayer code.
+- [x] Add a `HealthComponent` to the player.
+- [x] Add a `HealthComponent` to the training dummy.
+
+### Player sword combat
+
+- [x] Create `res://AincradProject/scripts/player/player_combat.gd`.
 - [x] Leave `player_controller.gd` unchanged.
+- [x] Add a primitive sword beneath the existing `VisualRoot`.
+- [x] Add one visible sword-swing tween.
+- [x] Add a forward `ShapeCast3D` attack boundary.
+- [x] Apply damage through `HealthComponent` rather than a dummy-specific method.
+- [x] Prevent one health component from being damaged more than once per swing.
+- [x] Add a short recovery and cooldown.
+- [x] Prevent attacking while the mouse is released.
+- [x] Prevent attacking when the player's health component is dead.
 
-### Interaction UI
+### Combat collision boundaries
 
-- [x] Create `res://scenes/ui/interaction_ui.tscn`.
-- [x] Create `res://scripts/ui/interaction_ui.gd`.
-- [x] Show a prompt while a valid object is targeted.
-- [x] Hide the prompt when no valid object is targeted.
-- [x] Display short interaction messages.
-- [x] Automatically hide messages after a timer.
-- [x] Add missing-node error checks.
+- [x] Name collision layer 1 `World`.
+- [x] Name collision layer 2 `Interactable`.
+- [x] Reserve collision layer 3 for `Hurtbox` areas.
+- [x] Set the player attack shape to detect only hurtbox layer 3.
+- [x] Keep the interaction ray on its existing world/interactable mask.
+- [x] Keep ordinary player movement collision unchanged.
 
-### Test interactables
+### Training dummy
 
-- [x] Create the primitive sign scene and script.
-- [x] Make the sign display a short message.
-- [x] Create the primitive placeholder NPC scene and script.
-- [x] Make the NPC display one dialogue line.
-- [x] Create the primitive chest scene and script.
-- [x] Make the chest animate open only once.
-- [x] Remove the chest as a valid target after opening.
-- [x] Add all three test objects to the greybox world.
+- [x] Create `res://AincradProject/scripts/enemies/training_dummy.gd`.
+- [x] Create `res://AincradProject/scenes/enemies/training_dummy.tscn`.
+- [x] Use only Godot primitive meshes and shapes.
+- [x] Add a physical body collision shape.
+- [x] Add a separate layer-3 hurtbox `Area3D`.
+- [x] Display current dummy health with a `Label3D`.
+- [x] Add visible hit feedback.
+- [x] Disable the hurtbox after defeat.
+- [x] Reset the dummy after three seconds for repeated tests.
+- [x] Add one dummy to the existing greybox world.
 
-### Input and scene integration
+### Player health UI
 
-- [x] Add the `interact` Input Map action.
-- [x] Bind `interact` to the physical E key.
-- [x] Add `InteractionRayCast` beneath the existing camera.
-- [x] Add `PlayerInteractor` to the player scene.
-- [x] Instance `InteractionUI` in the player scene.
-- [x] Preserve the existing movement controller and main scene.
+- [x] Create `res://AincradProject/scenes/ui/health_ui.tscn`.
+- [x] Create `res://AincradProject/scripts/ui/health_ui.gd`.
+- [x] Connect the UI to a reusable `HealthComponent` through a NodePath.
+- [x] Display numeric HP and a progress bar.
+- [x] Keep the health UI separate from the interaction UI.
+- [x] Add missing-node error handling.
+
+### Input
+
+- [x] Add the `player_attack_primary` Input Map action.
+- [x] Bind `player_attack_primary` to the left mouse button.
+- [x] Preserve all existing movement, mouse-capture, and interaction actions.
+
+### File safety
+
+- [x] Preserve every existing folder.
+- [x] Preserve every existing file except the explicitly required modifications.
+- [x] Do not move, rename, delete, duplicate, or reorganize existing content.
+- [x] Do not manually edit or delete any `.uid` file.
+- [x] Create only the allowed new `scripts/components/` folder and milestone files.
 
 ### Local verification still required
 
-- [~] Open the project in Godot 4.7.
+- [~] Open the project in Godot 4.7 and allow new script UIDs to be generated normally.
 - [ ] Confirm all new scripts parse without errors.
-- [ ] Confirm all new scenes load without missing-resource errors.
-- [ ] Press F5 and walk toward the sign.
-- [ ] Aim at the sign and confirm its prompt appears.
-- [ ] Look away and confirm the prompt disappears.
-- [ ] Press E and confirm the sign message appears.
-- [ ] Aim at the NPC and confirm only the NPC is targeted.
-- [ ] Press E and confirm one dialogue line appears.
-- [ ] Aim at the chest and press E.
-- [ ] Confirm the chest lid opens.
-- [ ] Confirm the chest prompt disappears after opening.
-- [ ] Confirm the chest cannot open a second time.
-- [ ] Confirm distant objects do not show a prompt.
-- [ ] Confirm cubes or walls block the interaction ray.
-- [ ] Confirm WASD, mouse camera, jump, sprint, and Escape still work.
+- [ ] Confirm all scenes load without missing-resource errors.
+- [ ] Confirm the HP panel appears at the upper-left corner.
+- [ ] Confirm the HP panel initially reads `HP: 100 / 100`.
+- [ ] Confirm the primitive sword is visible on the player.
+- [ ] Hold the mouse captured and press the left mouse button.
+- [ ] Confirm the sword visibly swings once.
+- [ ] Confirm repeated clicks during the swing do not start overlapping attacks.
+- [ ] Stand outside attack range and confirm the dummy takes no damage.
+- [ ] Stand close and face the dummy.
+- [ ] Attack once and confirm the dummy changes from 100 HP to 75 HP.
+- [ ] Confirm one swing removes only 25 HP even if several hurtbox checks occur.
+- [ ] Attack four times and confirm the dummy is defeated.
+- [ ] Confirm the dummy hurtbox stops accepting damage while defeated.
+- [ ] Wait three seconds and confirm the dummy returns to 100 HP.
+- [ ] Confirm WASD, camera, jump, sprint, gravity, and Escape still work.
+- [ ] Confirm E interactions with the sign, NPC, and chest still work.
 - [ ] Confirm no critical errors appear in the debugger.
 
-M2 is complete after these local checks pass.
+M3 is complete after these local checks pass.
 
 ---
 
-## 6. Current Work Limit
+## 7. Current Work Limit
 
-Do not add the following during M2 testing:
+Do not add the following during M3 testing:
 
-- Combat.
-- Weapons.
-- Enemies.
-- Health.
+- Enemy movement or artificial intelligence.
+- Enemy attacks or player death handling.
 - Experience or levels.
 - Quest state.
-- Inventory or item rewards.
+- Inventory, equipment menus, or item rewards.
 - Saving or loading.
 - Multiplayer code.
-- Shop purchasing.
-- Full dialogue trees.
-- Floor transitions.
-- Blender models.
-- External art packs.
+- Advanced combos.
+- Blocking, dodging, stamina, or lock-on targeting.
+- Damage numbers or advanced effects.
+- Blender models or external art packs.
 
-The interaction base may support these later, but this milestone only proves detection, prompting, and method calls.
+The current combat system is only the smallest reusable damage test.
 
 ---
 
-## 7. Next Milestone Preview
+## 8. Next Milestone Preview
 
-## M3 — Health and Basic Sword Combat
+## M4 — First Enemy
 
 Planned tasks:
 
-- [ ] Create a reusable health component.
-- [ ] Create basic hitbox and hurtbox boundaries.
-- [ ] Add one primitive sword placeholder.
-- [ ] Add one basic attack.
-- [ ] Keep enemy behaviour outside the first combat step.
-- [ ] Preserve the interaction system.
+- [ ] Create one primitive enemy type.
+- [ ] Add a small state-based behaviour controller.
+- [ ] Add idle, detection, chase, attack, hurt, and defeated states.
+- [ ] Reuse `HealthComponent`.
+- [ ] Reuse the existing hurtbox boundary.
+- [ ] Add an enemy attack boundary that can damage the player.
+- [ ] Add basic player death or reset behaviour only as required for testing.
+- [ ] Preserve movement, interaction, and M3 combat.
 
-Begin M3 only after M2 passes local testing.
+Begin M4 only after M3 passes local testing.
 
 ---
 
-## 8. Updated Milestone Order
+## 9. Updated Milestone Order
 
 ### M0 — Project Foundation
 
-Documentation, decisions, project settings, and version control preparation.
+Documentation, decisions, project settings, and version-control preparation.
 
 ### M1 — Bootstrap and Third-Person Greybox
 
@@ -209,11 +247,11 @@ Camera targeting, prompt UI, one-line interactions, a sign, an NPC, and a one-us
 
 ### M3 — Health and Basic Sword Combat
 
-Health components, one sword attack, hit detection, and damage.
+Reusable health, player HUD, primitive sword, attack hitbox, training-dummy hurtbox, and damage.
 
 ### M4 — First Enemy
 
-One enemy type with simple behaviour and defeat handling.
+One enemy type with simple behaviour, attacks, and defeat handling.
 
 ### M5 — Progression
 
@@ -241,7 +279,7 @@ Only after the complete local prototype works.
 
 ---
 
-## 9. Definition of Done for Any Task
+## 10. Definition of Done for Any Task
 
 A task is done when:
 
@@ -251,11 +289,12 @@ A task is done when:
 - Required scene references are validated.
 - The result has been tested in Godot 4.7.
 - No new critical errors are present.
+- Existing completed behaviour still works.
 - Relevant documentation is updated.
 - The change is ready for a focused Git commit.
 
 ---
 
-## 10. Next Action
+## 11. Next Action
 
-Extract the M2 package, open `project.godot` in Godot 4.7, press F5, and complete the M2 local verification checklist above.
+Open the project in Godot 4.7 and complete every M3 local-verification checkbox before beginning M4.

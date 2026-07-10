@@ -1,0 +1,101 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://AincradProject/scripts/enemies/training_dummy.gd" id="1_training_dummy"]
+[ext_resource type="Script" path="res://AincradProject/scripts/components/health_component.gd" id="2_health_component"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wood"]
+albedo_color = Color(0.42, 0.23, 0.1, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_target"]
+albedo_color = Color(0.72, 0.16, 0.12, 1)
+roughness = 0.75
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_metal"]
+albedo_color = Color(0.32, 0.35, 0.4, 1)
+metallic = 0.45
+roughness = 0.55
+
+[sub_resource type="BoxMesh" id="BoxMesh_base"]
+material = SubResource("StandardMaterial3D_metal")
+size = Vector3(1.25, 0.22, 0.85)
+
+[sub_resource type="BoxMesh" id="BoxMesh_post"]
+material = SubResource("StandardMaterial3D_wood")
+size = Vector3(0.24, 1.8, 0.24)
+
+[sub_resource type="BoxMesh" id="BoxMesh_arms"]
+material = SubResource("StandardMaterial3D_wood")
+size = Vector3(1.45, 0.2, 0.2)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_target"]
+material = SubResource("StandardMaterial3D_target")
+top_radius = 0.55
+bottom_radius = 0.55
+height = 0.18
+radial_segments = 24
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_body"]
+size = Vector3(1.45, 2.25, 0.9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hurtbox"]
+size = Vector3(1.65, 2.45, 1.1)
+
+[node name="TrainingDummy" type="StaticBody3D"]
+collision_layer = 1
+collision_mask = 1
+script = ExtResource("1_training_dummy")
+
+[node name="HealthComponent" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_health_component")
+maximum_health = 100.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.125, 0)
+shape = SubResource("BoxShape3D_body")
+
+[node name="VisualRoot" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="Base" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(0, 0.11, 0)
+mesh = SubResource("BoxMesh_base")
+
+[node name="Post" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(0, 1.0, 0)
+mesh = SubResource("BoxMesh_post")
+
+[node name="Arms" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(0, 1.35, 0)
+mesh = SubResource("BoxMesh_arms")
+
+[node name="Target" type="MeshInstance3D" parent="VisualRoot"]
+position = Vector3(0, 1.78, -0.16)
+rotation = Vector3(1.5707964, 0, 0)
+mesh = SubResource("CylinderMesh_target")
+
+[node name="Hurtbox" type="Area3D" parent="."]
+unique_name_in_owner = true
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+monitorable = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+position = Vector3(0, 1.225, 0)
+shape = SubResource("BoxShape3D_hurtbox")
+
+[node name="StatusLabel" type="Label3D" parent="."]
+unique_name_in_owner = true
+position = Vector3(0, 2.75, 0)
+text = "Training Dummy
+HP: 100 / 100"
+font_size = 32
+outline_size = 8
+billboard = 1
+
+[node name="ResetTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 3.0
+one_shot = true

@@ -766,3 +766,228 @@ Do not move the existing working player during this milestone.
 ### Follow-up
 
 Review the folder migration before or during M3, before several combat and actor systems are added.
+
+---
+
+## D-019 — Preserve the Existing Folder Structure Through M3
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The working project already contains established `scenes/`, `scripts/`, `world/`, `data/`, `assets/`, and `docs/` folders, plus Godot-generated `.uid` files. Moving content now would create unnecessary broken references and would conflict with the explicit file-safety requirements for Milestone 3.
+
+### Decision
+
+Preserve the current folder structure exactly during M3.
+
+Do not move, rename, delete, duplicate, or reorganize existing files or folders. Do not manually edit or delete Godot-generated `.uid` files.
+
+Create only the allowed new `scripts/components/` folder and the requested milestone files in existing suitable folders.
+
+### Consequences
+
+- Existing scene and script references remain stable.
+- The earlier migration review mentioned in D-014 and D-018 is postponed.
+- New M3 content continues using the established beginner-facing layout.
+- Any future reorganization requires a separate explicit migration decision and a tested path-update plan.
+
+### Alternatives considered
+
+- Move the project into the older proposed `game/` architecture before combat.
+- Duplicate working files into a second structure.
+- Clean generated files manually.
+
+### Follow-up
+
+Reconsider migration only when the user explicitly requests it and after the current prototype has a verified backup.
+
+---
+
+## D-020 — Use One Reusable Health Component for Players and Damageable Targets
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Player health, enemies, training targets, destructible quest objects, and future network actors all require the same basic concepts: current health, maximum health, damage, restoration, death, and health-change notifications.
+
+### Decision
+
+Create a typed `HealthComponent` that is independent from actor-specific logic.
+
+The component owns health state and emits typed signals. Player, enemy, UI, animation, saving, and networking code may observe or call the component but must not be built into it.
+
+### Consequences
+
+- The player and training dummy use the same damage API.
+- Future enemies can reuse the component without copying health logic.
+- UI can subscribe to health changes without controlling combat.
+- Saving and multiplayer can later serialize or replicate clean values around the component.
+- Actor-specific death reactions remain outside the component.
+
+### Alternatives considered
+
+- Put player health inside `player_controller.gd`.
+- Put dummy health directly inside `training_dummy.gd`.
+- Create separate player-health and enemy-health scripts.
+
+### Follow-up
+
+M4 should reuse this component for the first moving enemy and for incoming player damage.
+
+---
+
+## D-021 — Use a ShapeCast Attack Boundary and Dedicated Hurtbox Layer
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The first sword attack needs a clear, reusable collision boundary. Using ordinary body collision alone would mix movement collision with combat detection and make future hit filtering harder.
+
+### Decision
+
+Use a `ShapeCast3D` beneath the player's existing `VisualRoot` as the first attack boundary.
+
+Reserve 3D physics layer 3 for `Hurtbox` areas. The player attack cast detects only that layer and applies damage through a `HealthComponent` found on the hurtbox owner hierarchy.
+
+### Consequences
+
+- World collision, interaction targeting, and combat targeting remain separate.
+- The attack follows the direction the player's visual body faces.
+- One cast can detect several targets while deduplicating each health component per swing.
+- Future enemies can add a layer-3 hurtbox without changing player combat code.
+- More advanced weapon trails or animation-driven active frames may replace the prototype timing later.
+
+### Alternatives considered
+
+- Detect damage through ordinary `StaticBody3D` and `CharacterBody3D` collisions.
+- Hard-code the training dummy type into player combat.
+- Use a permanent overlapping `Area3D` without attack timing.
+- Use a camera ray for melee combat.
+
+### Follow-up
+
+M4 should use the same hurtbox layer and introduce a separate enemy attack boundary for player damage.
+
+---
+
+## D-022 — Bind the First Sword Attack to `player_attack_primary`
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The naming conventions reserve prefixed Input Map actions for player gameplay. The first combat milestone needs one clear attack action without changing movement, interaction, or mouse-capture controls.
+
+### Decision
+
+Add the Input Map action:
+
+```text
+player_attack_primary
+```
+
+Bind it to the left mouse button. Process it in the separate `PlayerCombat` node only while the mouse is captured.
+
+### Consequences
+
+- Left click performs one basic sword swing.
+- Clicking while the cursor is released does not attack.
+- Existing E interaction and Escape mouse capture remain unchanged.
+- Future controller bindings can be added to the same action.
+- Additional attack actions can follow the same naming pattern later.
+
+### Alternatives considered
+
+- Put attack input inside `player_controller.gd`.
+- Use a raw mouse-button check rather than the Input Map.
+- Reuse the E interaction action.
+
+### Follow-up
+
+Add controller bindings only after keyboard-and-mouse combat is locally verified.
+
+---
+
+## D-023 — Use a Resettable Training Dummy Before Building Enemy AI
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Health and sword damage should be tested independently before movement, detection, chasing, and enemy attacks introduce additional failure points.
+
+### Decision
+
+Create one primitive stationary training dummy with:
+
+- A reusable `HealthComponent`.
+- A dedicated hurtbox.
+- A visible health label.
+- Simple hit feedback.
+- A defeated state.
+- Automatic reset after three seconds.
+
+### Consequences
+
+- Combat can be tested repeatedly without restarting the scene.
+- M3 does not require enemy artificial intelligence.
+- The dummy is a development target, not the first real enemy type.
+- M4 remains responsible for enemy movement and attacks.
+
+### Alternatives considered
+
+- Build the first full enemy and combat system simultaneously.
+- Destroy the dummy permanently after defeat.
+- Add an enemy attack during M3.
+
+### Follow-up
+
+Keep the dummy available as a regression-test object after M4 begins.
+
+---
+
+## D-024 — Keep Health UI Separate From Interaction UI
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The existing interaction UI handles prompts and short messages. Health is persistent actor state with a different lifetime and update source.
+
+### Decision
+
+Create a separate reusable `HealthUI` scene that connects to one `HealthComponent` through an exported `NodePath`.
+
+Do not add health controls or health state to `InteractionUI`.
+
+### Consequences
+
+- Interaction UI remains focused on interaction prompts and messages.
+- Health UI can be reused or replaced independently.
+- Future HUD composition can instance both UI scenes without merging their scripts.
+- The player HUD is ready before enemies can damage the player.
+
+### Alternatives considered
+
+- Add the health bar to `interaction_ui.tscn`.
+- Make `player_controller.gd` directly update labels.
+- Create a global HUD autoload during M3.
+
+### Follow-up
+
+M5 may expand the HUD with experience and level displays while preserving separate feature responsibilities.

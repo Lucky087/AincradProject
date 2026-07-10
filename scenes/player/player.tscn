@@ -3,6 +3,9 @@
 [ext_resource type="Script" uid="uid://b8mjk5af27wql" path="res://AincradProject/scripts/player/player_controller.gd" id="1_player_controller"]
 [ext_resource type="Script" uid="uid://dvo5dggcqo8gl" path="res://AincradProject/scripts/interactions/player_interactor.gd" id="2_player_interactor"]
 [ext_resource type="PackedScene" path="res://AincradProject/scenes/ui/interaction_ui.tscn" id="3_interaction_ui"]
+[ext_resource type="Script" path="res://AincradProject/scripts/components/health_component.gd" id="4_health_component"]
+[ext_resource type="Script" path="res://AincradProject/scripts/player/player_combat.gd" id="5_player_combat"]
+[ext_resource type="PackedScene" path="res://AincradProject/scenes/ui/health_ui.tscn" id="6_health_ui"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.45
@@ -25,10 +28,44 @@ roughness = 0.65
 material = SubResource("StandardMaterial3D_facing")
 size = Vector3(0.22, 0.22, 0.18)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sword_blade"]
+albedo_color = Color(0.74, 0.8, 0.9, 1)
+metallic = 0.75
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sword_handle"]
+albedo_color = Color(0.2, 0.11, 0.06, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sword_guard"]
+albedo_color = Color(0.55, 0.4, 0.12, 1)
+metallic = 0.45
+roughness = 0.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_sword_blade"]
+material = SubResource("StandardMaterial3D_sword_blade")
+size = Vector3(0.12, 0.08, 1.35)
+
+[sub_resource type="BoxMesh" id="BoxMesh_sword_handle"]
+material = SubResource("StandardMaterial3D_sword_handle")
+size = Vector3(0.14, 0.12, 0.42)
+
+[sub_resource type="BoxMesh" id="BoxMesh_sword_guard"]
+material = SubResource("StandardMaterial3D_sword_guard")
+size = Vector3(0.52, 0.1, 0.12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_attack"]
+size = Vector3(1.4, 1.5, 0.85)
+
 [node name="Player" type="CharacterBody3D"]
 floor_snap_length = 0.3
 floor_stop_on_slope = true
 script = ExtResource("1_player_controller")
+
+[node name="HealthComponent" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("4_health_component")
+maximum_health = 100.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0.9, 0)
@@ -44,6 +81,33 @@ mesh = SubResource("CapsuleMesh_player")
 [node name="FacingMarker" type="MeshInstance3D" parent="VisualRoot"]
 position = Vector3(0, 1.08, -0.43)
 mesh = SubResource("BoxMesh_facing")
+
+[node name="SwordPivot" type="Node3D" parent="VisualRoot"]
+unique_name_in_owner = true
+position = Vector3(0.62, 1.0, -0.02)
+rotation = Vector3(0, -0.349066, 0)
+
+[node name="Handle" type="MeshInstance3D" parent="VisualRoot/SwordPivot"]
+position = Vector3(0, 0, 0.18)
+mesh = SubResource("BoxMesh_sword_handle")
+
+[node name="Guard" type="MeshInstance3D" parent="VisualRoot/SwordPivot"]
+position = Vector3(0, 0, -0.08)
+mesh = SubResource("BoxMesh_sword_guard")
+
+[node name="Blade" type="MeshInstance3D" parent="VisualRoot/SwordPivot"]
+position = Vector3(0, 0, -0.815)
+mesh = SubResource("BoxMesh_sword_blade")
+
+[node name="AttackShapeCast" type="ShapeCast3D" parent="VisualRoot"]
+unique_name_in_owner = true
+position = Vector3(0, 0.95, -0.45)
+target_position = Vector3(0, 0, -1.15)
+shape = SubResource("BoxShape3D_attack")
+collision_mask = 4
+collide_with_areas = true
+collide_with_bodies = false
+enabled = true
 
 [node name="CameraYaw" type="Node3D" parent="."]
 unique_name_in_owner = true
@@ -78,5 +142,16 @@ script = ExtResource("2_player_interactor")
 maximum_interaction_distance = 4.0
 ray_cast_path = NodePath("../CameraYaw/CameraPitch/SpringArm3D/Camera3D/InteractionRayCast")
 interaction_ui_path = NodePath("../InteractionUI")
+
+[node name="PlayerCombat" type="Node3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_player_combat")
+attack_damage = 25.0
+attack_shape_cast_path = NodePath("../VisualRoot/AttackShapeCast")
+sword_pivot_path = NodePath("../VisualRoot/SwordPivot")
+health_component_path = NodePath("../HealthComponent")
+
+[node name="HealthUI" parent="." instance=ExtResource("6_health_ui")]
+health_component_path = NodePath("../HealthComponent")
 
 [node name="InteractionUI" parent="." instance=ExtResource("3_interaction_ui")]
