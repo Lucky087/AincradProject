@@ -1,0 +1,155 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://AincradProject/scripts/ui/inventory_ui.gd" id="1_inventory_ui"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inventory_panel"]
+bg_color = Color(0.035, 0.045, 0.065, 0.98)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.72, 0.58, 0.22, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_details_panel"]
+bg_color = Color(0.075, 0.09, 0.12, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.32, 0.38, 0.48, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="InventoryUI" type="CanvasLayer"]
+layer = 30
+script = ExtResource("1_inventory_ui")
+inventory_path = NodePath("../PlayerInventory")
+player_controller_path = NodePath("..")
+player_combat_path = NodePath("../PlayerCombat")
+player_interactor_path = NodePath("../PlayerInteractor")
+
+[node name="InventoryRoot" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="DimBackground" type="ColorRect" parent="InventoryRoot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+color = Color(0, 0, 0, 0.62)
+
+[node name="CenterContainer" type="CenterContainer" parent="InventoryRoot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="InventoryPanel" type="PanelContainer" parent="InventoryRoot/CenterContainer"]
+custom_minimum_size = Vector2(780, 480)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_inventory_panel")
+
+[node name="MarginContainer" type="MarginContainer" parent="InventoryRoot/CenterContainer/InventoryPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 18
+
+[node name="MainVBox" type="VBoxContainer" parent="InventoryRoot/CenterContainer/InventoryPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TitleLabel" type="Label" parent="InventoryRoot/CenterContainer/InventoryPanel/MarginContainer/MainVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Inventory"
+horizontal_alignment = 1
+
+[node name="TitleSeparator" type="HSeparator" parent="InventoryRoot/CenterContainer/InventoryPanel/MarginContainer/MainVBox"]
+layout_mode = 2
+
+[node name="ContentHBox" type="HBoxContainer" parent="InventoryRoot/CenterContainer/InventoryPanel/MarginContainer/MainVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 18
+
+[node name="ItemsVBox" type="VBoxContainer" parent="InventoryRoot/CenterContainer/InventoryPanel/MarginContainer/MainVBox/ContentHBox"]
+custom_minimum_size = Vector2(330, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="ItemsLabel" type="Label" parent="InventoryRoot/CenterContainer/InventoryPanel/MarginContainer/MainVBox/ContentHBox/ItemsVBox"]
+layout_mode = 2
+text = "Items"
+
+[node name="ItemList" type="ItemList" parent="InventoryRoot/CenterContainer/InventoryPanel/MarginContainer/MainVBox/ContentHBox/ItemsVBox"]
+custom_minimum_size = Vector2(330, 320)
+layout_mode = 2
+size_flags_vertical = 3
+select_mode = 0
+allow_reselect = true
+
+[node name="DetailsVBox" type="VBoxContainer" parent="InventoryRoot/CenterContainer/InventoryPanel/MarginContainer/MainVBox/ContentHBox"]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="DetailsLabel" type="Label" parent="InventoryRoot/CenterContainer/InventoryPanel/MarginContainer/MainVBox/ContentHBox/DetailsVBox"]
+layout_mode = 2
+text = "Selected Item"
+
+[node name="DetailsPanel" type="PanelContainer" parent="InventoryRoot/CenterContainer/InventoryPanel/MarginContainer/MainVBox/ContentHBox/DetailsVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_details_panel")
+
+[node name="DetailsMargin" type="MarginContainer" parent="InventoryRoot/CenterContainer/InventoryPanel/MarginContainer/MainVBox/ContentHBox/DetailsVBox/DetailsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="DetailsContent" type="VBoxContainer" parent="InventoryRoot/CenterContainer/InventoryPanel/MarginContainer/MainVBox/ContentHBox/DetailsVBox/DetailsPanel/DetailsMargin"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="DescriptionLabel" type="Label" parent="InventoryRoot/CenterContainer/InventoryPanel/MarginContainer/MainVBox/ContentHBox/DetailsVBox/DetailsPanel/DetailsMargin/DetailsContent"]
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+size_flags_vertical = 3
+text = "Select an item to view its description."
+autowrap_mode = 2
+vertical_alignment = 1
+
+[node name="DamageLabel" type="Label" parent="InventoryRoot/CenterContainer/InventoryPanel/MarginContainer/MainVBox/ContentHBox/DetailsVBox/DetailsPanel/DetailsMargin/DetailsContent"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Damage: —"
+
+[node name="InstructionsLabel" type="Label" parent="InventoryRoot/CenterContainer/InventoryPanel/MarginContainer/MainVBox"]
+layout_mode = 2
+text = "↑ / ↓: Select    Enter: Equip    U: Unequip    I or Esc: Close"
+horizontal_alignment = 1

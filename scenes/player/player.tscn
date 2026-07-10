@@ -12,6 +12,11 @@
 [ext_resource type="Resource" path="res://AincradProject/data/quests/boar_hunt.tres" id="10_boar_hunt"]
 [ext_resource type="PackedScene" path="res://AincradProject/scenes/ui/quest_ui.tscn" id="11_quest_ui"]
 [ext_resource type="PackedScene" path="res://AincradProject/scenes/ui/save_status_ui.tscn" id="12_save_status_ui"]
+[ext_resource type="Script" path="res://AincradProject/scripts/components/player_inventory.gd" id="13_player_inventory"]
+[ext_resource type="Script" path="res://AincradProject/scripts/items/item_definition.gd" id="14_item_definition"]
+[ext_resource type="Resource" path="res://AincradProject/data/items/training_sword.tres" id="15_training_sword"]
+[ext_resource type="Resource" path="res://AincradProject/data/items/bronze_sword.tres" id="16_bronze_sword"]
+[ext_resource type="PackedScene" path="res://AincradProject/scenes/ui/inventory_ui.tscn" id="17_inventory_ui"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.45
@@ -85,6 +90,14 @@ base_experience_per_level = 100
 unique_name_in_owner = true
 script = ExtResource("9_player_quest_log")
 initial_quest_definition = ExtResource("10_boar_hunt")
+
+[node name="PlayerInventory" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("13_player_inventory")
+maximum_slots = 16
+item_definitions = Array[ExtResource("14_item_definition")]([ExtResource("15_training_sword"), ExtResource("16_bronze_sword")])
+starter_weapon_id = &"training_sword"
+equip_starter_weapon = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0.9, 0)
@@ -169,6 +182,7 @@ attack_damage = 25.0
 attack_shape_cast_path = NodePath("../VisualRoot/AttackShapeCast")
 sword_pivot_path = NodePath("../VisualRoot/SwordPivot")
 health_component_path = NodePath("../HealthComponent")
+inventory_path = NodePath("../PlayerInventory")
 
 [node name="HealthUI" parent="." instance=ExtResource("6_health_ui")]
 health_component_path = NodePath("../HealthComponent")
@@ -181,5 +195,7 @@ quest_log_path = NodePath("../PlayerQuestLog")
 tracked_quest_id = &"boar_hunt"
 
 [node name="SaveStatusUI" parent="." instance=ExtResource("12_save_status_ui")]
+
+[node name="InventoryUI" parent="." instance=ExtResource("17_inventory_ui")]
 
 [node name="InteractionUI" parent="." instance=ExtResource("3_interaction_ui")]

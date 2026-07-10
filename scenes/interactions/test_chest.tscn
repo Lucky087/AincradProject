@@ -31,7 +31,11 @@ collision_layer = 3
 collision_mask = 1
 script = ExtResource("1_test_chest")
 interaction_prompt = "Press E to open chest"
-opened_message = "You opened the chest. It is empty for now."
+reward_item_id = &"bronze_sword"
+reward_obtained_message = "Obtained Bronze Sword"
+already_owned_message = "You already own the Bronze Sword."
+inventory_full_message = "Your inventory is full. Make space and try again."
+opened_message = "You opened the chest."
 
 [node name="BaseMesh" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.35, 0)

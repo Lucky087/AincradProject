@@ -17,6 +17,7 @@ var _ray_cast: RayCast3D = null
 var _interaction_ui: InteractionUI = null
 var _current_target: Interactable = null
 var _setup_is_valid: bool = false
+var _interaction_input_enabled: bool = true
 
 
 func _ready() -> void:
@@ -31,13 +32,26 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if not _interaction_input_enabled:
+		return
+
 	if event.is_action_pressed(INTERACT_ACTION):
 		_try_interact()
 		get_viewport().set_input_as_handled()
 
 
 func _physics_process(_delta: float) -> void:
+	if not _interaction_input_enabled:
+		return
+
 	_update_current_target()
+
+
+## Enables or disables interaction targeting and input.
+func set_interaction_input_enabled(is_enabled: bool) -> void:
+	_interaction_input_enabled = is_enabled
+	if not is_enabled:
+		_set_current_target(null)
 
 
 func _resolve_required_nodes() -> bool:

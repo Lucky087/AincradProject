@@ -1802,3 +1802,253 @@ without crashing.
 ### Follow-up
 
 Add migration functions before changing the meaning or shape of version 1 data.
+
+---
+
+## D-043 — Keep Item Definitions Separate From Player Inventory State
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Weapons need reusable names, descriptions, categories, stack limits, slots, and
+damage values. Runtime ownership must also remain saveable without serializing
+live nodes or depending on Resource paths.
+
+### Decision
+
+Create `ItemDefinition` as a reusable Resource class under
+`scripts/items/item_definition.gd`.
+
+Store item design data in `.tres` resources, while `PlayerInventory` owns only
+stable item IDs, quantities, and the equipped weapon ID.
+
+The first registered definitions are:
+
+- `training_sword`, 25 damage.
+- `bronze_sword`, 35 damage.
+
+### Consequences
+
+- New items can reuse the same component and UI.
+- Save files remain based on stable IDs rather than scene or Resource references.
+- Item files can be edited without duplicating inventory logic.
+- Unknown saved IDs can be skipped safely.
+- Item definitions must keep their stable IDs after public saves depend on them.
+
+### Alternatives considered
+
+- Store complete Resource paths in save data.
+- Put weapon damage directly in inventory dictionaries.
+- Create separate scripts for every individual weapon.
+- Make SaveManager own an item database.
+
+### Follow-up
+
+Register future item definitions with each player's inventory or a later shared
+catalog without changing existing saved IDs.
+
+---
+
+## D-044 — Let PlayerInventory Own Runtime Items and One Weapon Slot
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Inventory data should not be duplicated inside the UI, combat script, chest, or
+SaveManager. The first milestone only requires weapons but should leave room for
+stackable consumables, materials, quest items, and miscellaneous items later.
+
+### Decision
+
+Add one `PlayerInventory` component as a direct child of the player.
+
+It owns:
+
+- A configurable maximum slot count.
+- Stable item ID and quantity stacks.
+- One equipped weapon ID.
+- Item add, remove, ownership, quantity, equip, and unequip interfaces.
+- Inventory and equipment signals.
+- Component-owned save and load methods.
+
+A new game starts with exactly one Training Sword equipped. Non-stackable
+weapons cannot be duplicated.
+
+### Consequences
+
+- Inventory UI is presentation only.
+- Combat asks the inventory for current weapon damage.
+- The chest asks the inventory to add its reward.
+- SaveManager only coordinates the component's public persistence interface.
+- Additional equipment slots remain intentionally outside this milestone.
+
+### Alternatives considered
+
+- Put inventory arrays on the player controller.
+- Let InventoryUI own the list.
+- Duplicate equipped-weapon data in PlayerCombat.
+- Use Node or Resource references as saved ownership state.
+
+### Follow-up
+
+Future armour or consumables must extend this component deliberately rather than
+creating parallel player inventories.
+
+---
+
+## D-045 — Derive Sword Damage From Equipped Weapon and Gate Gameplay Input
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The existing combat system already owns attack timing, ShapeCast3D collision,
+one-hit-per-swing protection, and cooldowns. Inventory must change damage without
+replacing those proven mechanics. Opening a full-screen inventory must also stop
+movement, attacks, and interactions while preserving gravity and UI input.
+
+### Decision
+
+Keep the existing `PlayerCombat` public signals and attack flow. Add an exported
+inventory path and synchronize the existing `attack_damage` value from the
+equipped weapon whenever equipment changes.
+
+An unequipped player cannot start a damaging sword attack.
+
+Add small public input gates to:
+
+- `PlayerController` for movement, jump, and sprint.
+- `PlayerCombat` for attacks and active-swing cancellation.
+- `PlayerInteractor` for targeting and E interactions.
+
+`InventoryUI` calls these gates when it opens and closes. Escape is consumed by
+the inventory first, so it closes before mouse capture can change.
+
+### Consequences
+
+- Training Sword preserves 25 damage.
+- Bronze Sword changes damage to 35 immediately.
+- Attack hit windows and cooldowns remain unchanged.
+- Unequipping produces a safe zero-damage state.
+- Gameplay scripts remain responsible for their own input rather than checking a
+  global menu flag every frame.
+
+### Alternatives considered
+
+- Replace PlayerCombat with an inventory-specific combat controller.
+- Change ShapeCast3D or cooldown logic.
+- Pause the entire scene tree when inventory opens.
+- Let each gameplay script search for InventoryUI every frame.
+
+### Follow-up
+
+A future general UI-state coordinator may replace the direct gates when several
+modal menus exist, but current public methods should remain compatible.
+
+---
+
+## D-046 — Grant Bronze Sword Through the Existing One-Use Chest
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Milestone 8 needs one item acquisition path without adding loot tables, enemy
+drops, shops, or a replacement chest scene.
+
+### Decision
+
+Extend the existing `TestChest` interaction so it safely finds the interacting
+player's `PlayerInventory` and attempts to add one `bronze_sword`.
+
+- The chest opens after a successful reward.
+- If the player already owns Bronze Sword, it opens and reports that no duplicate
+  was added.
+- If the inventory cannot accept the reward, the chest stays closed so the
+  player can retry.
+- Repeated interaction cannot produce duplicate non-stackable weapons.
+
+### Consequences
+
+- Existing interaction targeting, prompt, E input, and lid animation remain.
+- No alternative chest or loot system is introduced.
+- A loaded inventory containing Bronze Sword remains duplicate-safe even though
+  temporary chest-open state is not saved.
+
+### Alternatives considered
+
+- Replace the chest scene.
+- Give Bronze Sword automatically at startup.
+- Drop a physical pickup.
+- Award the sword from the boar or quest.
+
+### Follow-up
+
+Chest persistence and configurable loot containers may be added only after the
+prototype needs persistent world-object state.
+
+---
+
+## D-047 — Advance Save Format to Version 2 With Version-1 Inventory Fallback
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Inventory and equipment must survive restarts, but Milestone 7 version-1 saves
+contain only player, progression, and quest data. Existing saves must not crash
+or silently create duplicate starter weapons.
+
+### Decision
+
+Increase the save writer to version 2 and add:
+
+```text
+inventory.items[] = { item_id, quantity }
+inventory.equipped_weapon_id
+```
+
+Continue accepting save versions 1 and 2.
+
+When loading version 1, pass missing inventory data to `PlayerInventory`, which
+resets to exactly one configured starter Training Sword and equips it.
+
+For version 2:
+
+- Unknown item IDs are skipped with warnings.
+- Stack and slot limits are revalidated.
+- Duplicate non-stackable weapons are rejected.
+- The equipped ID is restored only if it identifies an owned equippable weapon.
+- Inventory and equipment signals refresh UI and combat immediately.
+
+### Consequences
+
+- Milestone 7 saves remain usable.
+- New saves preserve both swords and current weapon equipment.
+- SaveManager still does not own duplicate inventory state.
+- Future format changes must preserve or migrate versions 1 and 2 deliberately.
+
+### Alternatives considered
+
+- Reject all version-1 saves.
+- Keep version 1 despite changing its schema.
+- Store Resource paths or complete Resources in JSON.
+- Add starter inventory before loading every save, causing duplicates.
+
+### Follow-up
+
+Add explicit migration helpers before version 3 changes the meaning of existing
+inventory fields.
+

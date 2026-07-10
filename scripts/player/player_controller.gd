@@ -30,6 +30,7 @@ const REQUIRED_INPUT_ACTIONS: Array[StringName] = [
 @export_range(1.0, 89.0, 1.0) var maximum_camera_pitch_degrees: float = 55.0
 
 var _gravity_strength: float = 9.8
+var _movement_input_enabled: bool = true
 
 @onready var _visual_root: Node3D = %VisualRoot
 @onready var _camera_yaw: Node3D = %CameraYaw
@@ -61,19 +62,29 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _physics_process(delta: float) -> void:
 	_apply_gravity(delta)
-	_handle_jump()
 
-	var input_vector: Vector2 = Input.get_vector(
-		"player_move_left",
-		"player_move_right",
-		"player_move_forward",
-		"player_move_backward"
-	)
-	var movement_direction: Vector3 = _get_camera_relative_direction(input_vector)
+	var movement_direction: Vector3 = Vector3.ZERO
+	if _movement_input_enabled:
+		_handle_jump()
+		var input_vector: Vector2 = Input.get_vector(
+			"player_move_left",
+			"player_move_right",
+			"player_move_forward",
+			"player_move_backward"
+		)
+		movement_direction = _get_camera_relative_direction(input_vector)
 
 	_apply_horizontal_movement(movement_direction, delta)
 	_rotate_visual_toward(movement_direction, delta)
 	move_and_slide()
+
+
+## Enables or disables movement, sprint, and jump input while preserving gravity.
+func set_movement_input_enabled(is_enabled: bool) -> void:
+	_movement_input_enabled = is_enabled
+	if not is_enabled:
+		velocity.x = 0.0
+		velocity.z = 0.0
 
 
 func _apply_gravity(delta: float) -> void:

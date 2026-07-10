@@ -1,9 +1,9 @@
 # Current Tasks
 
 **Project:** Aincrad-Inspired RPG  
-**Current milestone:** M7 — Save and Load System  
-**Current phase:** Save/load implementation package created; local Godot verification remains  
-**Last updated:** 2026-07-10
+**Current milestone:** M8 — Inventory, Items, and Weapon Equipment  
+**Current phase:** Inventory/equipment implementation package created; local Godot verification remains  
+**Last updated:** 2026-07-11
 
 ---
 
@@ -21,28 +21,28 @@
 
 ## 2. Current Milestone Goal
 
-Add one application-wide SaveManager that writes versioned JSON to
-`user://savegame.json`, coordinates the existing player components through
-public save interfaces, restores player position, health, progression, and quest
-state, and reports success or failure through a small separate UI.
+Add one player-owned inventory and weapon-equipment component without replacing
+movement, interaction, combat, health, progression, quest, or save systems.
 
 The milestone should prove that:
 
-- K saves once per press and L loads once per press.
-- Save data includes version 1, player position, health, progression, and quest state.
-- Health, progression, and quest components remain the owners of their data.
-- Existing signal-driven UI refreshes immediately after loading.
-- Active Boar Hunt progress survives a restart.
-- Completed Boar Hunt and its claimed reward remain permanently protected.
-- Missing, empty, damaged, incomplete, or unsupported saves fail safely.
-- Unknown quest IDs are skipped without crashing.
-- Temporary enemy, attack, timer, and training-dummy state is not persisted.
-- Every M1–M6 feature remains functional.
+- Item design data is stored in reusable `ItemDefinition` resources.
+- Runtime quantities and equipment remain owned by `PlayerInventory`.
+- A new player starts with one Training Sword equipped.
+- The Training Sword deals 25 damage through the existing combat hit window.
+- The existing chest grants one Bronze Sword and cannot duplicate it.
+- The Bronze Sword can be selected and equipped through a keyboard UI.
+- Equipping Bronze Sword changes sword damage to 35 immediately.
+- Unequipping prevents sword attacks from applying damage.
+- Opening inventory disables movement, attacks, and interactions.
+- Escape closes inventory before changing mouse capture.
+- Save version 2 stores stable item IDs, quantities, and equipped weapon ID.
+- Save version 1 remains loadable and receives safe starter inventory defaults.
+- Every M1–M7 feature remains functional.
 
-Inventory, equipment, items, gold, shops, multiple slots, cloud saves,
-multiplayer saves, a main menu, and external assets remain outside this
-milestone.
-
+Armour, consumable effects, crafting, shops, gold, random loot, drag-and-drop,
+multiple equipment slots, multiplayer inventory, item icons, and external assets
+remain outside this milestone.
 ---
 
 ## 3. M0 — Project Foundation
@@ -540,42 +540,146 @@ M7 is complete after all local checks pass.
 
 ---
 
-## 11. Current Work Limit
+## 11. M8 — Inventory, Items, and Weapon Equipment
 
-Do not add the following during M7:
+### Item definitions
 
-- Inventory, equipment, items, loot, or gold.
-- Shops or economy systems.
-- Multiple save slots or profile selection.
-- Cloud saving or account synchronization.
-- Multiplayer or server-owned saves.
-- Automatic checkpoints or autosaving.
-- A main menu or load-game screen.
-- Temporary boar, dummy, attack, animation, or timer state.
-- Detailed graphics or external assets.
+- [x] Create `res://AincradProject/scripts/items/item_definition.gd`.
+- [x] Support Weapon, Consumable, Material, Quest Item, and Miscellaneous categories.
+- [x] Support stable item ID, display name, description, stack limit, equipment flag,
+  equipment slot, and weapon damage.
+- [x] Create `data/items/training_sword.tres` with 25 damage.
+- [x] Create `data/items/bronze_sword.tres` with 35 damage.
+- [x] Keep Resource definitions separate from runtime ownership.
 
-M7 is only the versioned local JSON save, component persistence interfaces,
-manual K/L controls, safe validation, and temporary status notification.
+### Player inventory
+
+- [x] Create `res://AincradProject/scripts/components/player_inventory.gd`.
+- [x] Add `PlayerInventory` as a direct player child.
+- [x] Register the two item definitions in the component Inspector.
+- [x] Configure 16 inventory slots.
+- [x] Add stable ID and quantity stacks.
+- [x] Enforce each definition's maximum stack size.
+- [x] Prevent duplicate non-stackable weapons.
+- [x] Add item, remove item, ownership, quantity, equip, and unequip interfaces.
+- [x] Add inventory and equipment signals.
+- [x] Give a new player exactly one equipped Training Sword.
+- [x] Add component-owned save and load interfaces.
+
+### Combat integration
+
+- [x] Preserve the existing attack signals, ShapeCast3D hit window, cooldown, and
+  duplicate-hit protection.
+- [x] Resolve `PlayerInventory` through an exported NodePath.
+- [x] Read attack damage from the equipped weapon.
+- [x] Keep Training Sword damage at 25.
+- [x] Change damage to 35 immediately when Bronze Sword is equipped.
+- [x] Prevent damage while no weapon is equipped.
+- [x] Add a public combat-input gate for inventory mode.
+
+### Chest reward
+
+- [x] Preserve the existing `TestChest` scene and lid animation.
+- [x] Configure the existing chest to grant `bronze_sword` once.
+- [x] Find the interacting player's inventory through the player group/interface.
+- [x] Refuse duplicate Bronze Swords.
+- [x] Leave the chest closed when the reward cannot fit so the player can retry.
+- [x] Display reward, already-owned, and inventory-full messages.
+
+### Inventory UI and controls
+
+- [x] Create `res://AincradProject/scripts/ui/inventory_ui.gd`.
+- [x] Create `res://AincradProject/scenes/ui/inventory_ui.tscn`.
+- [x] Add the UI beside the existing HUD without replacing it.
+- [x] Add `toggle_inventory` and bind it to physical I.
+- [x] Display item names, quantities, equipped marker, description, and damage.
+- [x] Use keyboard selection and Enter to equip.
+- [x] Use U to unequip for the required unarmed test.
+- [x] Use I or Escape to close.
+- [x] Disable movement, combat, and interaction input while open.
+- [x] Restore prior mouse mode and gameplay input when closed.
+- [x] Avoid `_process()` polling; refresh through signals.
+
+### Save compatibility
+
+- [x] Increase the save format to version 2.
+- [x] Save item IDs, quantities, and equipped weapon ID.
+- [x] Keep health, position, progression, and quest data unchanged.
+- [x] Continue accepting version 1 save files.
+- [x] Apply starter inventory defaults when version 1 has no inventory data.
+- [x] Skip unknown saved item IDs with warnings.
+- [x] Refresh inventory UI and combat damage through equipment signals after load.
+
+### File safety and documentation
+
+- [x] Preserve every existing folder and path.
+- [x] Do not move, rename, delete, duplicate, or reorganize existing content.
+- [x] Do not manually create, edit, or delete `.uid` files.
+- [x] Create only the allowed `scripts/items/` folder; no alternate code roots.
+- [x] Add `docs/MILESTONE_8_SETUP.md`.
+- [x] Update `docs/CURRENT_TASKS.md` and `docs/DECISION_LOG.md`.
+
+### Local verification still required
+
+- [~] Open the project in Godot 4.7 and allow new script UIDs to be generated.
+- [ ] Confirm all scripts and scenes parse without errors in Godot.
+- [ ] Confirm new game starts with one Training Sword equipped.
+- [ ] Confirm Training Sword still deals 25 damage and a 100-HP boar takes four hits.
+- [ ] Open the chest and confirm exactly one Bronze Sword is added.
+- [ ] Confirm repeat chest interaction cannot add a duplicate.
+- [ ] Open inventory with I and verify keyboard selection.
+- [ ] Equip Bronze Sword with Enter and confirm 35 damage.
+- [ ] Unequip with U and confirm attacks apply no damage.
+- [ ] Confirm movement, combat, and interaction are disabled while inventory is open.
+- [ ] Confirm Escape closes inventory without changing mouse capture first.
+- [ ] Save with Bronze Sword equipped, restart, load, and confirm equipment/damage.
+- [ ] Load a Milestone 7 version-1 save and confirm safe starter defaults.
+- [ ] Confirm all M1–M7 behavior remains functional.
+- [ ] Confirm no critical debugger errors appear.
+
+M8 is complete after all local checks pass.
 
 ---
 
-## 12. Next Milestone Preview
+## 12. Current Work Limit
 
-## M8 — Floor 1 Vertical Slice
+Do not add the following during M8:
+
+- Armour or additional equipment slots.
+- Consumable effects, item weight, crafting, shops, or gold.
+- Random loot tables or enemy item drops.
+- Drag-and-drop inventory controls.
+- Detailed icons, models, or external assets.
+- Multiplayer inventory or server authority.
+- Additional quests or item-based quest objectives.
+- A main menu or multiple save slots.
+
+M8 is only reusable item definitions, player-owned inventory stacks, one weapon
+slot, existing chest reward integration, keyboard inventory UI, combat damage
+integration, and version-2 save compatibility.
+
+---
+
+## 13. Next Milestone Preview
+
+## M9 — Floor 1 Vertical Slice
 
 Planned tasks:
 
-- [ ] Replace the single test-space layout with a small Starting City section, road, and field while preserving reusable systems.
-- [ ] Place the Road Warden, interactables, training target, and boar encounters into a readable route.
+- [ ] Replace the single test-space layout with a small Starting City section,
+  road, and field while preserving reusable systems.
+- [ ] Place the Road Warden, chest, sign, test NPC, training target, and boar
+  encounters into a readable route.
 - [ ] Add landmarks and blocked future paths using primitive greybox geometry.
-- [ ] Preserve the complete Boar Hunt and save/load loops.
-- [ ] Keep large-world zones and future floor separation in mind without implementing all floors.
+- [ ] Preserve the complete combat, progression, quest, inventory, and save loop.
+- [ ] Keep future floor zones and streaming boundaries in mind without building
+  all 100 floors.
 
-Begin M8 only after M7 passes local testing.
+Begin M9 only after M8 passes local testing.
 
 ---
 
-## 13. Updated Milestone Order
+## 14. Updated Milestone Order
 
 ### M0 — Project Foundation
 
@@ -609,21 +713,26 @@ One accept-track-complete quest.
 
 Versioned JSON save data and reliable restore flow.
 
-### M8 — Floor 1 Vertical Slice
+### M8 — Inventory, Items, and Weapon Equipment
+
+Resource-driven item definitions, player inventory, one weapon slot, keyboard UI,
+chest reward, combat integration, and save version 2.
+
+### M9 — Floor 1 Vertical Slice
 
 Starting City section, road, field, landmarks, and complete route.
 
-### M9 — Prototype Polish
+### M10 — Prototype Polish
 
 Feedback, audio, bug fixing, performance review, and full playthrough testing.
 
-### M10 — Multiplayer Technical Test
+### M11 — Multiplayer Technical Test
 
 Only after the complete local prototype works.
 
 ---
 
-## 14. Definition of Done for Any Task
+## 15. Definition of Done for Any Task
 
 A task is done when:
 
@@ -639,20 +748,21 @@ A task is done when:
 
 ---
 
-## 15. Next Action
+## 16. Next Action
 
-Open the project in Godot 4.7 and complete the M7 test sequence in
-`docs/MILESTONE_7_SETUP.md`.
+Open the project in Godot 4.7 and complete the M8 test sequence in
+`docs/MILESTONE_8_SETUP.md`.
 
 Prioritize these exact checks:
 
 ```text
-K after one boar:       save Level 1, 40 / 100 XP, position, and damaged HP
-Restart then L:         restore those exact values
-Quest at 2 / 3:         save, restart, load, and remain at 2 / 3
-Completed Boar Hunt:    save, load, talk again, and receive no extra 100 XP
-Missing save file:      L shows No save file found without crashing
-Damaged JSON:           L shows Save file could not be read without crashing
+New game:              one Training Sword owned and equipped; 25 damage
+Existing chest:        grants one Bronze Sword and never duplicates it
+Inventory I:           keyboard selection works and gameplay input is disabled
+Bronze Sword equipped: attacks deal 35 damage immediately
+U unequip:             attacks apply no damage
+Version 2 save:        both swords and Bronze equipment survive restart/load
+Version 1 save:        loads without crashing and applies starter defaults
 ```
 
-Run the complete M1–M6 regression checklist before considering M7 complete.
+Run the complete M1–M7 regression checklist before considering M8 complete.

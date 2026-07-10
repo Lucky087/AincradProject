@@ -5,6 +5,7 @@ extends Node3D
 ##
 ## A ShapeCast3D follows the player's facing direction and detects dedicated
 ## hurtbox areas. Damage is applied through reusable HealthComponent nodes.
+## The current attack damage is synchronized from PlayerInventory equipment.
 
 signal attack_started
 signal attack_hit(target: HealthComponent, damage_amount: float)
@@ -13,7 +14,7 @@ signal attack_finished
 const ATTACK_ACTION: StringName = &"player_attack_primary"
 
 @export_category("Attack")
-@export_range(0.1, 1000.0, 0.1) var attack_damage: float = 25.0
+@export_range(0.0, 1000.0, 0.1) var attack_damage: float = 25.0
 @export_range(0.05, 2.0, 0.01) var swing_duration_seconds: float = 0.16
 @export_range(0.05, 2.0, 0.01) var recovery_duration_seconds: float = 0.18
 @export_range(0.0, 2.0, 0.01) var cooldown_seconds: float = 0.18
@@ -24,13 +25,16 @@ const ATTACK_ACTION: StringName = &"player_attack_primary"
 @export var attack_shape_cast_path: NodePath
 @export var sword_pivot_path: NodePath
 @export var health_component_path: NodePath
+@export var inventory_path: NodePath
 
 var _attack_shape_cast: ShapeCast3D = null
 var _sword_pivot: Node3D = null
 var _health_component: HealthComponent = null
+var _inventory: PlayerInventory = null
 var _sword_rest_rotation: Vector3 = Vector3.ZERO
 var _attack_tween: Tween = null
 var _is_attacking: bool = false
+var _combat_input_enabled: bool = true
 var _setup_is_valid: bool = false
 
 
@@ -43,9 +47,14 @@ func _ready() -> void:
 		return
 
 	_sword_rest_rotation = _sword_pivot.rotation
+	_inventory.equipment_changed.connect(_on_equipment_changed)
+	_refresh_attack_damage()
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if not _combat_input_enabled:
+		return
+
 	if not event.is_action_pressed(ATTACK_ACTION):
 		return
 
@@ -61,8 +70,18 @@ func _exit_tree() -> void:
 		_attack_tween.kill()
 
 
+## Enables or disables attack input. Disabling also cancels an active swing.
+func set_combat_input_enabled(is_enabled: bool) -> void:
+	_combat_input_enabled = is_enabled
+	if not is_enabled:
+		_cancel_attack()
+
+
 func _try_start_attack() -> void:
 	if _is_attacking or not _setup_is_valid:
+		return
+
+	if attack_damage <= 0.0 or not _inventory.has_equipped_weapon():
 		return
 
 	if _health_component != null and not _health_component.is_alive():
@@ -101,6 +120,10 @@ func _apply_attack_damage() -> void:
 	if _attack_shape_cast == null:
 		return
 
+	_refresh_attack_damage()
+	if attack_damage <= 0.0:
+		return
+
 	_attack_shape_cast.force_shapecast_update()
 
 	var damaged_instance_ids: Dictionary[int, bool] = {}
@@ -137,6 +160,34 @@ func _finish_attack() -> void:
 
 	_is_attacking = false
 	attack_finished.emit()
+
+
+func _cancel_attack() -> void:
+	var was_attacking: bool = _is_attacking
+	if _attack_tween != null and _attack_tween.is_valid():
+		_attack_tween.kill()
+
+	if _sword_pivot != null:
+		_sword_pivot.rotation = _sword_rest_rotation
+
+	_is_attacking = false
+	if was_attacking:
+		attack_finished.emit()
+
+
+func _refresh_attack_damage() -> void:
+	if _inventory == null:
+		attack_damage = 0.0
+		return
+
+	attack_damage = _inventory.get_equipped_weapon_damage()
+
+
+func _on_equipment_changed(
+	_equipped_weapon_id: StringName,
+	_weapon_definition: ItemDefinition
+) -> void:
+	_refresh_attack_damage()
 
 
 func _find_health_component(start_node: Node) -> HealthComponent:
@@ -188,6 +239,16 @@ func _resolve_required_nodes() -> bool:
 		push_error(
 			"PlayerCombat could not find a HealthComponent at: %s"
 			% health_component_path
+		)
+		is_valid = false
+
+	var inventory_node: Node = get_node_or_null(inventory_path)
+	if inventory_node is PlayerInventory:
+		_inventory = inventory_node as PlayerInventory
+	else:
+		push_error(
+			"PlayerCombat could not find PlayerInventory at: %s"
+			% inventory_path
 		)
 		is_valid = false
 

@@ -14,7 +14,8 @@ signal save_completed(save_path: String)
 signal load_completed(save_path: String)
 
 const SAVE_FILE_PATH: String = "user://savegame.json"
-const SAVE_VERSION: int = 1
+const SAVE_VERSION: int = 2
+const OLDEST_SUPPORTED_SAVE_VERSION: int = 1
 const PLAYER_GROUP: StringName = &"players"
 
 
@@ -45,8 +46,9 @@ func save_game() -> bool:
 	var health_component: HealthComponent = _find_health_component(player)
 	var progression_component: PlayerProgression = _find_progression_component(player)
 	var quest_log: PlayerQuestLog = _find_quest_log(player)
+	var inventory: PlayerInventory = _find_inventory(player)
 	if not _validate_required_components(
-		health_component, progression_component, quest_log, "saved"
+		health_component, progression_component, quest_log, inventory, "saved"
 	):
 		return false
 
@@ -65,6 +67,7 @@ func save_game() -> bool:
 		},
 		"progression": progression_component.get_save_data(),
 		"quests": quest_log.get_save_data(),
+		"inventory": inventory.get_save_data(),
 	}
 
 	var json_text: String = JSON.stringify(save_data, "\t")
@@ -83,12 +86,12 @@ func save_game() -> bool:
 		)
 		return false
 
-	var write_succeeded: bool = save_file.store_string(json_text)
+	save_file.store_string(json_text)
 	save_file.flush()
 	var write_error: Error = save_file.get_error()
 	save_file.close()
 
-	if not write_succeeded or write_error != OK:
+	if write_error != OK:
 		_report_failure(
 			"Game could not be saved",
 			(
@@ -166,10 +169,13 @@ func load_game() -> bool:
 
 	var save_data: Dictionary = parsed_data
 	var save_version: int = _read_int(save_data, "save_version", -1, "save root")
-	if save_version != SAVE_VERSION:
+	if save_version < OLDEST_SUPPORTED_SAVE_VERSION or save_version > SAVE_VERSION:
 		_report_failure(
 			"Save version is not supported",
-			"SaveManager expected version %d but found %d." % [SAVE_VERSION, save_version]
+			(
+				"SaveManager supports versions %d through %d but found %d."
+				% [OLDEST_SUPPORTED_SAVE_VERSION, SAVE_VERSION, save_version]
+			)
 		)
 		return false
 
@@ -184,19 +190,28 @@ func load_game() -> bool:
 	var health_component: HealthComponent = _find_health_component(player)
 	var progression_component: PlayerProgression = _find_progression_component(player)
 	var quest_log: PlayerQuestLog = _find_quest_log(player)
+	var inventory: PlayerInventory = _find_inventory(player)
 	if not _validate_required_components(
-		health_component, progression_component, quest_log, "loaded"
+		health_component, progression_component, quest_log, inventory, "loaded"
 	):
 		return false
 
 	var player_data: Dictionary = _read_dictionary(save_data, "player", "save root")
 	var progression_data: Dictionary = _read_dictionary(save_data, "progression", "save root")
 	var quest_data: Dictionary = _read_dictionary(save_data, "quests", "save root")
+	var inventory_data: Dictionary = {}
+	if save_version >= 2:
+		inventory_data = _read_dictionary(save_data, "inventory", "save root")
+	else:
+		push_warning(
+			"SaveManager is loading version 1 without inventory data; starter defaults will be used."
+		)
 
 	_restore_player_position(player, player_data)
 	health_component.load_save_data(player_data)
 	progression_component.load_save_data(progression_data)
 	quest_log.load_save_data(quest_data)
+	inventory.load_save_data(inventory_data)
 
 	print("Game loaded from: %s" % ProjectSettings.globalize_path(SAVE_FILE_PATH))
 	status_message_requested.emit("Game loaded")
@@ -241,10 +256,19 @@ func _find_quest_log(player: Node) -> PlayerQuestLog:
 	return null
 
 
+func _find_inventory(player: Node) -> PlayerInventory:
+	for child_node: Node in player.get_children():
+		if child_node is PlayerInventory:
+			return child_node as PlayerInventory
+
+	return null
+
+
 func _validate_required_components(
 	health_component: HealthComponent,
 	progression_component: PlayerProgression,
 	quest_log: PlayerQuestLog,
+	inventory: PlayerInventory,
 	operation_past_tense: String
 ) -> bool:
 	var missing_components: PackedStringArray = []
@@ -254,6 +278,8 @@ func _validate_required_components(
 		missing_components.append("PlayerProgression")
 	if quest_log == null:
 		missing_components.append("PlayerQuestLog")
+	if inventory == null:
+		missing_components.append("PlayerInventory")
 
 	if missing_components.is_empty():
 		return true
