@@ -1,0 +1,85 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://AincradProject/scripts/interactions/quest_npc.gd" id="1_quest_npc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
+albedo_color = Color(0.72, 0.48, 0.12, 1)
+roughness = 0.82
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_head"]
+albedo_color = Color(0.92, 0.7, 0.52, 1)
+roughness = 0.82
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_marker"]
+albedo_color = Color(1, 0.84, 0.18, 1)
+emission_enabled = true
+emission = Color(0.5, 0.28, 0.02, 1)
+emission_energy_multiplier = 0.7
+roughness = 0.55
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_body"]
+material = SubResource("StandardMaterial3D_body")
+radius = 0.4
+height = 1.4
+
+[sub_resource type="SphereMesh" id="SphereMesh_head"]
+material = SubResource("StandardMaterial3D_head")
+radius = 0.31
+height = 0.62
+
+[sub_resource type="BoxMesh" id="BoxMesh_facing"]
+material = SubResource("StandardMaterial3D_head")
+size = Vector3(0.16, 0.12, 0.12)
+
+[sub_resource type="SphereMesh" id="SphereMesh_marker_dot"]
+material = SubResource("StandardMaterial3D_marker")
+radius = 0.09
+height = 0.18
+
+[sub_resource type="BoxMesh" id="BoxMesh_marker_stem"]
+material = SubResource("StandardMaterial3D_marker")
+size = Vector3(0.12, 0.38, 0.12)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_npc"]
+radius = 0.44
+height = 1.95
+
+[node name="QuestNpc" type="StaticBody3D"]
+collision_layer = 3
+collision_mask = 1
+script = ExtResource("1_quest_npc")
+interaction_prompt = "Press E to hear quest"
+quest_id = &"boar_hunt"
+player_group = &"players"
+speaker_name = "Road Warden"
+
+[node name="BodyMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.8, 0)
+mesh = SubResource("CapsuleMesh_body")
+
+[node name="HeadMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.75, 0)
+mesh = SubResource("SphereMesh_head")
+
+[node name="FacingMarker" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.75, -0.3)
+mesh = SubResource("BoxMesh_facing")
+
+[node name="QuestMarkerStem" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.42, 0)
+mesh = SubResource("BoxMesh_marker_stem")
+
+[node name="QuestMarkerDot" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.12, 0)
+mesh = SubResource("SphereMesh_marker_dot")
+
+[node name="NameLabel" type="Label3D" parent="."]
+position = Vector3(0, 2.85, 0)
+text = "Road Warden\nQuest Giver"
+font_size = 24
+outline_size = 6
+billboard = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.98, 0)
+shape = SubResource("CapsuleShape3D_npc")

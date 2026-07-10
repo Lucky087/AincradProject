@@ -6,6 +6,11 @@
 [ext_resource type="Script" path="res://AincradProject/scripts/components/health_component.gd" id="4_health_component"]
 [ext_resource type="Script" path="res://AincradProject/scripts/player/player_combat.gd" id="5_player_combat"]
 [ext_resource type="PackedScene" path="res://AincradProject/scenes/ui/health_ui.tscn" id="6_health_ui"]
+[ext_resource type="Script" path="res://AincradProject/scripts/components/player_progression.gd" id="7_player_progression"]
+[ext_resource type="PackedScene" path="res://AincradProject/scenes/ui/progression_ui.tscn" id="8_progression_ui"]
+[ext_resource type="Script" path="res://AincradProject/scripts/components/player_quest_log.gd" id="9_player_quest_log"]
+[ext_resource type="Resource" path="res://AincradProject/data/quests/boar_hunt.tres" id="10_boar_hunt"]
+[ext_resource type="PackedScene" path="res://AincradProject/scenes/ui/quest_ui.tscn" id="11_quest_ui"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.45
@@ -66,6 +71,19 @@ script = ExtResource("1_player_controller")
 unique_name_in_owner = true
 script = ExtResource("4_health_component")
 maximum_health = 100.0
+
+[node name="PlayerProgression" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("7_player_progression")
+starting_level = 1
+starting_experience = 0
+maximum_level = 100
+base_experience_per_level = 100
+
+[node name="PlayerQuestLog" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("9_player_quest_log")
+initial_quest_definition = ExtResource("10_boar_hunt")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0.9, 0)
@@ -153,5 +171,12 @@ health_component_path = NodePath("../HealthComponent")
 
 [node name="HealthUI" parent="." instance=ExtResource("6_health_ui")]
 health_component_path = NodePath("../HealthComponent")
+
+[node name="ProgressionUI" parent="." instance=ExtResource("8_progression_ui")]
+progression_component_path = NodePath("../PlayerProgression")
+
+[node name="QuestUI" parent="." instance=ExtResource("11_quest_ui")]
+quest_log_path = NodePath("../PlayerQuestLog")
+tracked_quest_id = &"boar_hunt"
 
 [node name="InteractionUI" parent="." instance=ExtResource("3_interaction_ui")]

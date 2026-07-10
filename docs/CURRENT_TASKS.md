@@ -1,8 +1,8 @@
 # Current Tasks
 
 **Project:** Aincrad-Inspired RPG  
-**Current milestone:** M4 — First Enemy  
-**Current phase:** Implementation package created; local Godot verification remains  
+**Current milestone:** M6 — First Quest  
+**Current phase:** Quest implementation package created; local Godot verification remains  
 **Last updated:** 2026-07-10
 
 ---
@@ -21,20 +21,24 @@
 
 ## 2. Current Milestone Goal
 
-Add one reusable hostile boar enemy without replacing the working player, interaction, health, or sword-combat systems.
+Add one reusable quest-definition and player quest-log system, connect valid wild-boar defeats to objective progress, add a new primitive quest giver, and display one complete accept-track-turn-in quest without replacing any working M1–M5 system.
 
 The milestone should prove that:
 
-- One primitive enemy can idle, detect, chase, attack, return, die, and respawn.
-- Enemy damage reaches the player's existing `HealthComponent`.
-- The existing sword damages the enemy through the existing hurtbox system.
-- One enemy attack can damage the player at most once.
-- Attack damage is rejected when the player has moved too far away or a world body blocks the attack line.
-- The enemy stops moving and attacking after death.
-- The enemy returns to its exact original spawn after the respawn timer.
-- All earlier movement, camera, interaction, health UI, sword, and training-dummy behaviour remains available.
+- `boar_hunt` is a stable quest ID stored in a reusable resource.
+- The quest supports Not Started, Active, Ready to Turn In, and Completed states.
+- The Road Warden presents the offer before acceptance.
+- Only boar defeats after acceptance count.
+- The stable objective ID `wild_boar` reaches exactly 3 / 3.
+- The existing 40 XP reward still applies to every valid boar death.
+- The quest waits for the player to return before granting its 100 XP reward.
+- Quest progress and reward ownership use the killing damage source and `players` group.
+- One spawned boar life reports objective progress at most once.
+- The completed quest can never grant its reward again.
+- A separate quest tracker updates from signals and does not replace health or progression UI.
+- All movement, interaction, health, combat, dummy, boar AI, and levelling behavior remains available.
 
-Experience, loot, quests, inventory, saving, bosses, multiplayer, and detailed art remain outside this milestone.
+Inventory, item rewards, gold, multiple quests, quest chains, saving, multiplayer, and detailed art remain outside this milestone.
 
 ---
 
@@ -277,44 +281,205 @@ M4 is complete after these local checks pass.
 
 ---
 
-## 8. Current Work Limit
+## 8. M5 — Experience and Levelling
 
-Do not add the following during M4:
+### Reusable player progression
 
-- Loot or item drops.
-- Experience or level rewards.
-- Inventory or equipment systems.
-- Quest progress.
-- Boss phases or special mechanics.
-- Multiplayer or network authority code.
-- Saving or loading.
-- Advanced pathfinding or crowd avoidance.
-- Complex animation trees.
-- Blocking, dodging, stamina, or lock-on targeting.
-- Blender models, external assets, or detailed environments.
+- [x] Create `res://AincradProject/scripts/components/player_progression.gd`.
+- [x] Add typed current-level, current-experience, next-level requirement, and maximum-level state.
+- [x] Start at Level 1 with 0 XP by default.
+- [x] Use the replaceable formula `base_experience_per_level × current level`.
+- [x] Configure the default base requirement as 100 XP.
+- [x] Add `add_experience(amount)` with support for several level-ups from one reward.
+- [x] Carry excess experience into the next level.
+- [x] Add typed `experience_changed` and `levelled_up` signals.
+- [x] Add typed getters and an experience-progress ratio.
+- [x] Add useful level-up debug output.
+- [x] Add the component to the existing player scene without modifying player movement or combat scripts.
 
-The first boar is only a small hostile-enemy behaviour test.
+### Boar experience reward
+
+- [x] Add a configurable integer `experience_reward` to the existing boar.
+- [x] Set the default reward to 40 XP.
+- [x] Use the existing `HealthComponent.died(source)` killing source.
+- [x] Resolve the responsible player by walking from the source to a `players` group member.
+- [x] Find the player's direct `PlayerProgression` child without a fragile world path.
+- [x] Award XP only from the boar's existing death callback.
+- [x] Prevent duplicate rewards with one per-life reward gate.
+- [x] Reset the reward gate only when the boar respawns.
+- [x] Do not award XP when the boar is removed or freed for another reason.
+- [x] Leave the training dummy unchanged so it gives no XP.
+
+### Progression UI
+
+- [x] Create `res://AincradProject/scenes/ui/progression_ui.tscn`.
+- [x] Create `res://AincradProject/scripts/ui/progression_ui.gd`.
+- [x] Place the progression panel beneath the existing health panel.
+- [x] Show current level.
+- [x] Show current XP and the next-level requirement.
+- [x] Show an experience progress bar.
+- [x] Show `Level Up!` briefly after a level increase.
+- [x] Update only through progression signals rather than `_process()`.
+- [x] Add required-node validation and clear errors.
+- [x] Keep the existing health and interaction UI scenes unchanged.
+
+### Stat growth decision
+
+- [x] Review the existing `HealthComponent`.
+- [x] Confirm it has no safe public method for changing maximum health at runtime.
+- [x] Leave maximum health unchanged rather than modifying or bypassing its interface.
+- [ ] Add a safe maximum-health API and optional `+5 HP per level` in a future dedicated task.
+
+### File safety
+
+- [x] Preserve all existing files and folders.
+- [x] Do not move, rename, delete, duplicate, or reorganize project content.
+- [x] Do not manually edit or delete existing `.uid` files.
+- [x] Modify only the player scene, boar script, boar scene, and required documentation.
+- [x] Add `docs/MILESTONE_5_SETUP.md`.
+
+### Local verification still required
+
+- [~] Open the project in Godot 4.7 and let Godot create new script UIDs normally.
+- [ ] Confirm every script parses without errors.
+- [ ] Confirm the progression panel appears below the existing health panel.
+- [ ] Confirm the initial display reads `Level 1` and `XP: 0 / 100`.
+- [ ] Defeat the boar once and confirm `XP: 40 / 100`.
+- [ ] Wait for respawn, defeat it again, and confirm `XP: 80 / 100`.
+- [ ] Wait for respawn, defeat it a third time, and confirm Level 2 with `XP: 20 / 200`.
+- [ ] Confirm `Level Up!` appears briefly on the third defeat.
+- [ ] Confirm the Output panel prints a useful level-up message.
+- [ ] Confirm one boar death never gives 80 XP or more from duplicate callbacks.
+- [ ] Confirm a respawned boar can give 40 XP again.
+- [ ] Confirm the training dummy gives no XP.
+- [ ] Confirm the player still receives boar damage and the health UI updates.
+- [ ] Confirm sword attacks still damage both the boar and training dummy.
+- [ ] Confirm boar detection, chasing, attacking, returning, death, and respawn still work.
+- [ ] Confirm sign, NPC, and chest interactions still work.
+- [ ] Confirm WASD, camera, jumping, sprinting, gravity, and Escape still work.
+- [ ] Confirm no critical debugger errors appear.
+
+M5 is complete after these local checks pass.
 
 ---
 
-## 9. Next Milestone Preview
+## 9. M6 — First Quest
 
-## M5 — Progression
+### Reusable quest data and state
+
+- [x] Create `res://AincradProject/scripts/quests/quest_definition.gd`.
+- [x] Create `res://AincradProject/data/quests/boar_hunt.tres`.
+- [x] Use the stable quest ID `boar_hunt`.
+- [x] Use the stable objective ID `wild_boar`.
+- [x] Store title, description, objective label, objective target, and XP reward in the resource.
+- [x] Create `res://AincradProject/scripts/components/player_quest_log.gd`.
+- [x] Support Not Started, Active, Ready to Turn In, and Completed states.
+- [x] Add typed state, progress, and reward signals.
+- [x] Add reusable registration, acceptance, objective-progress, and turn-in methods.
+- [x] Prevent progress before acceptance and after the objective is ready.
+- [x] Prevent the quest reward from being granted more than once.
+- [x] Add the quest log to the existing player scene.
+
+### Quest giver
+
+- [x] Create `res://AincradProject/scripts/interactions/quest_npc.gd`.
+- [x] Create `res://AincradProject/scenes/interactions/quest_npc.tscn`.
+- [x] Inherit from the existing `Interactable` base class.
+- [x] Use the existing E interaction input, camera ray, distance check, prompt, and message UI.
+- [x] Use only Godot primitive meshes and shapes.
+- [x] Present the quest offer on the first interaction.
+- [x] Accept the quest on the second interaction.
+- [x] Show state-dependent active, ready, and completed dialogue.
+- [x] Turn in the quest only after 3 / 3 progress.
+- [x] Add the new NPC near the player start without replacing the existing test NPC.
+
+### Boar integration
+
+- [x] Add the stable exported enemy ID `wild_boar` to the existing boar.
+- [x] Preserve the normal configurable 40 XP reward.
+- [x] Resolve the killing player from the existing damage source and `players` group.
+- [x] Find that player's direct `PlayerQuestLog` child without an absolute world path.
+- [x] Report one `wild_boar` objective event from the existing death callback.
+- [x] Add a per-life quest-progress gate.
+- [x] Reset the quest-progress gate only when the boar respawns.
+- [x] Leave the training dummy unchanged so it never counts.
+- [x] Preserve boar detection, movement, attack, hit, death, return, respawn, and XP behavior.
+
+### Quest UI
+
+- [x] Create `res://AincradProject/scripts/ui/quest_ui.gd`.
+- [x] Create `res://AincradProject/scenes/ui/quest_ui.tscn`.
+- [x] Place the tracker below the existing progression panel.
+- [x] Hide the tracker before acceptance.
+- [x] Show `Boar Hunt` and `Defeat wild boars: X / 3` while active.
+- [x] Show `Return to the quest giver` at 3 / 3.
+- [x] Show a brief completion message after turn-in, then hide.
+- [x] Update from quest signals without `_process()` polling.
+- [x] Validate required quest-log and UI node references.
+
+### File safety and documentation
+
+- [x] Preserve every existing folder and path.
+- [x] Do not move, rename, delete, duplicate, or reorganize existing content.
+- [x] Do not manually edit or delete any existing `.uid` file.
+- [x] Modify only the player scene, test world, boar script, boar scene, and required documentation.
+- [x] Add `docs/MILESTONE_6_SETUP.md`.
+
+### Local verification still required
+
+- [~] Open the project in Godot 4.7 and let Godot generate new script UIDs normally.
+- [ ] Confirm all scripts parse without errors.
+- [ ] Confirm all new resources and scenes load without missing references.
+- [ ] Defeat a boar before acceptance and confirm it gives 40 XP but no quest progress.
+- [ ] Talk to the Road Warden once and confirm the offer appears.
+- [ ] Talk again and confirm Boar Hunt is accepted at 0 / 3.
+- [ ] Defeat three respawning boars and confirm 1 / 3, 2 / 3, then 3 / 3.
+- [ ] Confirm the tracker changes to `Return to the quest giver`.
+- [ ] Confirm the 100 XP quest reward is not automatic.
+- [ ] Return to the Road Warden and confirm exactly 100 XP is awarded.
+- [ ] Talk again and confirm no duplicate reward is granted.
+- [ ] Confirm the training dummy never changes quest progress.
+- [ ] Confirm all M1–M5 behavior remains functional.
+- [ ] Confirm no critical debugger errors appear.
+
+M6 is complete after these local checks pass.
+
+---
+
+## 10. Current Work Limit
+
+Do not add the following during M6:
+
+- Inventory, equipment, item rewards, loot, or gold.
+- Shops or economy systems.
+- Additional quests or quest chains.
+- Save files or quest persistence.
+- Multiplayer or network authority code.
+- Boss mechanics.
+- Detailed dialogue trees or cinematic presentation.
+- Detailed effects, animation trees, or external assets.
+
+M6 is only the reusable quest definition, player quest log, Boar Hunt flow, quest giver, boar progress report, and quest tracker.
+
+---
+
+## 11. Next Milestone Preview
+
+## M7 — Floor 1 Vertical Slice
 
 Planned tasks:
 
-- [ ] Add reusable experience data and level calculations.
-- [ ] Award experience only after a valid enemy defeat.
-- [ ] Add current level and experience to the HUD.
-- [ ] Prevent repeated rewards from one enemy death.
-- [ ] Keep progression separate from enemy movement and combat logic.
-- [ ] Preserve all M1–M4 behaviour.
+- [ ] Replace the single test-space layout with a small Starting City section, road, and field while preserving the reusable systems.
+- [ ] Place the Road Warden, interactables, training target, and boar encounters into a readable route.
+- [ ] Add landmarks and blocked future paths using primitive greybox geometry.
+- [ ] Preserve the complete Boar Hunt loop.
+- [ ] Keep large-world zones and future floor separation in mind without implementing all floors.
 
-Begin M5 only after M4 passes local testing.
+Begin M7 only after M6 passes local testing.
 
 ---
 
-## 10. Updated Milestone Order
+## 12. Updated Milestone Order
 
 ### M0 — Project Foundation
 
@@ -362,7 +527,7 @@ Only after the complete local prototype works.
 
 ---
 
-## 11. Definition of Done for Any Task
+## 13. Definition of Done for Any Task
 
 A task is done when:
 
@@ -378,6 +543,18 @@ A task is done when:
 
 ---
 
-## 12. Next Action
+## 14. Next Action
 
-Open the project in Godot 4.7 and complete every M4 local-verification checkbox, including regression tests for movement, interaction, sword combat, the training dummy, and the player health UI.
+Open the project in Godot 4.7 and complete every M6 local-verification checkbox, especially this exact quest sequence:
+
+```text
+Before acceptance: boar gives 40 XP, quest remains hidden
+Accept quest:      Boar Hunt appears at 0 / 3
+First valid kill:  1 / 3 plus normal 40 boar XP
+Second valid kill: 2 / 3 plus normal 40 boar XP
+Third valid kill:  Return to the quest giver plus normal 40 boar XP
+Turn in quest:     receive exactly 100 quest XP
+Talk again:        no additional quest XP
+```
+
+Also run the full M1–M5 regression checklist before considering M6 complete.

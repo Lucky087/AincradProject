@@ -16,6 +16,9 @@ enum EnemyState {
 	DEAD,
 }
 
+@export_category("Identity")
+@export var enemy_id: StringName = &"wild_boar"
+
 @export_category("Targeting")
 @export var player_group: StringName = &"players"
 @export_range(1.0, 50.0, 0.5) var detection_range: float = 9.0
@@ -37,6 +40,9 @@ enum EnemyState {
 @export_range(0.05, 2.0, 0.05) var attack_recovery_seconds: float = 0.3
 @export_range(0.1, 10.0, 0.1) var attack_cooldown_seconds: float = 1.2
 @export_range(0.05, 1.5, 0.05) var attack_lunge_distance: float = 0.45
+
+@export_category("Rewards")
+@export_range(0, 1000000, 1) var experience_reward: int = 40
 
 @export_category("Reaction and Respawn")
 @export_range(0.05, 2.0, 0.05) var hit_reaction_seconds: float = 0.18
@@ -75,6 +81,8 @@ var _attack_tween: Tween = null
 var _feedback_tween: Tween = null
 var _attack_is_active: bool = false
 var _is_dead: bool = false
+var _experience_reward_granted: bool = false
+var _quest_progress_reported: bool = false
 var _setup_is_valid: bool = false
 
 
@@ -535,7 +543,7 @@ func _on_damage_taken(_amount: float, _source: Node) -> void:
 		_attack_cooldown_timer.start(attack_cooldown_seconds)
 
 
-func _on_died(_source: Node) -> void:
+func _on_died(source: Node) -> void:
 	if _is_dead:
 		return
 
@@ -547,6 +555,8 @@ func _on_died(_source: Node) -> void:
 	_hit_reaction_timer.stop()
 	_hurtbox.monitorable = false
 	_body_collision.set_deferred("disabled", true)
+	_award_experience_to_killing_player(source)
+	_report_quest_progress_to_killing_player(source)
 	_play_death_feedback()
 	_respawn_timer.start(respawn_delay_seconds)
 
@@ -561,6 +571,8 @@ func _on_hit_reaction_timer_timeout() -> void:
 
 func _on_respawn_timer_timeout() -> void:
 	_is_dead = false
+	_experience_reward_granted = false
+	_quest_progress_reported = false
 	global_transform = _spawn_transform
 	velocity = Vector3.ZERO
 	_attack_pivot.transform = _attack_pivot_rest_transform
@@ -570,6 +582,98 @@ func _on_respawn_timer_timeout() -> void:
 	_health_component.reset_health()
 	_set_state(EnemyState.IDLE)
 	_find_player()
+
+
+func _award_experience_to_killing_player(source: Node) -> void:
+	if _experience_reward_granted or experience_reward <= 0:
+		return
+
+	var progression_component: PlayerProgression = (
+		_find_player_progression_from_source(source)
+	)
+	if progression_component == null:
+		if source != null:
+			push_warning(
+				"BoarEnemy was defeated, but the killing source did not "
+				+ "resolve to a player with PlayerProgression. No XP awarded."
+			)
+		return
+
+	_experience_reward_granted = true
+	var applied_experience: int = progression_component.add_experience(
+		experience_reward
+	)
+	print(
+		"Wild Boar reward: requested %d XP, applied %d XP."
+		% [experience_reward, applied_experience]
+	)
+
+
+func _report_quest_progress_to_killing_player(source: Node) -> void:
+	if _quest_progress_reported or enemy_id.is_empty():
+		return
+
+	# The death callback is already protected by _is_dead. This second gate keeps
+	# quest progress explicitly limited to one report per spawned boar life.
+	_quest_progress_reported = true
+
+	var quest_log: PlayerQuestLog = _find_player_quest_log_from_source(source)
+	if quest_log == null:
+		return
+
+	var applied_progress: int = quest_log.record_objective_progress(enemy_id, 1)
+	if applied_progress > 0:
+		print(
+			"Wild Boar quest progress: reported %s once."
+			% enemy_id
+		)
+
+
+func _find_player_quest_log_from_source(source: Node) -> PlayerQuestLog:
+	var player_root: Node = _find_player_root_from_source(source)
+	if player_root == null:
+		return null
+
+	for child_node: Node in player_root.get_children():
+		if child_node is PlayerQuestLog:
+			return child_node as PlayerQuestLog
+
+	push_warning(
+		"Player group member '%s' has no PlayerQuestLog child."
+		% player_root.name
+	)
+	return null
+
+
+func _find_player_progression_from_source(
+	source: Node
+) -> PlayerProgression:
+	var player_root: Node = _find_player_root_from_source(source)
+	if player_root == null:
+		return null
+
+	for child_node: Node in player_root.get_children():
+		if child_node is PlayerProgression:
+			return child_node as PlayerProgression
+
+	push_warning(
+		"Player group member '%s' has no PlayerProgression child."
+		% player_root.name
+	)
+	return null
+
+
+func _find_player_root_from_source(source: Node) -> Node:
+	if source == null or not is_instance_valid(source):
+		return null
+
+	var current_node: Node = source
+	while current_node != null:
+		if current_node.is_in_group(player_group):
+			return current_node
+		current_node = current_node.get_parent()
+
+	return null
 
 
 func _resolve_required_nodes() -> bool:

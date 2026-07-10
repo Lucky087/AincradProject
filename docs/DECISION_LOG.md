@@ -1215,3 +1215,373 @@ On death, stop movement and attacks, disable the body collision and hurtbox, and
 ### Follow-up
 
 Future world-state saving must decide whether defeated enemies should respawn immediately, after a timer, or after a session reload.
+
+---
+
+## D-031 — Preserve the Existing Folder Structure Through M5
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The uploaded project already contains working movement, interactions, health, sword combat, a training dummy, a hostile boar, established `scenes/` and `scripts/` folders, and Godot-generated `.uid` files. Reorganising those files while adding progression would create unnecessary risk and violate the current file-safety rules.
+
+### Decision
+
+Preserve the existing folder structure exactly during M5.
+
+Create only:
+
+```text
+res://AincradProject/scripts/components/player_progression.gd
+res://AincradProject/scripts/ui/progression_ui.gd
+res://AincradProject/scenes/ui/progression_ui.tscn
+res://AincradProject/docs/MILESTONE_5_SETUP.md
+```
+
+Modify only the existing player scene, boar script, boar scene, current-tasks document, and decision log where required. Do not manually edit or delete `.uid` files.
+
+### Consequences
+
+- Existing resource paths remain stable.
+- The player controller, player combat script, health component, training dummy, and interaction system remain unchanged.
+- Godot may generate new `.uid` files for the two new scripts when the project opens.
+- Any future reorganisation still requires a separate explicit migration task.
+
+### Alternatives considered
+
+- Move progression into a new `game/progression/` hierarchy.
+- Merge progression into `player_controller.gd`.
+- Manually create script UID files.
+
+### Follow-up
+
+Keep using the current beginner-facing paths until a separately approved migration is requested.
+
+---
+
+## D-032 — Use a Reusable PlayerProgression Component With a Linear Formula
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The player needs level and experience state that can later be used by quests, saving, UI, enemies, and multiplayer authority without placing progression logic inside movement, combat, or enemy scripts.
+
+### Decision
+
+Create one typed `PlayerProgression` component as a direct child of the player.
+
+Use the replaceable formula:
+
+```text
+experience required for next level = base_experience_per_level × current level
+```
+
+Set `base_experience_per_level` to 100 by default. Store experience within the current level, carry excess experience forward, support several level-ups from one reward, and expose typed getters plus `experience_changed` and `levelled_up` signals.
+
+### Consequences
+
+- Level 1 requires 100 XP, Level 2 requires 200 XP, and Level 3 requires 300 XP.
+- Progression logic remains independent from the HUD and enemy movement.
+- Future formulas can replace one calculation method without changing reward callers.
+- Experience beyond the configured maximum level is discarded.
+
+### Alternatives considered
+
+- Store level and XP inside `player_controller.gd`.
+- Hard-code each level requirement in an array.
+- Make the progression UI own the experience values.
+
+### Follow-up
+
+A future saving milestone should serialize current level and current-level experience through stable save data.
+
+---
+
+## D-033 — Award Boar XP From the Killing Damage Source With a Per-Life Gate
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The existing `HealthComponent` already emits `died(source)` using the source from the damage that reduced health to zero. The sword already supplies the player root as that source. The boar must reward the responsible player once, without relying on a fixed test-world path or rewarding simple scene removal.
+
+### Decision
+
+Give the boar an exported `experience_reward` with a default value of 40.
+
+In the existing death callback:
+
+1. Use the killing `source` supplied by `HealthComponent.died(source)`.
+2. Walk upward from that source until a node in the existing `players` group is found.
+3. Find that player's direct `PlayerProgression` child.
+4. Call `add_experience(experience_reward)`.
+5. Set a private per-life reward flag so the same death cannot reward twice.
+6. Reset the flag only when the boar respawns.
+
+Do not award experience from `_exit_tree()`, `queue_free()`, timeout removal, or any other non-death path.
+
+### Consequences
+
+- The player responsible for the killing sword hit receives the reward.
+- Duplicate death callbacks cannot duplicate XP.
+- A respawned boar can reward XP again.
+- The training dummy remains reward-free because it is not modified.
+- Future non-player damage sources receive no player XP unless they resolve to a `players` group member.
+
+### Alternatives considered
+
+- Award XP whenever the boar is removed from the scene tree.
+- Hard-code `../../Player/PlayerProgression`.
+- Make `PlayerCombat` award a fixed reward for every damaged target.
+- Store a global XP singleton.
+
+### Follow-up
+
+Future party, assist, and multiplayer reward rules must replace the single killing-source rule explicitly.
+
+---
+
+## D-034 — Keep Progression UI Separate and Defer Maximum-Health Growth
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The project already has separate health and interaction UI scenes. Progression is a different feature with its own signals and presentation. The existing `HealthComponent` exposes health reads, damage, healing, and reset, but it does not expose a safe public method for changing maximum health while clamping current health and emitting a consistent update.
+
+### Decision
+
+Create a separate `ProgressionUI` scene beneath the existing health panel. It connects to `PlayerProgression` through an exported `NodePath` and updates only from progression signals.
+
+Do not change maximum health during M5. Do not directly assign the exported `maximum_health` property from progression code. Record `+5 maximum HP and full heal per level` as a future task that requires a safe public health API first.
+
+### Consequences
+
+- Existing health and interaction UI files remain unchanged.
+- Progression UI can be replaced independently later.
+- No `_process()` loop is required for HUD updates.
+- Level-ups do not currently change combat stats or health.
+- Health-component invariants are not bypassed.
+
+### Alternatives considered
+
+- Merge XP controls into `health_ui.tscn`.
+- Make the boar directly update labels.
+- Change `maximum_health` from outside the health component without a method or signal.
+- Redesign the existing health component during M5.
+
+### Follow-up
+
+Add a tested `set_maximum_health()` or `increase_maximum_health()` API in a dedicated future milestone before enabling health growth.
+
+---
+
+## D-035 — Preserve the Existing Folder Structure Through M6
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The uploaded project already contains working movement, interaction, health,
+combat, enemy, progression, UI, data, world, documentation, and Godot-generated
+`.uid` files. Reorganising those files while adding the first quest would add
+risk without improving the milestone.
+
+### Decision
+
+Preserve the existing folder structure exactly during M6.
+
+Create only the quest definition, player quest log, quest NPC, quest UI, Boar
+Hunt resource, their scenes, and the milestone setup document inside existing
+suitable folders. Modify only the existing player scene, test world, boar script,
+boar scene, current tasks, and decision log where required.
+
+Do not move, rename, delete, duplicate, or reorganize existing content. Do not
+manually create, edit, or delete `.uid` files.
+
+### Consequences
+
+- Existing resource paths remain stable.
+- Movement, combat, health, progression, and interaction scripts remain
+  unchanged.
+- Godot may generate `.uid` files for new scripts after opening the project.
+- Any future migration still requires a separately approved task.
+
+### Alternatives considered
+
+- Move all gameplay into a new `game/` or `src/` hierarchy.
+- Merge quest logic into the existing NPC or progression scripts.
+- Manually generate script UID files.
+
+### Follow-up
+
+Continue using the current paths until an explicit migration milestone is
+approved.
+
+---
+
+## D-036 — Separate Quest Definitions From Player Runtime Quest State
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Quest titles, descriptions, objective targets, and rewards are reusable design
+data. Accepted state, progress, readiness, completion, and reward gates belong
+to one player. Mixing both kinds of data in an NPC or UI would make future
+quests, saving, and multiplayer authority harder to add.
+
+### Decision
+
+Use a typed `QuestDefinition` resource for stable quest content and a direct
+player child named `PlayerQuestLog` for runtime state.
+
+The Boar Hunt resource uses:
+
+```text
+quest_id: boar_hunt
+objective_id: wild_boar
+objective_target: 3
+experience_reward: 100
+```
+
+`PlayerQuestLog` supports registration, acceptance, objective progress, turn-in,
+and the four states Not Started, Active, Ready to Turn In, and Completed. It
+announces changes through typed signals.
+
+### Consequences
+
+- The same quest definition can later be used by NPCs, UI, saving, or server
+  authority without duplicating text and values.
+- Visible text can change without changing stable IDs.
+- Additional quests can be registered without changing the player controller.
+- Runtime state is not stored in the `.tres` resource.
+
+### Alternatives considered
+
+- Store quest state directly on the quest NPC.
+- Store all quest values in the quest UI.
+- Hard-code Boar Hunt values inside the boar enemy.
+- Add a global quest singleton for one local prototype player.
+
+### Follow-up
+
+The saving milestone should serialize quest IDs, states, progress, and reward
+gates rather than serializing live quest nodes.
+
+---
+
+## D-037 — Report Boar Quest Progress From the Killing Source With a Per-Life Gate
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The existing health system already identifies the source of the killing hit,
+and the boar already uses that source for its normal 40 XP reward. Quest
+progress must go to the same responsible player, count only after acceptance,
+and never duplicate during one defeated life.
+
+### Decision
+
+Give the boar the stable exported enemy ID `wild_boar`.
+
+During the existing guarded death callback:
+
+1. Preserve the normal 40 XP reward.
+2. Walk upward from the killing source to the existing `players` group member.
+3. Find that player's direct `PlayerQuestLog` child.
+4. Report one objective event using the boar's stable enemy ID.
+5. Set a private per-life quest-report flag.
+6. Reset that flag only when the boar respawns.
+
+Let `PlayerQuestLog` decide whether an active quest accepts the objective event.
+
+### Consequences
+
+- Boars defeated before acceptance do not count.
+- A valid active Boar Hunt receives exactly one progress point per boar life.
+- A respawned boar can count again.
+- The training dummy does not count because it never reports `wild_boar`.
+- The boar's AI, damage, death, respawn, and XP behavior remain independent from
+  Boar Hunt-specific state.
+
+### Alternatives considered
+
+- Let the quest UI watch the boar's health directly.
+- Increment quest progress from `PlayerCombat` for every target it kills.
+- Hard-code a path to the test-world player.
+- Count every boar death globally regardless of the killing source.
+
+### Follow-up
+
+Future shared-kill, party, assist, and multiplayer rules must replace the single
+killing-source rule explicitly.
+
+---
+
+## D-038 — Use a Two-Step Quest Offer and Require NPC Turn-In
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The first quest needs a visible offer, explicit acceptance, progress checking,
+and manual turn-in, but a full branching dialogue system is outside the current
+scope. The existing interaction system already supports E input, changing
+prompts, and short messages.
+
+### Decision
+
+Create a new primitive `QuestNpc` that inherits the existing `Interactable`
+base class.
+
+- First E interaction presents Boar Hunt and its reward.
+- Second E interaction accepts it.
+- Active interactions show current progress.
+- Ready interactions turn in the quest.
+- Completed interactions show thank-you dialogue.
+
+Do not automatically grant the 100 XP reward when progress reaches 3 / 3. Grant
+it only from `PlayerQuestLog.turn_in_quest()` after the player returns to the
+NPC. Set the reward gate before adding XP, then mark the quest completed.
+
+Use a separate signal-driven `QuestUI` below the existing progression panel.
+
+### Consequences
+
+- The prototype demonstrates offer, acceptance, tracking, return, and completion.
+- The reward cannot be duplicated by talking to the NPC repeatedly.
+- No new input action or dialogue manager is required.
+- Existing health, progression, and interaction UI remain separate.
+- A full dialogue-choice interface can replace the two-step approach later.
+
+### Alternatives considered
+
+- Accept the quest automatically on the first interaction.
+- Grant the reward immediately on the third kill.
+- Replace the existing test NPC.
+- Build a full dialogue tree and choice system during M6.
+
+### Follow-up
+
+A future dialogue milestone may replace the two-step E flow while keeping the
+same quest-log methods and states.

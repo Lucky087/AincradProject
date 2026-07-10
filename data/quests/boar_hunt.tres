@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="QuestDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://AincradProject/scripts/quests/quest_definition.gd" id="1_quest_definition"]
+
+[resource]
+script = ExtResource("1_quest_definition")
+quest_id = &"boar_hunt"
+title = "Boar Hunt"
+description = "The boars outside the city have become aggressive. Defeat three wild boars and return to me."
+objective_id = &"wild_boar"
+objective_label = "Defeat wild boars"
+objective_target = 3
+experience_reward = 100
