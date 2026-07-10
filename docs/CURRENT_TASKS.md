@@ -1,8 +1,8 @@
 # Current Tasks
 
 **Project:** Aincrad-Inspired RPG  
-**Current milestone:** M6 — First Quest  
-**Current phase:** Quest implementation package created; local Godot verification remains  
+**Current milestone:** M7 — Save and Load System  
+**Current phase:** Save/load implementation package created; local Godot verification remains  
 **Last updated:** 2026-07-10
 
 ---
@@ -21,24 +21,27 @@
 
 ## 2. Current Milestone Goal
 
-Add one reusable quest-definition and player quest-log system, connect valid wild-boar defeats to objective progress, add a new primitive quest giver, and display one complete accept-track-turn-in quest without replacing any working M1–M5 system.
+Add one application-wide SaveManager that writes versioned JSON to
+`user://savegame.json`, coordinates the existing player components through
+public save interfaces, restores player position, health, progression, and quest
+state, and reports success or failure through a small separate UI.
 
 The milestone should prove that:
 
-- `boar_hunt` is a stable quest ID stored in a reusable resource.
-- The quest supports Not Started, Active, Ready to Turn In, and Completed states.
-- The Road Warden presents the offer before acceptance.
-- Only boar defeats after acceptance count.
-- The stable objective ID `wild_boar` reaches exactly 3 / 3.
-- The existing 40 XP reward still applies to every valid boar death.
-- The quest waits for the player to return before granting its 100 XP reward.
-- Quest progress and reward ownership use the killing damage source and `players` group.
-- One spawned boar life reports objective progress at most once.
-- The completed quest can never grant its reward again.
-- A separate quest tracker updates from signals and does not replace health or progression UI.
-- All movement, interaction, health, combat, dummy, boar AI, and levelling behavior remains available.
+- K saves once per press and L loads once per press.
+- Save data includes version 1, player position, health, progression, and quest state.
+- Health, progression, and quest components remain the owners of their data.
+- Existing signal-driven UI refreshes immediately after loading.
+- Active Boar Hunt progress survives a restart.
+- Completed Boar Hunt and its claimed reward remain permanently protected.
+- Missing, empty, damaged, incomplete, or unsupported saves fail safely.
+- Unknown quest IDs are skipped without crashing.
+- Temporary enemy, attack, timer, and training-dummy state is not persisted.
+- Every M1–M6 feature remains functional.
 
-Inventory, item rewards, gold, multiple quests, quest chains, saving, multiplayer, and detailed art remain outside this milestone.
+Inventory, equipment, items, gold, shops, multiple slots, cloud saves,
+multiplayer saves, a main menu, and external assets remain outside this
+milestone.
 
 ---
 
@@ -446,40 +449,133 @@ M6 is complete after these local checks pass.
 
 ---
 
-## 10. Current Work Limit
+## 10. M7 — Save and Load System
 
-Do not add the following during M6:
+### SaveManager
 
-- Inventory, equipment, item rewards, loot, or gold.
-- Shops or economy systems.
-- Additional quests or quest chains.
-- Save files or quest persistence.
-- Multiplayer or network authority code.
-- Boss mechanics.
-- Detailed dialogue trees or cinematic presentation.
-- Detailed effects, animation trees, or external assets.
+- [x] Create `res://AincradProject/scripts/systems/save_manager.gd`.
+- [x] Register it as the `SaveManager` Autoload.
+- [x] Keep the typed class name separate as `SaveManagerService`.
+- [x] Save to `user://savegame.json`.
+- [x] Add `save_version = 1`.
+- [x] Find the player through the existing `players` group.
+- [x] Validate the player and required direct child components.
+- [x] Use `FileAccess` and `JSON` safely.
+- [x] Reject empty, damaged, non-dictionary, and unsupported-version files.
+- [x] Print useful warnings and the globalized save path.
+- [x] Avoid `_process()` polling.
 
-M6 is only the reusable quest definition, player quest log, Boar Hunt flow, quest giver, boar progress report, and quest tracker.
+### Input actions
+
+- [x] Add `save_game` to K.
+- [x] Add `load_game` to L.
+- [x] Use `_unhandled_input()`.
+- [x] Ignore keyboard echo so each action runs once per press.
+
+### Health persistence
+
+- [x] Add `HealthComponent.get_save_data()`.
+- [x] Add `HealthComponent.load_save_data(data)`.
+- [x] Save current and maximum health.
+- [x] Validate numeric values and clamp safely.
+- [x] Emit `health_changed` after loading.
+- [x] Do not replay damage, heal, or death events during loading.
+
+### Progression persistence
+
+- [x] Add `PlayerProgression.get_save_data()`.
+- [x] Add `PlayerProgression.load_save_data(data)`.
+- [x] Save current level, current XP, and maximum level.
+- [x] Recalculate the existing XP requirement after loading.
+- [x] Normalize oversized or invalid XP safely.
+- [x] Emit `experience_changed` after loading.
+- [x] Do not replay `levelled_up` during loading.
+
+### Quest persistence
+
+- [x] Add `PlayerQuestLog.get_save_data()`.
+- [x] Add `PlayerQuestLog.load_save_data(data)`.
+- [x] Save stable quest IDs, readable states, progress, and reward gates.
+- [x] Skip unknown saved quest IDs with a warning.
+- [x] Normalize completed state and reward ownership together.
+- [x] Guarantee a completed quest cannot become rewardable after loading.
+- [x] Add a dedicated `quest_data_loaded` UI-refresh signal.
+- [x] Avoid replaying the normal quest-completion message on load.
+
+### Save-status UI
+
+- [x] Create `res://AincradProject/scripts/ui/save_status_ui.gd`.
+- [x] Create `res://AincradProject/scenes/ui/save_status_ui.tscn`.
+- [x] Add it to the existing player scene without replacing other UI.
+- [x] Connect to the SaveManager status signal.
+- [x] Show success, missing-file, read-error, version, and player errors.
+- [x] Hide messages automatically after two seconds.
+
+### File safety and documentation
+
+- [x] Preserve every existing folder and path.
+- [x] Do not move, rename, delete, duplicate, or reorganize existing content.
+- [x] Do not manually create, edit, or delete `.uid` files.
+- [x] Modify only the required project, player, component, UI, and document files.
+- [x] Add `docs/MILESTONE_7_SETUP.md`.
+
+### Local verification still required
+
+- [~] Open the project in Godot 4.7 and let Godot generate new script UIDs normally.
+- [ ] Confirm every script parses without errors.
+- [ ] Confirm `SaveManager` appears under Remote scene-tree root.
+- [ ] Confirm K displays `Game saved` exactly once.
+- [ ] Confirm L displays `Game loaded` exactly once.
+- [ ] Complete position, health, and 40-XP restart test.
+- [ ] Complete active Boar Hunt 2 / 3 restart test.
+- [ ] Complete claimed Boar Hunt reward protection test.
+- [ ] Complete missing-file test.
+- [ ] Complete empty-JSON and damaged-JSON tests.
+- [ ] Complete unsupported-version test.
+- [ ] Complete unknown-quest-ID test.
+- [ ] Confirm all M1–M6 behavior remains functional.
+- [ ] Confirm no critical debugger errors appear.
+
+M7 is complete after all local checks pass.
 
 ---
 
-## 11. Next Milestone Preview
+## 11. Current Work Limit
 
-## M7 — Floor 1 Vertical Slice
+Do not add the following during M7:
+
+- Inventory, equipment, items, loot, or gold.
+- Shops or economy systems.
+- Multiple save slots or profile selection.
+- Cloud saving or account synchronization.
+- Multiplayer or server-owned saves.
+- Automatic checkpoints or autosaving.
+- A main menu or load-game screen.
+- Temporary boar, dummy, attack, animation, or timer state.
+- Detailed graphics or external assets.
+
+M7 is only the versioned local JSON save, component persistence interfaces,
+manual K/L controls, safe validation, and temporary status notification.
+
+---
+
+## 12. Next Milestone Preview
+
+## M8 — Floor 1 Vertical Slice
 
 Planned tasks:
 
-- [ ] Replace the single test-space layout with a small Starting City section, road, and field while preserving the reusable systems.
+- [ ] Replace the single test-space layout with a small Starting City section, road, and field while preserving reusable systems.
 - [ ] Place the Road Warden, interactables, training target, and boar encounters into a readable route.
 - [ ] Add landmarks and blocked future paths using primitive greybox geometry.
-- [ ] Preserve the complete Boar Hunt loop.
+- [ ] Preserve the complete Boar Hunt and save/load loops.
 - [ ] Keep large-world zones and future floor separation in mind without implementing all floors.
 
-Begin M7 only after M6 passes local testing.
+Begin M8 only after M7 passes local testing.
 
 ---
 
-## 12. Updated Milestone Order
+## 13. Updated Milestone Order
 
 ### M0 — Project Foundation
 
@@ -509,13 +605,13 @@ Experience, levels, and basic HUD display.
 
 One accept-track-complete quest.
 
-### M7 — Floor 1 Vertical Slice
+### M7 — Saving and Loading
+
+Versioned JSON save data and reliable restore flow.
+
+### M8 — Floor 1 Vertical Slice
 
 Starting City section, road, field, landmarks, and complete route.
-
-### M8 — Saving and Loading
-
-Versioned save data and reliable restore flow.
 
 ### M9 — Prototype Polish
 
@@ -527,7 +623,7 @@ Only after the complete local prototype works.
 
 ---
 
-## 13. Definition of Done for Any Task
+## 14. Definition of Done for Any Task
 
 A task is done when:
 
@@ -543,18 +639,20 @@ A task is done when:
 
 ---
 
-## 14. Next Action
+## 15. Next Action
 
-Open the project in Godot 4.7 and complete every M6 local-verification checkbox, especially this exact quest sequence:
+Open the project in Godot 4.7 and complete the M7 test sequence in
+`docs/MILESTONE_7_SETUP.md`.
+
+Prioritize these exact checks:
 
 ```text
-Before acceptance: boar gives 40 XP, quest remains hidden
-Accept quest:      Boar Hunt appears at 0 / 3
-First valid kill:  1 / 3 plus normal 40 boar XP
-Second valid kill: 2 / 3 plus normal 40 boar XP
-Third valid kill:  Return to the quest giver plus normal 40 boar XP
-Turn in quest:     receive exactly 100 quest XP
-Talk again:        no additional quest XP
+K after one boar:       save Level 1, 40 / 100 XP, position, and damaged HP
+Restart then L:         restore those exact values
+Quest at 2 / 3:         save, restart, load, and remain at 2 / 3
+Completed Boar Hunt:    save, load, talk again, and receive no extra 100 XP
+Missing save file:      L shows No save file found without crashing
+Damaged JSON:           L shows Save file could not be read without crashing
 ```
 
-Also run the full M1–M5 regression checklist before considering M6 complete.
+Run the complete M1–M6 regression checklist before considering M7 complete.

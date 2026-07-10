@@ -6,11 +6,7 @@ extends Node
 ## This component is intentionally independent from player, enemy, combat,
 ## animation, UI, saving, and networking code.
 
-signal health_changed(
-	previous_health: float,
-	current_health: float,
-	maximum_health: float
-)
+signal health_changed(previous_health: float, current_health: float, maximum_health: float)
 signal damage_taken(amount: float, source: Node)
 signal health_restored(amount: float, source: Node)
 signal died(source: Node)
@@ -103,6 +99,43 @@ func reset_health() -> void:
 		health_changed.emit(previous_health, _current_health, maximum_health)
 
 
+## Returns only the persistent health values owned by this component.
+func get_save_data() -> Dictionary:
+	_ensure_initialized()
+	return {
+		"current_health": _current_health,
+		"maximum_health": maximum_health,
+	}
+
+
+## Restores validated health values and refreshes signal-driven UI.
+##
+## Loading does not emit damage, healing, or death events because restoring a
+## snapshot must not replay gameplay consequences.
+func load_save_data(data: Dictionary) -> void:
+	_ensure_initialized()
+
+	if data.is_empty():
+		push_warning("HealthComponent received empty save data; current values remain.")
+		return
+
+	var previous_health: float = _current_health
+	var loaded_maximum_health: float = maxf(
+		_read_saved_float(data, "maximum_health", maximum_health), 1.0
+	)
+	var loaded_current_health: float = clampf(
+		_read_saved_float(data, "current_health", _current_health), 0.0, loaded_maximum_health
+	)
+
+	maximum_health = loaded_maximum_health
+	_current_health = loaded_current_health
+	_is_initialized = true
+
+	# Emit even when values are unchanged so every connected HUD refreshes after
+	# an explicit load operation.
+	health_changed.emit(previous_health, _current_health, maximum_health)
+
+
 func _initialize_health() -> void:
 	maximum_health = maxf(maximum_health, 1.0)
 
@@ -117,3 +150,16 @@ func _initialize_health() -> void:
 func _ensure_initialized() -> void:
 	if not _is_initialized:
 		_initialize_health()
+
+
+func _read_saved_float(data: Dictionary, key: String, fallback: float) -> float:
+	if not data.has(key):
+		push_warning("HealthComponent save data has no '%s'; using %.2f." % [key, fallback])
+		return fallback
+
+	var value: Variant = data[key]
+	if value is int or value is float:
+		return float(value)
+
+	push_warning("HealthComponent expected '%s' to be numeric; using %.2f." % [key, fallback])
+	return fallback

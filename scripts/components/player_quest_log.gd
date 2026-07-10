@@ -7,21 +7,13 @@ extends Node
 ## only player-specific state and rewards completed quests through an explicit
 ## PlayerProgression reference supplied at turn-in time.
 
-signal quest_state_changed(
-	quest_id: StringName,
-	previous_state: int,
-	current_state: int
-)
-signal quest_progress_changed(
-	quest_id: StringName,
-	current_progress: int,
-	target_progress: int
-)
+signal quest_state_changed(quest_id: StringName, previous_state: int, current_state: int)
+signal quest_progress_changed(quest_id: StringName, current_progress: int, target_progress: int)
 signal quest_reward_granted(
-	quest_id: StringName,
-	requested_experience: int,
-	applied_experience: int
+	quest_id: StringName, requested_experience: int, applied_experience: int
 )
+
+signal quest_data_loaded
 
 enum QuestState {
 	NOT_STARTED,
@@ -55,16 +47,12 @@ func register_quest(definition: QuestDefinition) -> bool:
 
 	if not definition.is_valid_definition():
 		push_error(
-			"PlayerQuestLog rejected invalid quest definition: %s"
-			% definition.resource_path
+			"PlayerQuestLog rejected invalid quest definition: %s" % definition.resource_path
 		)
 		return false
 
 	if _definitions_by_id.has(definition.quest_id):
-		push_warning(
-			"PlayerQuestLog already contains quest '%s'."
-			% definition.quest_id
-		)
+		push_warning("PlayerQuestLog already contains quest '%s'." % definition.quest_id)
 		return false
 
 	_definitions_by_id[definition.quest_id] = definition
@@ -117,21 +105,14 @@ func accept_quest(quest_id: StringName) -> bool:
 
 	_progress_by_id[quest_id] = 0
 	_set_quest_state(quest_id, QuestState.ACTIVE)
-	quest_progress_changed.emit(
-		quest_id,
-		0,
-		get_objective_target(quest_id)
-	)
+	quest_progress_changed.emit(quest_id, 0, get_objective_target(quest_id))
 	print("Quest accepted: %s" % quest_id)
 	return true
 
 
 ## Applies one objective event to every matching active quest.
 ## Returns the total amount of progress applied across those quests.
-func record_objective_progress(
-	objective_id: StringName,
-	amount: int = 1
-) -> int:
+func record_objective_progress(objective_id: StringName, amount: int = 1) -> int:
 	if objective_id.is_empty() or amount <= 0:
 		return 0
 
@@ -146,21 +127,14 @@ func record_objective_progress(
 			continue
 
 		var previous_progress: int = get_objective_progress(quest_id)
-		var new_progress: int = mini(
-			previous_progress + amount,
-			definition.objective_target
-		)
+		var new_progress: int = mini(previous_progress + amount, definition.objective_target)
 		var applied_progress: int = new_progress - previous_progress
 		if applied_progress <= 0:
 			continue
 
 		_progress_by_id[quest_id] = new_progress
 		total_applied_progress += applied_progress
-		quest_progress_changed.emit(
-			quest_id,
-			new_progress,
-			definition.objective_target
-		)
+		quest_progress_changed.emit(quest_id, new_progress, definition.objective_target)
 
 		if new_progress >= definition.objective_target:
 			_set_quest_state(quest_id, QuestState.READY_TO_TURN_IN)
@@ -169,10 +143,7 @@ func record_objective_progress(
 
 
 ## Completes a ready quest and grants its XP reward exactly once.
-func turn_in_quest(
-	quest_id: StringName,
-	progression: PlayerProgression
-) -> bool:
+func turn_in_quest(quest_id: StringName, progression: PlayerProgression) -> bool:
 	if not has_quest(quest_id):
 		push_warning("Cannot turn in unknown quest '%s'." % quest_id)
 		return false
@@ -186,10 +157,7 @@ func turn_in_quest(
 
 	if progression == null:
 		push_error(
-			(
-				"PlayerQuestLog cannot turn in quest '%s' without "
-				+ "PlayerProgression."
-			) % quest_id
+			("PlayerQuestLog cannot turn in quest '%s' without " + "PlayerProgression.") % quest_id
 		)
 		return false
 
@@ -200,24 +168,198 @@ func turn_in_quest(
 	# Close the reward gate before calling another component. This prevents
 	# duplicate rewards even if later code reacts to the emitted XP signals.
 	_reward_granted_by_id[quest_id] = true
-	var applied_experience: int = progression.add_experience(
-		definition.experience_reward
-	)
+	var applied_experience: int = progression.add_experience(definition.experience_reward)
 	_set_quest_state(quest_id, QuestState.COMPLETED)
-	quest_reward_granted.emit(
-		quest_id,
-		definition.experience_reward,
-		applied_experience
-	)
+	quest_reward_granted.emit(quest_id, definition.experience_reward, applied_experience)
 	print(
-		"Quest completed: %s. Requested reward: %d XP; applied: %d XP."
-		% [
-			quest_id,
-			definition.experience_reward,
-			applied_experience,
-		]
+		(
+			"Quest completed: %s. Requested reward: %d XP; applied: %d XP."
+			% [
+				quest_id,
+				definition.experience_reward,
+				applied_experience,
+			]
+		)
 	)
 	return true
+
+
+## Returns persistent state for every registered quest using stable quest IDs.
+func get_save_data() -> Dictionary:
+	var saved_quests: Dictionary = {}
+
+	for quest_id: StringName in _definitions_by_id:
+		saved_quests[String(quest_id)] = {
+			"state": _quest_state_to_save_name(get_quest_state(quest_id)),
+			"progress": get_objective_progress(quest_id),
+			"reward_claimed": bool(_reward_granted_by_id.get(quest_id, false)),
+		}
+
+	return saved_quests
+
+
+## Restores registered quest state and refreshes signal-driven UI.
+##
+## Unknown saved quest IDs are ignored. Completed state and reward ownership
+## are normalized together so a completed quest can never pay its reward again.
+func load_save_data(data: Dictionary) -> void:
+	if data.is_empty():
+		push_warning("PlayerQuestLog received empty save data; current values remain.")
+		_emit_all_quest_updates()
+		return
+
+	for saved_key: Variant in data.keys():
+		var quest_id: StringName = StringName(String(saved_key))
+		if not has_quest(quest_id):
+			push_warning("PlayerQuestLog skipped unknown saved quest ID '%s'." % quest_id)
+			continue
+
+		var saved_entry_value: Variant = data[saved_key]
+		if not saved_entry_value is Dictionary:
+			push_warning("PlayerQuestLog expected saved quest '%s' to be a Dictionary." % quest_id)
+			continue
+
+		var saved_entry: Dictionary = saved_entry_value
+		_load_quest_entry(quest_id, saved_entry)
+
+	_emit_all_quest_updates()
+
+
+func _load_quest_entry(quest_id: StringName, saved_entry: Dictionary) -> void:
+	var definition: QuestDefinition = get_quest_definition(quest_id)
+	if definition == null:
+		return
+
+	var current_state: int = get_quest_state(quest_id)
+	var current_progress: int = get_objective_progress(quest_id)
+	var current_reward_claimed: bool = bool(_reward_granted_by_id.get(quest_id, false))
+
+	var loaded_state: int = _read_saved_state(saved_entry, "state", current_state, quest_id)
+	var loaded_progress: int = clampi(
+		_read_saved_int(saved_entry, "progress", current_progress, quest_id),
+		0,
+		definition.objective_target
+	)
+	var loaded_reward_claimed: bool = _read_saved_bool(
+		saved_entry, "reward_claimed", current_reward_claimed, quest_id
+	)
+
+	# The reward gate is authoritative for duplicate protection. A claimed reward
+	# always means the quest is completed, and a completed quest always closes
+	# the reward gate even if an older or manually edited save omitted the flag.
+	if loaded_reward_claimed or loaded_state == QuestState.COMPLETED:
+		loaded_state = QuestState.COMPLETED
+		loaded_progress = definition.objective_target
+		loaded_reward_claimed = true
+	else:
+		match loaded_state:
+			QuestState.NOT_STARTED:
+				loaded_progress = 0
+				loaded_reward_claimed = false
+			QuestState.ACTIVE:
+				if loaded_progress >= definition.objective_target:
+					loaded_state = QuestState.READY_TO_TURN_IN
+			QuestState.READY_TO_TURN_IN:
+				loaded_progress = definition.objective_target
+			_:
+				loaded_state = QuestState.NOT_STARTED
+				loaded_progress = 0
+				loaded_reward_claimed = false
+
+	_states_by_id[quest_id] = loaded_state
+	_progress_by_id[quest_id] = loaded_progress
+	_reward_granted_by_id[quest_id] = loaded_reward_claimed
+
+
+func _emit_all_quest_updates() -> void:
+	quest_data_loaded.emit()
+
+
+func _quest_state_to_save_name(state: int) -> String:
+	match state:
+		QuestState.NOT_STARTED:
+			return "not_started"
+		QuestState.ACTIVE:
+			return "active"
+		QuestState.READY_TO_TURN_IN:
+			return "ready_to_turn_in"
+		QuestState.COMPLETED:
+			return "completed"
+		_:
+			return "not_started"
+
+
+func _read_saved_state(data: Dictionary, key: String, fallback: int, quest_id: StringName) -> int:
+	var loaded_state: int = fallback
+
+	if not data.has(key):
+		push_warning(
+			(
+				"Saved quest '%s' has no state; keeping %s."
+				% [quest_id, _quest_state_to_save_name(fallback)]
+			)
+		)
+	else:
+		var value: Variant = data[key]
+		if value is String:
+			match String(value):
+				"not_started":
+					loaded_state = QuestState.NOT_STARTED
+				"active":
+					loaded_state = QuestState.ACTIVE
+				"ready_to_turn_in":
+					loaded_state = QuestState.READY_TO_TURN_IN
+				"completed":
+					loaded_state = QuestState.COMPLETED
+				_:
+					push_warning(
+						(
+							"Saved quest '%s' has an unknown state name; keeping %s."
+							% [
+								quest_id,
+								_quest_state_to_save_name(fallback),
+							]
+						)
+					)
+		elif value is int or value is float:
+			loaded_state = clampi(int(value), QuestState.NOT_STARTED, QuestState.COMPLETED)
+		else:
+			push_warning(
+				(
+					"Saved quest '%s' has an invalid state; keeping %s."
+					% [quest_id, _quest_state_to_save_name(fallback)]
+				)
+			)
+
+	return loaded_state
+
+
+func _read_saved_int(data: Dictionary, key: String, fallback: int, quest_id: StringName) -> int:
+	if not data.has(key):
+		push_warning("Saved quest '%s' has no '%s'; using %d." % [quest_id, key, fallback])
+		return fallback
+
+	var value: Variant = data[key]
+	if value is int or value is float:
+		return int(value)
+
+	push_warning(
+		"Saved quest '%s' expected '%s' to be numeric; using %d." % [quest_id, key, fallback]
+	)
+	return fallback
+
+
+func _read_saved_bool(data: Dictionary, key: String, fallback: bool, quest_id: StringName) -> bool:
+	if not data.has(key):
+		push_warning("Saved quest '%s' has no '%s'; using %s." % [quest_id, key, fallback])
+		return fallback
+
+	var value: Variant = data[key]
+	if value is bool:
+		return bool(value)
+
+	push_warning("Saved quest '%s' expected '%s' to be bool; using %s." % [quest_id, key, fallback])
+	return fallback
 
 
 ## Returns a readable state name for debugging and UI fallbacks.

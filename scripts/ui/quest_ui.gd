@@ -25,6 +25,7 @@ func _ready() -> void:
 
 	_quest_log.quest_state_changed.connect(_on_quest_state_changed)
 	_quest_log.quest_progress_changed.connect(_on_quest_progress_changed)
+	_quest_log.quest_data_loaded.connect(_on_quest_data_loaded)
 	_completion_timer.timeout.connect(_on_completion_timer_timeout)
 	_update_display()
 
@@ -33,9 +34,7 @@ func _update_display() -> void:
 	if not _setup_is_valid:
 		return
 
-	var definition: QuestDefinition = _quest_log.get_quest_definition(
-		tracked_quest_id
-	)
+	var definition: QuestDefinition = _quest_log.get_quest_definition(tracked_quest_id)
 	if definition == null:
 		_quest_panel.visible = false
 		return
@@ -61,9 +60,7 @@ func _update_display() -> void:
 
 
 func _show_completion_message() -> void:
-	var definition: QuestDefinition = _quest_log.get_quest_definition(
-		tracked_quest_id
-	)
+	var definition: QuestDefinition = _quest_log.get_quest_definition(tracked_quest_id)
 	if definition == null:
 		return
 
@@ -74,9 +71,7 @@ func _show_completion_message() -> void:
 
 
 func _on_quest_state_changed(
-	quest_id: StringName,
-	_previous_state: int,
-	current_state: int
+	quest_id: StringName, _previous_state: int, current_state: int
 ) -> void:
 	if quest_id != tracked_quest_id:
 		return
@@ -89,12 +84,15 @@ func _on_quest_state_changed(
 
 
 func _on_quest_progress_changed(
-	quest_id: StringName,
-	_current_progress: int,
-	_target_progress: int
+	quest_id: StringName, _current_progress: int, _target_progress: int
 ) -> void:
 	if quest_id == tracked_quest_id:
 		_update_display()
+
+
+func _on_quest_data_loaded() -> void:
+	_completion_timer.stop()
+	_update_display()
 
 
 func _on_completion_timer_timeout() -> void:
@@ -108,10 +106,7 @@ func _resolve_required_nodes() -> bool:
 	if quest_log_node is PlayerQuestLog:
 		_quest_log = quest_log_node as PlayerQuestLog
 	else:
-		push_error(
-			"QuestUI could not find PlayerQuestLog at: %s"
-			% quest_log_path
-		)
+		push_error("QuestUI could not find PlayerQuestLog at: %s" % quest_log_path)
 		is_valid = false
 
 	var panel_node: Node = get_node_or_null("QuestPanel")
@@ -121,9 +116,7 @@ func _resolve_required_nodes() -> bool:
 		push_error("QuestUI is missing QuestPanel.")
 		is_valid = false
 
-	var title_node: Node = get_node_or_null(
-		"QuestPanel/MarginContainer/VBoxContainer/TitleLabel"
-	)
+	var title_node: Node = get_node_or_null("QuestPanel/MarginContainer/VBoxContainer/TitleLabel")
 	if title_node is Label:
 		_title_label = title_node as Label
 	else:

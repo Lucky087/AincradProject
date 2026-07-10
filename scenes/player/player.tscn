@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://AincradProject/scripts/components/player_quest_log.gd" id="9_player_quest_log"]
 [ext_resource type="Resource" path="res://AincradProject/data/quests/boar_hunt.tres" id="10_boar_hunt"]
 [ext_resource type="PackedScene" path="res://AincradProject/scenes/ui/quest_ui.tscn" id="11_quest_ui"]
+[ext_resource type="PackedScene" path="res://AincradProject/scenes/ui/save_status_ui.tscn" id="12_save_status_ui"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.45
@@ -178,5 +179,7 @@ progression_component_path = NodePath("../PlayerProgression")
 [node name="QuestUI" parent="." instance=ExtResource("11_quest_ui")]
 quest_log_path = NodePath("../PlayerQuestLog")
 tracked_quest_id = &"boar_hunt"
+
+[node name="SaveStatusUI" parent="." instance=ExtResource("12_save_status_ui")]
 
 [node name="InteractionUI" parent="." instance=ExtResource("3_interaction_ui")]

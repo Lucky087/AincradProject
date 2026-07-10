@@ -1585,3 +1585,220 @@ Use a separate signal-driven `QuestUI` below the existing progression panel.
 
 A future dialogue milestone may replace the two-step E flow while keeping the
 same quest-log methods and states.
+
+---
+
+## D-039 — Preserve the Existing Folder Structure Through M7
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The uploaded project already contains working movement, interaction, combat,
+health, enemy, progression, quest, UI, documentation, Godot settings, and
+Godot-generated `.uid` files. Reorganising those files while adding persistence
+would make resource-path and save testing less reliable.
+
+### Decision
+
+Preserve the existing folder structure exactly during M7.
+
+Create only:
+
+```text
+scripts/systems/save_manager.gd
+scripts/ui/save_status_ui.gd
+scenes/ui/save_status_ui.tscn
+docs/MILESTONE_7_SETUP.md
+```
+
+Modify only `project.godot`, the existing player scene, the existing health,
+progression, quest-log and quest-UI scripts, and required documentation.
+
+Do not move, rename, delete, duplicate, or reorganize existing content. Do not
+manually create, edit, or delete `.uid` files.
+
+### Consequences
+
+- Existing `res://AincradProject/` resource paths remain stable.
+- Godot may generate UID files for the two new scripts after opening the project.
+- M1–M6 scenes and public interfaces remain available.
+- A future structure migration still requires an explicitly approved milestone.
+
+### Alternatives considered
+
+- Move all systems into a new architecture while adding saves.
+- Create duplicate player or quest data under `scripts/systems/`.
+- Manually generate new UID files.
+
+### Follow-up
+
+Continue using the current paths through the Floor 1 vertical-slice milestone.
+
+---
+
+## D-040 — Use One SaveManager Autoload as a Coordinator
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Manual save and load input is application-wide and should remain available when
+world scenes are replaced later. The architecture document reserves Autoloads
+for true application-wide services and lists SaveManager as an appropriate
+future example.
+
+### Decision
+
+Register `scripts/systems/save_manager.gd` as the `SaveManager` Autoload.
+
+Use the typed script class name `SaveManagerService` so it does not conflict with
+the Autoload node name.
+
+The manager will:
+
+1. Handle K and L through `_unhandled_input()`.
+2. Find the local player through the existing `players` group.
+3. Resolve the player's direct health, progression, and quest components.
+4. Ask those components to export or restore their own data.
+5. Read and write `user://savegame.json`.
+6. Emit user-facing status messages.
+
+The manager will not own duplicate health, XP, level, or quest variables.
+
+### Consequences
+
+- Save/load remains available independently of the current gameplay scene.
+- Existing components remain the source of truth.
+- The manager has one clear application-wide responsibility.
+- No `_process()` polling is needed.
+- Future scene transitions can keep the same save coordinator.
+
+### Alternatives considered
+
+- Attach save code to the player controller.
+- Put save input inside the test world.
+- Add duplicate progression and quest dictionaries to a global game manager.
+- Avoid an Autoload and hard-code the current scene tree.
+
+### Follow-up
+
+Future floor and spawn persistence may extend the same versioned format without
+moving current player-owned data into SaveManager.
+
+---
+
+## D-041 — Let Components Own Their Persistent Data Interfaces
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+`HealthComponent`, `PlayerProgression`, and `PlayerQuestLog` already own and
+validate their runtime state. SaveManager would violate those boundaries if it
+wrote private variables directly or recreated their rules.
+
+### Decision
+
+Add these public interfaces where appropriate:
+
+```gdscript
+get_save_data() -> Dictionary
+load_save_data(data: Dictionary) -> void
+```
+
+Each component validates its own fields and emits a signal that refreshes its
+existing UI after loading.
+
+- Health emits `health_changed` but not damage, healing, or death signals.
+- Progression emits `experience_changed` but not `levelled_up`.
+- Quest log emits the new `quest_data_loaded` refresh signal rather than
+  replaying normal quest completion.
+
+### Consequences
+
+- SaveManager remains orchestration code rather than a duplicate data model.
+- Component invariants remain centralized.
+- UI refreshes immediately without `_process()` loops.
+- Loading does not replay combat, reward, or level-up consequences.
+- Future component fields can be versioned behind their own load methods.
+
+### Alternatives considered
+
+- Let SaveManager modify private fields directly.
+- Recalculate quest state in the UI.
+- Emit every gameplay signal again during load.
+- Duplicate all player data inside the Autoload.
+
+### Follow-up
+
+Any future inventory or equipment component should follow the same ownership
+pattern rather than expanding SaveManager into a monolithic state container.
+
+---
+
+## D-042 — Use Versioned JSON and Normalize Quest Reward Ownership on Load
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The first save must be readable for testing, survive restarts, reject damaged or
+unsupported data safely, and guarantee that a completed Boar Hunt never pays its
+100 XP reward twice.
+
+### Decision
+
+Write JSON to:
+
+```text
+user://savegame.json
+```
+
+Use `save_version = 1` and stable quest IDs. Store readable quest state names:
+
+```text
+not_started
+active
+ready_to_turn_in
+completed
+```
+
+During quest loading:
+
+- Completed state forces `reward_claimed = true`.
+- A claimed reward forces Completed state.
+- Completed and ready states normalize objective progress to the target.
+- Unknown quest IDs are skipped with warnings.
+- Missing or invalid fields use safe existing values.
+
+Reject an empty file, invalid JSON root, parse error, or unsupported version
+without crashing.
+
+### Consequences
+
+- The file is easy to inspect during prototype testing.
+- Save-format migration can be added explicitly later.
+- Completed Boar Hunt cannot become turn-in-ready after loading.
+- Talking to the Road Warden after loading a completed quest cannot grant more XP.
+- Damaged and outdated saves produce visible feedback and useful warnings.
+
+### Alternatives considered
+
+- Save live nodes or scene trees.
+- Store visible quest titles instead of stable IDs.
+- Trust `state` without saving the reward gate.
+- Use an unversioned JSON file.
+- Crash or reset the project when parsing fails.
+
+### Follow-up
+
+Add migration functions before changing the meaning or shape of version 1 data.

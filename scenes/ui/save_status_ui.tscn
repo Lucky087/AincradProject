@@ -1,0 +1,50 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://AincradProject/scripts/ui/save_status_ui.gd" id="1_save_status_ui"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_status_panel"]
+bg_color = Color(0.035, 0.045, 0.06, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.55, 0.85, 0.68, 0.95)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="SaveStatusUI" type="CanvasLayer"]
+layer = 20
+script = ExtResource("1_save_status_ui")
+save_manager_path = NodePath("/root/SaveManager")
+message_duration_seconds = 2.0
+
+[node name="StatusPanel" type="PanelContainer" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 460.0
+offset_top = 24.0
+offset_right = -460.0
+offset_bottom = 74.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_status_panel")
+visible = false
+
+[node name="MarginContainer" type="MarginContainer" parent="StatusPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 10
+
+[node name="MessageLabel" type="Label" parent="StatusPanel/MarginContainer"]
+layout_mode = 2
+text = "Game saved"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StatusTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
