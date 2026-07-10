@@ -14,7 +14,7 @@ signal save_completed(save_path: String)
 signal load_completed(save_path: String)
 
 const SAVE_FILE_PATH: String = "user://savegame.json"
-const SAVE_VERSION: int = 3
+const SAVE_VERSION: int = 4
 const OLDEST_SUPPORTED_SAVE_VERSION: int = 1
 const PLAYER_GROUP: StringName = &"players"
 
@@ -48,9 +48,23 @@ func save_game() -> bool:
 	var quest_log: PlayerQuestLog = _find_quest_log(player)
 	var inventory: PlayerInventory = _find_inventory(player)
 	var wallet: PlayerWallet = _find_wallet(player)
+	var respawn: PlayerRespawn = _find_respawn(player)
 	if not _validate_required_components(
-		health_component, progression_component, quest_log, inventory, wallet, "saved"
+		health_component,
+		progression_component,
+		quest_log,
+		inventory,
+		wallet,
+		respawn,
+		"saved"
 	):
+		return false
+
+	if respawn.is_player_dead() or respawn.is_respawning():
+		_report_failure(
+			"Game could not be saved",
+			"SaveManager does not save temporary player death or respawn states."
+		)
 		return false
 
 	var save_data: Dictionary = {
@@ -70,6 +84,7 @@ func save_game() -> bool:
 		"quests": quest_log.get_save_data(),
 		"inventory": inventory.get_save_data(),
 		"wallet": wallet.get_save_data(),
+		"respawn": respawn.get_save_data(),
 	}
 
 	var json_text: String = JSON.stringify(save_data, "\t")
@@ -194,8 +209,15 @@ func load_game() -> bool:
 	var quest_log: PlayerQuestLog = _find_quest_log(player)
 	var inventory: PlayerInventory = _find_inventory(player)
 	var wallet: PlayerWallet = _find_wallet(player)
+	var respawn: PlayerRespawn = _find_respawn(player)
 	if not _validate_required_components(
-		health_component, progression_component, quest_log, inventory, wallet, "loaded"
+		health_component,
+		progression_component,
+		quest_log,
+		inventory,
+		wallet,
+		respawn,
+		"loaded"
 	):
 		return false
 
@@ -218,12 +240,22 @@ func load_game() -> bool:
 			"SaveManager is loading an older save without wallet data; zero gold will be used."
 		)
 
+	var respawn_data: Dictionary = {}
+	if save_version >= 4:
+		respawn_data = _read_dictionary(save_data, "respawn", "save root")
+	else:
+		push_warning(
+			"SaveManager is loading an older save without checkpoint data; "
+			+ "the original player spawn will be used."
+		)
+
 	_restore_player_position(player, player_data)
 	health_component.load_save_data(player_data)
 	progression_component.load_save_data(progression_data)
 	quest_log.load_save_data(quest_data)
 	inventory.load_save_data(inventory_data)
 	wallet.load_save_data(wallet_data)
+	respawn.load_save_data(respawn_data)
 
 	print("Game loaded from: %s" % ProjectSettings.globalize_path(SAVE_FILE_PATH))
 	status_message_requested.emit("Game loaded")
@@ -284,12 +316,21 @@ func _find_wallet(player: Node) -> PlayerWallet:
 	return null
 
 
+func _find_respawn(player: Node) -> PlayerRespawn:
+	for child_node: Node in player.get_children():
+		if child_node is PlayerRespawn:
+			return child_node as PlayerRespawn
+
+	return null
+
+
 func _validate_required_components(
 	health_component: HealthComponent,
 	progression_component: PlayerProgression,
 	quest_log: PlayerQuestLog,
 	inventory: PlayerInventory,
 	wallet: PlayerWallet,
+	respawn: PlayerRespawn,
 	operation_past_tense: String
 ) -> bool:
 	var missing_components: PackedStringArray = []
@@ -303,6 +344,8 @@ func _validate_required_components(
 		missing_components.append("PlayerInventory")
 	if wallet == null:
 		missing_components.append("PlayerWallet")
+	if respawn == null:
+		missing_components.append("PlayerRespawn")
 
 	if missing_components.is_empty():
 		return true

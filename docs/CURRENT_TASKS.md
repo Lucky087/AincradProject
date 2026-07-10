@@ -1,8 +1,8 @@
 # Current Tasks
 
 **Project:** Aincrad-Inspired RPG  
-**Current milestone:** M9 — Gold, Loot Drops, and Shop NPC
-**Current phase:** Gold/loot/shop implementation package created; local Godot verification remains
+**Current milestone:** M10 — Player Death, Respawning, and Checkpoints
+**Current phase:** Death/respawn/checkpoint implementation package created; local Godot verification remains
 **Last updated:** 2026-07-11
 
 ---
@@ -21,28 +21,27 @@
 
 ## 2. Current Milestone Goal
 
-Add one reusable player wallet, per-death boar gold and material loot, and one
-primitive weapon shop without replacing inventory, combat, interaction, quest,
-or save ownership boundaries.
+Add reusable player death, safe checkpoint, respawn, fade, temporary damage
+immunity, enemy disengagement, and checkpoint persistence without replacing the
+existing player or changing persistent progression/economy ownership.
 
 The milestone should prove that:
 
-- `PlayerWallet` owns all player gold and prevents negative balances.
-- A valid wild-boar death grants the killing player 12 gold exactly once.
-- Existing 40 XP and Boar Hunt progress still occur independently.
-- Each boar life performs one configurable 50-percent Boar Tusk drop roll.
-- Temporary world pickups add stable item IDs to `PlayerInventory` automatically.
-- Pickups disappear after loading and are not part of persistent save data.
-- Boar Tusks stack up to 99 through the existing inventory rules.
-- The shopkeeper opens a modal shop through the existing E interaction system.
-- Iron Sword costs 50 gold, cannot duplicate, and deals 45 damage when equipped.
-- Purchases validate ownership, inventory capacity, and gold before spending.
-- Save version 3 stores wallet data while versions 1 and 2 remain loadable.
-- Every M1–M8 feature remains functional.
+- `PlayerRespawn` owns temporary death and checkpoint state.
+- Lethal health damage disables movement, camera input, combat, and interaction.
+- Inventory and shop close before the death screen appears.
+- The same player instance respawns after a 3-second wait and black fade.
+- Active checkpoints use stable IDs and separate respawn marker transforms.
+- The original player spawn remains the fallback checkpoint.
+- Health resets to maximum and velocity is cleared on respawn.
+- The player receives 2 seconds of movement-compatible damage immunity.
+- The boar cancels attacks, releases the dead target, and returns to spawn.
+- Save version 4 stores checkpoint data while versions 1–3 remain loadable.
+- Every M1–M9 feature remains functional and unchanged by death.
 
-Selling, armour, crafting, consumable effects, multiple currencies, random shop
-inventories, multiplayer trading, detailed graphics, and external assets remain
-outside this milestone.
+Permanent death, penalties, corpse retrieval, multiple lives, multiplayer
+respawning, main menus, detailed graphics, and external assets remain outside
+this milestone.
 
 ---
 
@@ -723,44 +722,135 @@ M9 is complete after all local checks pass.
 
 ---
 
-## 13. Current Work Limit
+## 13. M10 — Player Death, Respawning, and Checkpoints
 
-Do not add the following during M9:
+### Player death and respawn component
 
-- Selling items or player-to-player trading.
-- Armour, extra equipment slots, or consumable effects.
-- Crafting, item weight, gold sinks, or multiple currencies.
-- Random or rotating shop inventories.
-- Persistent world-drop state or loot containers.
-- Detailed item icons, models, animation, or external assets.
-- Multiplayer authority for gold, loot, or transactions.
-- Additional enemies, shops, or currencies.
+- [x] Create `scripts/components/player_respawn.gd`.
+- [x] Add `PlayerRespawn` as a direct player child.
+- [x] Observe the existing `HealthComponent.died` signal.
+- [x] Preserve the existing player scene instance instead of replacing it.
+- [x] Close inventory and shop if they are open.
+- [x] Disable movement, camera mouse input, attacks, and interactions while dead.
+- [x] Clear player velocity at death and again at respawn.
+- [x] Wait 3 seconds before the black fade.
+- [x] Move the same player to the active checkpoint at full black.
+- [x] Restore health to maximum.
+- [x] Fade back and restore normal controls.
+- [x] Add typed death, respawn, checkpoint, and protection signals.
 
-M9 is only one wallet, boar gold, one material drop, one temporary pickup, one
-shopkeeper, one purchasable sword, HUD updates, and save-version compatibility.
+### Death UI and protection
+
+- [x] Create `scenes/ui/death_ui.tscn` and `scripts/ui/death_ui.gd`.
+- [x] Display `You Died` and the safe-area respawn message.
+- [x] Add a separate full-screen fade overlay.
+- [x] Keep all existing HUD scenes in place beneath the death UI.
+- [x] Add a temporary `Respawn protection` indicator.
+- [x] Use the existing health invulnerability property for 2 seconds.
+- [x] Keep player movement enabled during post-respawn protection.
+
+### Checkpoint system
+
+- [x] Create `scenes/interactions/checkpoint_crystal.tscn`.
+- [x] Create `scripts/interactions/checkpoint_crystal.gd`.
+- [x] Reuse the existing `Interactable` base and E interaction path.
+- [x] Use stable ID `test_world_safe_zone`.
+- [x] Use a child `RespawnPoint` marker instead of the collision-body origin.
+- [x] Fully heal the player on first activation.
+- [x] Change the primitive visual from inactive blue to active green.
+- [x] Prevent repeated activation effects on the already-active checkpoint.
+- [x] Support multiple future checkpoint scenes through the `checkpoints` group.
+- [x] Preserve the original player spawn as fallback.
+- [x] Add the checkpoint near the starting NPC area in `test_world.tscn`.
+
+### Boar integration
+
+- [x] Preserve all existing boar AI, combat, rewards, loot, quest, and respawn code.
+- [x] Resolve the player's direct `PlayerRespawn` component safely.
+- [x] Cancel an active boar attack immediately on `player_died`.
+- [x] Stop treating dead, respawning, and protected players as valid targets.
+- [x] Return the boar toward its original spawn after player death.
+- [x] Allow normal detection again only after protection ends and range rules pass.
+
+### Save compatibility
+
+- [x] Increase the save writer to version 4.
+- [x] Save active checkpoint ID, position, and rotation.
+- [x] Restore checkpoint data through `PlayerRespawn.load_save_data()`.
+- [x] Continue accepting versions 1, 2, and 3.
+- [x] Use original-spawn fallback when older saves have no checkpoint section.
+- [x] Keep player, health, progression, quest, inventory, equipment, and wallet data unchanged.
+- [x] Exclude temporary death, fade, immunity, and enemy state from save data.
+- [x] Reject saving during the death/black-screen respawn sequence.
+
+### File safety and documentation
+
+- [x] Preserve every existing file and folder path.
+- [x] Create new files only inside existing approved folders.
+- [x] Do not manually create, edit, or delete `.uid` files.
+- [x] Add `docs/MILESTONE_10_SETUP.md`.
+- [x] Update `docs/CURRENT_TASKS.md` and `docs/DECISION_LOG.md`.
+
+### Local verification still required
+
+- [~] Open the project in Godot 4.7 and allow new script UIDs to be generated.
+- [ ] Activate the checkpoint and confirm full healing plus active visual.
+- [ ] Confirm repeated interaction cannot repeat activation effects.
+- [ ] Let the boar kill the player and confirm all gameplay inputs stop.
+- [ ] Confirm open inventory and shop close immediately.
+- [ ] Confirm the death message, 3-second delay, fade, teleport, and fade-back order.
+- [ ] Confirm the player respawns at the active checkpoint with maximum health.
+- [ ] Confirm velocity is cleared and normal controls return.
+- [ ] Confirm 2 seconds of visible damage immunity while movement remains enabled.
+- [ ] Confirm the boar cancels attacks and returns to spawn during death/protection.
+- [ ] Confirm XP, gold, items, equipment, quest progress, and levels do not change.
+- [ ] Save an active checkpoint, restart, load, and confirm later death uses it.
+- [ ] Load versions 1–3 and confirm original-spawn fallback without crashing.
+- [ ] Confirm every M1–M9 system still works.
+- [ ] Confirm no critical debugger errors appear.
+
+M10 is complete after all local checks pass.
 
 ---
 
-## 14. Next Milestone Preview
+## 14. Current Work Limit
 
-## M10 — Floor 1 Vertical Slice
+Do not add the following during M10:
+
+- Permanent death, lives, corpse retrieval, or death penalties.
+- Item, gold, or experience loss.
+- Main-menu, reload-screen, or scene replacement flows.
+- Multiple checkpoint selection menus or fast travel.
+- Multiplayer respawn authority.
+- Detailed death animation, post-processing, or external assets.
+- Changes to unrelated progression, inventory, economy, quest, or combat rules.
+
+M10 is only one reusable respawn component, one death/fade UI, one primitive
+checkpoint, boar disengagement, two-second protection, and save-version 4.
+
+---
+
+## 15. Next Milestone Preview
+
+## M11 — Floor 1 Vertical Slice
 
 Planned tasks:
 
 - [ ] Replace the single test-space layout with a small Starting City section,
   road, and field while preserving reusable systems.
-- [ ] Place the Road Warden, shopkeeper, chest, sign, test NPC, training target,
-  and boar encounters into a readable route.
+- [ ] Place the Road Warden, shopkeeper, chest, checkpoint, sign, test NPC,
+  training target, and boar encounters into a readable route.
 - [ ] Add landmarks and blocked future paths using primitive greybox geometry.
-- [ ] Preserve the complete combat, progression, quest, inventory, economy, and save loop.
+- [ ] Preserve the complete combat, progression, quest, inventory, economy,
+  checkpoint, respawn, and save loop.
 - [ ] Keep future floor zones and streaming boundaries in mind without building
   all 100 floors.
 
-Begin M10 only after M9 passes local testing.
+Begin M11 only after M10 passes local testing.
 
 ---
 
-## 15. Updated Milestone Order
+## 16. Updated Milestone Order
 
 ### M0 — Project Foundation
 
@@ -803,21 +893,26 @@ chest reward, combat integration, and save version 2.
 
 Player wallet, boar gold, Boar Tusk pickup, weapon shop, Iron Sword, and save version 3.
 
-### M10 — Floor 1 Vertical Slice
+### M10 — Player Death, Respawning, and Checkpoints
 
-Starting City section, road, field, landmarks, economy placement, and complete route.
+Death state, fade UI, stable safe checkpoint, boar disengagement, respawn
+protection, and save version 4.
 
-### M11 — Prototype Polish
+### M11 — Floor 1 Vertical Slice
+
+Starting City section, road, field, landmarks, economy/checkpoint placement, and complete route.
+
+### M12 — Prototype Polish
 
 Feedback, audio, bug fixing, performance review, and full playthrough testing.
 
-### M12 — Multiplayer Technical Test
+### M13 — Multiplayer Technical Test
 
 Only after the complete local prototype works.
 
 ---
 
-## 16. Definition of Done for Any Task
+## 17. Definition of Done for Any Task
 
 A task is done when:
 
@@ -833,22 +928,22 @@ A task is done when:
 
 ---
 
-## 17. Next Action
+## 18. Next Action
 
-Open the project in Godot 4.7 and complete the M9 test sequence in
-`docs/MILESTONE_9_SETUP.md`.
+Open the project in Godot 4.7 and complete the M10 test sequence in
+`docs/MILESTONE_10_SETUP.md`.
 
 Prioritize these exact checks:
 
 ```text
-One boar death:        +40 XP, +12 gold, active quest +1
-Loot sequence:         both tusk drops and non-drops occur
-Pickup:                automatic collection and correct stacking
-Shop below 50 gold:    purchase fails with no gold removed
-Shop at 50+ gold:      exactly 50 removed and one Iron Sword added
-Iron Sword equipped:   attacks deal 45 damage
-Version 3 save:        gold, tusks, sword, and equipment survive restart/load
-Versions 1 and 2:      load without crashing and use zero gold
+Checkpoint activation:       full heal, active visual, no repeated effect
+Player death:                every gameplay input stops
+Respawn sequence:            3-second wait, fade, same-player teleport, full heal
+Boar response:               attack cancelled and return to original spawn
+Protection:                  2 seconds, movement allowed, no incoming damage
+Persistent values:           XP, gold, items, equipment, and quest unchanged
+Version 4 save:              active checkpoint survives restart/load
+Versions 1 through 3:        load safely and use original spawn fallback
 ```
 
-Run the complete M1–M8 regression checklist before considering M9 complete.
+Run the complete M1–M9 regression checklist before considering M10 complete.

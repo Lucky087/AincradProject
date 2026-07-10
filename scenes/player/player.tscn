@@ -22,6 +22,8 @@
 [ext_resource type="Resource" path="res://AincradProject/data/items/iron_sword.tres" id="20_iron_sword"]
 [ext_resource type="PackedScene" path="res://AincradProject/scenes/ui/gold_ui.tscn" id="21_gold_ui"]
 [ext_resource type="PackedScene" path="res://AincradProject/scenes/ui/shop_ui.tscn" id="22_shop_ui"]
+[ext_resource type="Script" path="res://AincradProject/scripts/components/player_respawn.gd" id="23_player_respawn"]
+[ext_resource type="PackedScene" path="res://AincradProject/scenes/ui/death_ui.tscn" id="24_death_ui"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.45
@@ -108,6 +110,24 @@ equip_starter_weapon = true
 unique_name_in_owner = true
 script = ExtResource("18_player_wallet")
 starting_gold = 0
+
+[node name="PlayerRespawn" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("23_player_respawn")
+death_wait_seconds = 3.0
+fade_to_black_seconds = 0.45
+fade_from_black_seconds = 0.55
+respawn_invulnerability_seconds = 2.0
+
+[node name="DeathWaitTimer" type="Timer" parent="PlayerRespawn"]
+unique_name_in_owner = true
+wait_time = 3.0
+one_shot = true
+
+[node name="InvulnerabilityTimer" type="Timer" parent="PlayerRespawn"]
+unique_name_in_owner = true
+wait_time = 2.0
+one_shot = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0.9, 0)
@@ -212,5 +232,7 @@ wallet_path = NodePath("../PlayerWallet")
 [node name="InventoryUI" parent="." instance=ExtResource("17_inventory_ui")]
 
 [node name="ShopUI" parent="." instance=ExtResource("22_shop_ui")]
+
+[node name="DeathUI" parent="." instance=ExtResource("24_death_ui")]
 
 [node name="InteractionUI" parent="." instance=ExtResource("3_interaction_ui")]

@@ -2241,3 +2241,183 @@ stable item IDs.
 
 Before version 4, add explicit migration helpers if any existing field changes
 meaning rather than only adding an optional component section.
+
+## D-052 — Let PlayerRespawn Coordinate Death Without Replacing the Player
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Player death must stop every gameplay input mode, preserve all persistent
+components, and return the same player instance to a safe location. Replacing
+or re-instantiating the player would risk losing inventory, quest, wallet, UI,
+and signal connections.
+
+### Decision
+
+Add one direct-child `PlayerRespawn` component. It observes the existing
+`HealthComponent.died` signal and coordinates existing public input gates,
+modal UI close methods, two Timer children, and the separate `DeathUI`.
+
+The existing `CharacterBody3D` is never deleted. At full black it is moved to
+the active respawn transform, velocity is cleared, and existing health is reset.
+The component emits typed death, respawn, checkpoint, and invulnerability
+signals for enemies and future systems.
+
+### Consequences
+
+- Progression, quests, inventory, equipment, and wallet state remain in place.
+- Death behavior has one owner instead of being duplicated in controller,
+  combat, enemy, or UI scripts.
+- Inventory and shop close before controls are disabled.
+- Saving temporary death or respawn state is deliberately rejected.
+
+### Alternatives considered
+
+- Delete and instantiate a new player scene.
+- Put death sequencing in `PlayerController`.
+- Pause the complete scene tree.
+- Let `DeathUI` own gameplay state.
+
+### Follow-up
+
+Future floor transitions should reuse the respawn transform interface instead
+of adding another player replacement path.
+
+---
+
+## D-053 — Store Stable Checkpoint IDs and Marker Transforms
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Checkpoints must support multiple future safe areas and remain reliable if
+visible names, scene placement structure, or localized text changes.
+
+### Decision
+
+Each `CheckpointCrystal` uses a stable `StringName` ID and a child
+`RespawnPoint` marker. `PlayerRespawn` owns the active ID and full global marker
+transform. The original player transform captured at startup remains the
+fallback when no checkpoint is active.
+
+Checkpoint scenes join the `checkpoints` group. Activating or loading a
+checkpoint refreshes every loaded checkpoint visual so only the matching stable
+ID appears active.
+
+### Consequences
+
+- Player spawn position is separate from the crystal's collision body.
+- More checkpoint scenes can be added without changing player code.
+- Repeated interaction with the active checkpoint cannot repeatedly heal or
+  replay activation effects.
+- Unloaded future checkpoints can still be represented by saved ID and transform.
+
+### Alternatives considered
+
+- Save a fragile NodePath to the checkpoint.
+- Use the checkpoint display name as identity.
+- Always respawn at the player's current saved position.
+- Put checkpoint state on each world scene instead of the player component.
+
+### Follow-up
+
+A future world/floor transition system may validate checkpoint IDs against
+floor definitions before accepting remote or migrated saves.
+
+---
+
+## D-054 — Treat Death and Respawn Protection as Untargetable Enemy States
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The boar already checks living health, but health is restored before the fade
+finishes. Without a separate targeting rule it could reacquire or damage the
+player during the protected return to play.
+
+### Decision
+
+Let the boar resolve the player's `PlayerRespawn` component in addition to
+`HealthComponent`. The boar immediately cancels its active attack on
+`player_died` and returns toward spawn. Its existing living-target check also
+rejects dead, respawning, and respawn-invulnerable players.
+
+Damage immunity uses the existing `HealthComponent.is_invulnerable` property
+for 2 seconds after the fade returns. Movement remains enabled during this
+protection window.
+
+### Consequences
+
+- No separate enemy target manager is required for the current prototype.
+- An attack tween cannot land after the player's death.
+- The boar returns home during the death screen and may detect again only after
+  protection ends and normal range rules pass.
+- Existing boar rewards and lifecycle behavior remain independent.
+
+### Alternatives considered
+
+- Temporarily change player collision layers.
+- Delete or disable all enemies during death.
+- Keep the player at zero health until the protection timer ends.
+- Let every enemy maintain unrelated death checks.
+
+### Follow-up
+
+A future reusable enemy base or threat system should consume the same
+`can_be_targeted_by_enemies()` contract.
+
+---
+
+## D-055 — Advance Save Format to Version 4 for Checkpoint Data
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The active checkpoint must survive restarts, while versions 1 through 3 contain
+no checkpoint section and must remain safe to load.
+
+### Decision
+
+Write save version 4 and add:
+
+```text
+respawn.active_checkpoint_id
+respawn.checkpoint_position.{x,y,z}
+respawn.checkpoint_rotation.{x,y,z}
+```
+
+Continue accepting versions 1, 2, 3, and 4. Missing checkpoint data is passed as
+an empty Dictionary to `PlayerRespawn`, which restores the original scene spawn
+fallback. Temporary death, fade, immunity, and enemy state are never saved.
+
+### Consequences
+
+- Activated checkpoints persist with all existing saved systems.
+- Older saves remain loadable without migration files.
+- SaveManager still coordinates component-owned data instead of becoming the
+  runtime owner of checkpoint state.
+- A zero-health or hand-edited save recovers at the safe respawn transform.
+
+### Alternatives considered
+
+- Add checkpoint fields without changing the declared version.
+- Reject versions 1 through 3.
+- Save the checkpoint scene path or NodePath.
+- Serialize Timer and fade state.
+
+### Follow-up
+
+Before version 5, add explicit migration helpers if existing fields change
+meaning rather than only adding another optional component section.

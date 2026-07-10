@@ -80,6 +80,7 @@ var _respawn_timer: Timer = null
 
 var _player: Node3D = null
 var _player_health: HealthComponent = null
+var _player_respawn: PlayerRespawn = null
 var _state: EnemyState = EnemyState.IDLE
 var _spawn_transform: Transform3D = Transform3D.IDENTITY
 var _attack_pivot_rest_transform: Transform3D = Transform3D.IDENTITY
@@ -174,6 +175,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _exit_tree() -> void:
+	_disconnect_player_respawn_signal()
 	_kill_tween(_attack_tween)
 	_kill_tween(_feedback_tween)
 
@@ -415,8 +417,10 @@ func _refresh_player_reference(delta: float) -> void:
 
 
 func _find_player() -> void:
+	_disconnect_player_respawn_signal()
 	_player = null
 	_player_health = null
+	_player_respawn = null
 
 	var player_node: Node = get_tree().get_first_node_in_group(player_group)
 	if not player_node is Node3D:
@@ -424,11 +428,17 @@ func _find_player() -> void:
 
 	_player = player_node as Node3D
 	_player_health = _find_health_component(_player)
+	_player_respawn = _find_player_respawn_component(_player)
 
 	if _player_health == null:
 		push_warning(
 			"BoarEnemy found a player group member without a HealthComponent."
 		)
+
+	if _player_respawn != null:
+		var death_callable: Callable = Callable(self, "_on_player_died")
+		if not _player_respawn.player_died.is_connected(death_callable):
+			_player_respawn.player_died.connect(death_callable)
 
 
 func _has_valid_player_reference() -> bool:
@@ -441,7 +451,11 @@ func _has_valid_player_reference() -> bool:
 
 
 func _has_living_player() -> bool:
-	return _has_valid_player_reference() and _player_health.is_alive()
+	if not _has_valid_player_reference() or not _player_health.is_alive():
+		return false
+	if _player_respawn != null and not _player_respawn.can_be_targeted_by_enemies():
+		return false
+	return true
 
 
 func _find_health_component(start_node: Node) -> HealthComponent:
@@ -453,6 +467,35 @@ func _find_health_component(start_node: Node) -> HealthComponent:
 			return child_node as HealthComponent
 
 	return null
+
+
+func _find_player_respawn_component(start_node: Node) -> PlayerRespawn:
+	for child_node: Node in start_node.get_children():
+		if child_node is PlayerRespawn:
+			return child_node as PlayerRespawn
+	return null
+
+
+func _disconnect_player_respawn_signal() -> void:
+	if _player_respawn == null or not is_instance_valid(_player_respawn):
+		return
+	var death_callable: Callable = Callable(self, "_on_player_died")
+	if _player_respawn.player_died.is_connected(death_callable):
+		_player_respawn.player_died.disconnect(death_callable)
+
+
+func _on_player_died() -> void:
+	if _is_dead:
+		return
+
+	_cancel_attack()
+	_attack_cooldown_timer.stop()
+	velocity.x = 0.0
+	velocity.z = 0.0
+	if _horizontal_distance_to(_spawn_transform.origin) > spawn_arrival_distance:
+		_set_state(EnemyState.RETURNING)
+	else:
+		_set_state(EnemyState.IDLE)
 
 
 func _horizontal_distance_to(target_position: Vector3) -> float:
