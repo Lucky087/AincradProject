@@ -1,6 +1,9 @@
-[gd_scene load_steps=19 format=3]
+[gd_scene format=3 uid="uid://cyuu87i5oghux"]
 
-[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" path="res://AincradProject/scenes/player/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" path="res://AincradProject/scenes/interactions/test_sign.tscn" id="2_test_sign"]
+[ext_resource type="PackedScene" path="res://AincradProject/scenes/interactions/test_npc.tscn" id="3_test_npc"]
+[ext_resource type="PackedScene" path="res://AincradProject/scenes/interactions/test_chest.tscn" id="4_test_chest"]
 
 [sub_resource type="Environment" id="Environment_test"]
 background_mode = 1
@@ -66,83 +69,91 @@ size = Vector3(3, 0.5, 6)
 [sub_resource type="BoxShape3D" id="BoxShape3D_narrow_ramp"]
 size = Vector3(3, 0.5, 6)
 
-[node name="TestWorld" type="Node3D"]
+[node name="TestWorld" type="Node3D" unique_id=37805245]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=154883778]
 environment = SubResource("Environment_test")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-rotation = Vector3(-0.872665, -0.610865, 0)
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=462498472]
+transform = Transform3D(0.8191522, 0.439385, -0.36868754, 0, 0.64278734, 0.7660447, 0.5735762, -0.62750715, 0.52654064, 0, 0, 0)
 light_energy = 1.2
 shadow_enabled = true
 
-[node name="GreyboxGeometry" type="Node3D" parent="."]
+[node name="GreyboxGeometry" type="Node3D" parent="." unique_id=931416290]
 
-[node name="Floor" type="StaticBody3D" parent="GreyboxGeometry"]
-position = Vector3(0, -0.25, 0)
+[node name="Floor" type="StaticBody3D" parent="GreyboxGeometry" unique_id=560426153]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/Floor"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/Floor" unique_id=1012166456]
 mesh = SubResource("BoxMesh_floor")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/Floor"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/Floor" unique_id=1671007979]
 shape = SubResource("BoxShape3D_floor")
 
-[node name="SmallCube" type="StaticBody3D" parent="GreyboxGeometry"]
-position = Vector3(-4, 0.5, 6)
+[node name="SmallCube" type="StaticBody3D" parent="GreyboxGeometry" unique_id=733745099]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.5, 6)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/SmallCube"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/SmallCube" unique_id=80051620]
 mesh = SubResource("BoxMesh_small_cube")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/SmallCube"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/SmallCube" unique_id=1697923218]
 shape = SubResource("BoxShape3D_small_cube")
 
-[node name="TallCube" type="StaticBody3D" parent="GreyboxGeometry"]
-position = Vector3(5, 1.5, 1)
+[node name="TallCube" type="StaticBody3D" parent="GreyboxGeometry" unique_id=213160557]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.5, 1)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/TallCube"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/TallCube" unique_id=1149695471]
 mesh = SubResource("BoxMesh_tall_cube")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/TallCube"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/TallCube" unique_id=802943470]
 shape = SubResource("BoxShape3D_tall_cube")
 
-[node name="RaisedPlatform" type="StaticBody3D" parent="GreyboxGeometry"]
-position = Vector3(-7, 2.25, -3)
+[node name="RaisedPlatform" type="StaticBody3D" parent="GreyboxGeometry" unique_id=441192224]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 2.25, -3)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/RaisedPlatform"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/RaisedPlatform" unique_id=1354538337]
 mesh = SubResource("BoxMesh_platform")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/RaisedPlatform"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/RaisedPlatform" unique_id=983464882]
 shape = SubResource("BoxShape3D_platform")
 
-[node name="WideRamp" type="StaticBody3D" parent="GreyboxGeometry"]
-position = Vector3(-7, 1.16, 1.25)
-rotation = Vector3(0.261799, 0, 0)
+[node name="WideRamp" type="StaticBody3D" parent="GreyboxGeometry" unique_id=1765080755]
+transform = Transform3D(1, 0, 0, 0, 0.96592593, -0.2588187, 0, 0.2588187, 0.96592593, -7, 1.16, 1.25)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/WideRamp"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/WideRamp" unique_id=471890610]
 mesh = SubResource("BoxMesh_ramp")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/WideRamp"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/WideRamp" unique_id=804509943]
 shape = SubResource("BoxShape3D_ramp")
 
-[node name="LowWall" type="StaticBody3D" parent="GreyboxGeometry"]
-position = Vector3(5, 0.75, -7)
-rotation = Vector3(0, 0.261799, 0)
+[node name="LowWall" type="StaticBody3D" parent="GreyboxGeometry" unique_id=789773765]
+transform = Transform3D(0.96592593, 0, 0.2588187, 0, 1, 0, -0.2588187, 0, 0.96592593, 5, 0.75, -7)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/LowWall"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/LowWall" unique_id=1637915551]
 mesh = SubResource("BoxMesh_wall")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/LowWall"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/LowWall" unique_id=1783026190]
 shape = SubResource("BoxShape3D_wall")
 
-[node name="NarrowRamp" type="StaticBody3D" parent="GreyboxGeometry"]
-position = Vector3(8, 1.15, 7)
-rotation = Vector3(-0.349066, 0.349066, 0)
+[node name="NarrowRamp" type="StaticBody3D" parent="GreyboxGeometry" unique_id=1065845623]
+transform = Transform3D(0.93969256, -0.11697787, 0.3213939, 0, 0.93969256, 0.34202027, -0.34202027, -0.3213939, 0.8830221, 8, 1.15, 7)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/NarrowRamp"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GreyboxGeometry/NarrowRamp" unique_id=1117048174]
 mesh = SubResource("BoxMesh_narrow_ramp")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/NarrowRamp"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/NarrowRamp" unique_id=1268633945]
 shape = SubResource("BoxShape3D_narrow_ramp")
 
-[node name="Player" parent="." instance=ExtResource("1_player")]
-position = Vector3(0, 0.05, 14)
+[node name="TestInteractables" type="Node3D" parent="." unique_id=452880678]
+
+[node name="TestSign" parent="TestInteractables" unique_id=1879314570 instance=ExtResource("2_test_sign")]
+transform = Transform3D(-0.86602557, 0, -0.49999976, 0, 1, 0, 0.49999976, 0, -0.86602557, -3, 0, 10.5)
+
+[node name="TestNpc" parent="TestInteractables" unique_id=519966007 instance=ExtResource("3_test_npc")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, 9.5)
+
+[node name="TestChest" parent="TestInteractables" unique_id=64610679 instance=ExtResource("4_test_chest")]
+transform = Transform3D(-0.86602557, 0, 0.4999997, 0, 1, 0, -0.4999997, 0, -0.86602557, 3, 0, 10.5)
+
+[node name="Player" parent="." unique_id=413033696 instance=ExtResource("1_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 14)

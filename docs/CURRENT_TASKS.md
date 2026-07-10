@@ -1,8 +1,8 @@
 # Current Tasks
 
 **Project:** Aincrad-Inspired RPG  
-**Current milestone:** M0 — Project Foundation  
-**Current phase:** Documentation and folder setup only  
+**Current milestone:** M2 — Reusable Third-Person Interaction  
+**Current phase:** Implementation package created; local Godot verification remains  
 **Last updated:** 2026-07-10
 
 ---
@@ -21,270 +21,241 @@
 
 ## 2. Current Milestone Goal
 
-Create a clean Godot 4.7 project foundation before implementing gameplay.
+Add a reusable third-person interaction system without redesigning the working movement controller.
 
-Milestone M0 is complete when:
+The player should be able to aim the third-person camera at one nearby interactable, see a prompt, and press E to interact.
 
-- The project opens correctly in Godot 4.7.
-- The agreed folder structure exists.
-- The five core documents exist in `res://docs/`.
-- Naming rules are understood.
-- Initial technical decisions are recorded.
-- Version control is ready.
-- No gameplay system has been prematurely implemented.
+This milestone contains three primitive test objects:
+
+- A readable sign.
+- A placeholder NPC with one dialogue line.
+- A one-use chest.
+
+Combat, inventory, quests, saving, multiplayer, and detailed dialogue remain outside this milestone.
 
 ---
 
 ## 3. M0 — Project Foundation
 
-### Project creation
-
-- [ ] Create a new Godot 4.7 project.
-- [ ] Give the project a temporary original working title.
-- [ ] Confirm the project opens without errors.
-- [ ] Confirm `project.godot` is in the project root.
-- [ ] Choose a renderer.
-- [ ] Record the renderer decision in `DECISION_LOG.md`.
-- [ ] Set up Git version control.
-- [ ] Add the correct Godot `.gitignore`.
-- [ ] Make an initial clean commit.
-
-### Folder structure
-
-- [ ] Create `res://addons/`.
-- [ ] Create `res://assets/` and its initial subfolders.
-- [ ] Create `res://core/` and its initial subfolders.
-- [ ] Create `res://docs/`.
-- [ ] Create `res://game/` and its feature folders.
-- [ ] Create `res://game/world/floors/floor_001/`.
-- [ ] Create `res://multiplayer/`.
-- [ ] Create `res://tests/`.
-- [ ] Create `res://app/`.
-- [ ] Confirm folder names follow `NAMING_CONVENTIONS.md`.
-
-### Documentation
-
-- [x] Define the project vision and prototype scope.
-- [x] Define the initial technical architecture.
-- [x] Define naming conventions.
-- [x] Create the current task list.
-- [x] Create the initial decision log.
-- [ ] Copy all five files into `res://docs/`.
-- [ ] Read each document once inside the project.
-- [ ] Correct any paths that differ from the real local setup.
-- [ ] Commit the documentation.
-
-### Project settings review
-
-- [ ] Confirm Godot version is 4.7.
-- [ ] Record the chosen renderer.
-- [ ] Record the intended initial platform as Windows PC.
-- [ ] Do not configure final graphics settings yet.
-- [ ] Do not create the full Input Map yet.
-- [ ] Do not add autoloads yet.
-
-### Architecture check
-
-- [ ] Confirm Floor 1 has its own folder.
-- [ ] Confirm reusable systems are outside the Floor 1 folder.
-- [ ] Confirm networking has a separate future-facing folder.
-- [ ] Confirm saves will use stable IDs and a format version.
-- [ ] Confirm no design requires all 100 floors to be loaded.
-- [ ] Confirm the project does not assume all future code belongs in one manager.
+- [x] Create the five core project documents.
+- [x] Define the Floor 1 vertical-slice scope.
+- [x] Define naming and architecture rules.
+- [x] Use Godot 4.7 and typed GDScript.
+- [x] Select the Compatibility renderer for early greybox work.
+- [x] Record the temporary beginner-facing path structure.
+- [ ] Initialise Git in the user's working copy.
+- [ ] Add the Godot `.gitignore`.
+- [ ] Make the first local commit.
 
 ---
 
-## 4. Current Work Limit
+## 4. M1 — Third-Person Greybox
 
-Do not begin these features during M0:
+### Implementation
 
-- Third-person movement.
-- Camera controls.
-- Sword combat.
+- [x] Create the runnable main scene.
+- [x] Create the primitive greybox world.
+- [x] Create the `CharacterBody3D` player.
+- [x] Add camera-relative WASD movement.
+- [x] Add mouse camera control.
+- [x] Add gravity and jumping.
+- [x] Add hold-to-sprint.
+- [x] Add player facing rotation.
+- [x] Add Escape mouse capture toggling.
+- [x] Add collision floor, cubes, ramps, lighting, and environment.
+
+### Local verification
+
+- [~] Open and test M1 in the user's Godot 4.7 editor.
+- [ ] Confirm movement and camera behaviour.
+- [ ] Confirm jumping, gravity, and sprinting.
+- [ ] Confirm collision on the floor, ramps, and cubes.
+- [ ] Confirm no critical debugger errors.
+
+The existing player controller remains unchanged during M2.
+
+---
+
+## 5. M2 — Reusable Third-Person Interaction
+
+### Base interaction architecture
+
+- [x] Create `res://scripts/interactions/interactable.gd`.
+- [x] Use a reusable `Interactable` base class.
+- [x] Add typed availability, prompt, and interaction methods.
+- [x] Return optional display text from interactions.
+- [x] Keep quest, inventory, combat, saving, and networking logic out.
+
+### Player interaction detection
+
+- [x] Create `res://scripts/interactions/player_interactor.gd`.
+- [x] Add one camera-mounted `RayCast3D`.
+- [x] Limit interaction using player-to-object distance.
+- [x] Allow only the ray's closest valid object to be targeted.
+- [x] Ignore the player's own collision body.
+- [x] Stop world geometry from being interacted through.
+- [x] Validate required scene nodes.
+- [x] Validate the `interact` Input Map action.
+- [x] Press E to call the target's interaction method.
+- [x] Leave `player_controller.gd` unchanged.
+
+### Interaction UI
+
+- [x] Create `res://scenes/ui/interaction_ui.tscn`.
+- [x] Create `res://scripts/ui/interaction_ui.gd`.
+- [x] Show a prompt while a valid object is targeted.
+- [x] Hide the prompt when no valid object is targeted.
+- [x] Display short interaction messages.
+- [x] Automatically hide messages after a timer.
+- [x] Add missing-node error checks.
+
+### Test interactables
+
+- [x] Create the primitive sign scene and script.
+- [x] Make the sign display a short message.
+- [x] Create the primitive placeholder NPC scene and script.
+- [x] Make the NPC display one dialogue line.
+- [x] Create the primitive chest scene and script.
+- [x] Make the chest animate open only once.
+- [x] Remove the chest as a valid target after opening.
+- [x] Add all three test objects to the greybox world.
+
+### Input and scene integration
+
+- [x] Add the `interact` Input Map action.
+- [x] Bind `interact` to the physical E key.
+- [x] Add `InteractionRayCast` beneath the existing camera.
+- [x] Add `PlayerInteractor` to the player scene.
+- [x] Instance `InteractionUI` in the player scene.
+- [x] Preserve the existing movement controller and main scene.
+
+### Local verification still required
+
+- [~] Open the project in Godot 4.7.
+- [ ] Confirm all new scripts parse without errors.
+- [ ] Confirm all new scenes load without missing-resource errors.
+- [ ] Press F5 and walk toward the sign.
+- [ ] Aim at the sign and confirm its prompt appears.
+- [ ] Look away and confirm the prompt disappears.
+- [ ] Press E and confirm the sign message appears.
+- [ ] Aim at the NPC and confirm only the NPC is targeted.
+- [ ] Press E and confirm one dialogue line appears.
+- [ ] Aim at the chest and press E.
+- [ ] Confirm the chest lid opens.
+- [ ] Confirm the chest prompt disappears after opening.
+- [ ] Confirm the chest cannot open a second time.
+- [ ] Confirm distant objects do not show a prompt.
+- [ ] Confirm cubes or walls block the interaction ray.
+- [ ] Confirm WASD, mouse camera, jump, sprint, and Escape still work.
+- [ ] Confirm no critical errors appear in the debugger.
+
+M2 is complete after these local checks pass.
+
+---
+
+## 6. Current Work Limit
+
+Do not add the following during M2 testing:
+
+- Combat.
+- Weapons.
+- Enemies.
 - Health.
-- Enemy artificial intelligence.
-- Experience.
-- Levelling.
-- Dialogue.
-- Quests.
-- Saving and loading.
-- Multiplayer.
-- Final city art.
-- Full Floor 1 terrain.
-- Any additional floors.
+- Experience or levels.
+- Quest state.
+- Inventory or item rewards.
+- Saving or loading.
+- Multiplayer code.
+- Shop purchasing.
+- Full dialogue trees.
+- Floor transitions.
+- Blender models.
+- External art packs.
 
-The purpose of M0 is to prevent these systems from being built on an unclear foundation.
-
----
-
-## 5. Next Milestone Preview
-
-## M1 — Bootstrap and Development Test Scene
-
-M1 should begin only after M0 is complete.
-
-Planned M1 tasks:
-
-- [ ] Create `res://app/bootstrap/bootstrap.tscn`.
-- [ ] Create `res://app/bootstrap/bootstrap.gd`.
-- [ ] Create `res://app/main/game_root.tscn`.
-- [ ] Create a minimal development test scene.
-- [ ] Set the bootstrap scene as the main scene.
-- [ ] Confirm project startup flow.
-- [ ] Add no combat or quest code.
-- [ ] Document how to run the project.
-
-M1 should prove the application starts through a controlled entry point.
+The interaction base may support these later, but this milestone only proves detection, prompting, and method calls.
 
 ---
 
-## 6. Future Milestone Order
+## 7. Next Milestone Preview
 
-This order is provisional and may be changed in the decision log.
+## M3 — Health and Basic Sword Combat
+
+Planned tasks:
+
+- [ ] Create a reusable health component.
+- [ ] Create basic hitbox and hurtbox boundaries.
+- [ ] Add one primitive sword placeholder.
+- [ ] Add one basic attack.
+- [ ] Keep enemy behaviour outside the first combat step.
+- [ ] Preserve the interaction system.
+
+Begin M3 only after M2 passes local testing.
+
+---
+
+## 8. Updated Milestone Order
 
 ### M0 — Project Foundation
 
-Documentation, folders, version control, and conventions.
+Documentation, decisions, project settings, and version control preparation.
 
-### M1 — Bootstrap and Test World
+### M1 — Bootstrap and Third-Person Greybox
 
-Application startup, game root, and a simple test environment.
+Main scene, primitive world, movement, camera, jump, sprint, gravity, and mouse capture.
 
-### M2 — Third-Person Player
+### M2 — Reusable Third-Person Interaction
 
-Movement, camera, basic animation, and input separation.
+Camera targeting, prompt UI, one-line interactions, a sign, an NPC, and a one-use chest.
 
-### M3 — Interaction and NPC
+### M3 — Health and Basic Sword Combat
 
-Interaction detection, one NPC, and simple dialogue.
+Health components, one sword attack, hit detection, and damage.
 
-### M4 — Health and Combat
-
-Health components, sword attack, hit detection, and damage.
-
-### M5 — First Enemy
+### M4 — First Enemy
 
 One enemy type with simple behaviour and defeat handling.
 
-### M6 — Progression
+### M5 — Progression
 
-Experience, level calculation, and basic HUD display.
+Experience, levels, and basic HUD display.
 
-### M7 — Quest
+### M6 — First Quest
 
 One accept-track-complete quest.
 
-### M8 — Floor 1 Vertical Slice
+### M7 — Floor 1 Vertical Slice
 
 Starting City section, road, field, landmarks, and complete route.
 
-### M9 — Saving and Loading
+### M8 — Saving and Loading
 
 Versioned save data and reliable restore flow.
 
-### M10 — Prototype Polish
+### M9 — Prototype Polish
 
-Audio, feedback, bug fixing, optimisation, and complete playthrough test.
+Feedback, audio, bug fixing, performance review, and full playthrough testing.
 
-### M11 — Multiplayer Technical Test
+### M10 — Multiplayer Technical Test
 
 Only after the complete local prototype works.
 
 ---
 
-## 7. Task Selection Rule
-
-Work on one small task at a time.
-
-A task should ideally produce one testable result.
-
-Good task:
-
-```text
-Create the bootstrap scene and make it print a startup confirmation.
-```
-
-Too large:
-
-```text
-Create the full player, combat, multiplayer, and Floor 1.
-```
-
-When a task grows, divide it before coding.
-
----
-
-## 8. Definition of Done for Any Task
+## 9. Definition of Done for Any Task
 
 A task is done when:
 
 - The requested behaviour or document exists.
-- Names follow the project rules.
-- Typed GDScript is used when code exists.
-- The project runs without new critical errors.
-- The result has been tested.
+- Names follow the project rules or an accepted decision-log exception.
+- Typed GDScript is used.
+- Required scene references are validated.
+- The result has been tested in Godot 4.7.
+- No new critical errors are present.
 - Relevant documentation is updated.
-- The change has a focused Git commit.
-- Temporary debug code is removed or clearly labelled.
+- The change is ready for a focused Git commit.
 
 ---
 
-## 9. Bug Priority
+## 10. Next Action
 
-Use these priorities later:
-
-### P0 — Critical
-
-The project cannot start, save data is destroyed, or development is blocked.
-
-### P1 — High
-
-A required prototype feature cannot be completed.
-
-### P2 — Medium
-
-A feature works incorrectly but has a workaround.
-
-### P3 — Low
-
-Minor visual, usability, naming, or polish issue.
-
----
-
-## 10. Current Questions to Resolve
-
-Record the answer to each question in `DECISION_LOG.md`.
-
-- [ ] What is the original working title?
-- [ ] Which renderer will the project use initially?
-- [ ] Which Git hosting service will store the repository?
-- [ ] Will placeholder art come from primitive meshes, original Blender assets, or licensed asset packs?
-- [ ] What minimum computer specification should the prototype target?
-- [ ] Will the first prototype use keyboard and mouse only?
-- [ ] What internal measurement and scale rules will environment artists follow?
-
-None of these questions should block copying the documentation and creating folders.
-
----
-
-## 11. Latest Completed Work
-
-- [x] Reduced the immediate goal from 100 floors to one Floor 1 vertical slice.
-- [x] Defined the eventual prototype feature list.
-- [x] Chosen Godot 4.7.
-- [x] Chosen typed GDScript.
-- [x] Established a multiplayer-aware but single-player-first direction.
-- [x] Established a floor and zone folder strategy.
-- [x] Established stable ID and versioned-save requirements.
-
----
-
-## 12. Next Action
-
-Create the Godot project and copy this documentation folder into:
-
-```text
-res://docs/
-```
-
-Then create the root folders listed in `TECHNICAL_ARCHITECTURE.md`.
+Extract the M2 package, open `project.godot` in Godot 4.7, press F5, and complete the M2 local verification checklist above.

@@ -1,0 +1,53 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://d23k4f32us11o" path="res://AincradProject/scripts/interactions/test_npc.gd" id="1_test_npc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
+albedo_color = Color(0.18, 0.62, 0.3, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_head"]
+albedo_color = Color(0.92, 0.7, 0.52, 1)
+roughness = 0.82
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_body"]
+material = SubResource("StandardMaterial3D_body")
+radius = 0.38
+height = 1.35
+
+[sub_resource type="SphereMesh" id="SphereMesh_head"]
+material = SubResource("StandardMaterial3D_head")
+radius = 0.3
+height = 0.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_facing"]
+material = SubResource("StandardMaterial3D_head")
+size = Vector3(0.16, 0.12, 0.12)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_npc"]
+radius = 0.42
+height = 1.9
+
+[node name="TestNpc" type="StaticBody3D"]
+collision_layer = 3
+collision_mask = 1
+script = ExtResource("1_test_npc")
+interaction_prompt = "Press E to talk"
+speaker_name = "Town Guide"
+dialogue_line = "Welcome! The city gate is still being built."
+
+[node name="BodyMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.78, 0)
+mesh = SubResource("CapsuleMesh_body")
+
+[node name="HeadMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.72, 0)
+mesh = SubResource("SphereMesh_head")
+
+[node name="FacingMarker" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.72, -0.29)
+mesh = SubResource("BoxMesh_facing")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.95, 0)
+shape = SubResource("CapsuleShape3D_npc")

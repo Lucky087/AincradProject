@@ -1,0 +1,48 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://b11spanrjl2ll" path="res://AincradProject/scripts/interactions/test_sign.gd" id="1_test_sign"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wood"]
+albedo_color = Color(0.35, 0.18, 0.07, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_board"]
+albedo_color = Color(0.65, 0.42, 0.16, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="BoxMesh_post"]
+material = SubResource("StandardMaterial3D_wood")
+size = Vector3(0.18, 1.4, 0.18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_board"]
+material = SubResource("StandardMaterial3D_board")
+size = Vector3(1.6, 0.8, 0.14)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_post"]
+size = Vector3(0.22, 1.4, 0.22)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_board"]
+size = Vector3(1.65, 0.85, 0.18)
+
+[node name="TestSign" type="StaticBody3D"]
+collision_layer = 3
+collision_mask = 1
+script = ExtResource("1_test_sign")
+interaction_prompt = "Press E to read sign"
+sign_message = "The road ahead leads toward the first field."
+
+[node name="PostMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.7, 0)
+mesh = SubResource("BoxMesh_post")
+
+[node name="BoardMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.55, 0)
+mesh = SubResource("BoxMesh_board")
+
+[node name="PostCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.7, 0)
+shape = SubResource("BoxShape3D_post")
+
+[node name="BoardCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.55, 0)
+shape = SubResource("BoxShape3D_board")

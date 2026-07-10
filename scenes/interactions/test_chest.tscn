@@ -1,0 +1,53 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://d1qp32fn5u6al" path="res://AincradProject/scripts/interactions/test_chest.gd" id="1_test_chest"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_chest"]
+albedo_color = Color(0.5, 0.24, 0.06, 1)
+roughness = 0.82
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_metal"]
+albedo_color = Color(0.75, 0.58, 0.18, 1)
+metallic = 0.55
+roughness = 0.45
+
+[sub_resource type="BoxMesh" id="BoxMesh_base"]
+material = SubResource("StandardMaterial3D_chest")
+size = Vector3(1.6, 0.7, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lid"]
+material = SubResource("StandardMaterial3D_chest")
+size = Vector3(1.6, 0.3, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lock"]
+material = SubResource("StandardMaterial3D_metal")
+size = Vector3(0.28, 0.34, 0.12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_chest"]
+size = Vector3(1.65, 1.05, 1.05)
+
+[node name="TestChest" type="StaticBody3D"]
+collision_layer = 3
+collision_mask = 1
+script = ExtResource("1_test_chest")
+interaction_prompt = "Press E to open chest"
+opened_message = "You opened the chest. It is empty for now."
+
+[node name="BaseMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.35, 0)
+mesh = SubResource("BoxMesh_base")
+
+[node name="LockMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.66, -0.53)
+mesh = SubResource("BoxMesh_lock")
+
+[node name="LidPivot" type="Node3D" parent="."]
+position = Vector3(0, 0.7, 0.5)
+
+[node name="LidMesh" type="MeshInstance3D" parent="LidPivot"]
+position = Vector3(0, 0.15, -0.5)
+mesh = SubResource("BoxMesh_lid")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.525, 0)
+shape = SubResource("BoxShape3D_chest")

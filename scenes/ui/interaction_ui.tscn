@@ -1,0 +1,101 @@
+[gd_scene format=3 uid="uid://diirtq7sv3wvc"]
+
+[ext_resource type="Script" uid="uid://cjtwjkvmj1ot1" path="res://AincradProject/scripts/ui/interaction_ui.gd" id="1_interaction_ui"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_message"]
+bg_color = Color(0.035, 0.045, 0.06, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.9, 0.78, 0.35, 0.95)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_prompt"]
+bg_color = Color(0.04, 0.055, 0.075, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.72, 0.82, 1, 0.9)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="InteractionUI" type="CanvasLayer" unique_id=842157382]
+layer = 10
+script = ExtResource("1_interaction_ui")
+
+[node name="MessagePanel" type="PanelContainer" parent="." unique_id=1687801763]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -280.0
+offset_top = -166.0
+offset_right = 280.0
+offset_bottom = -104.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_message")
+
+[node name="MarginContainer" type="MarginContainer" parent="MessagePanel" unique_id=1976951741]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 12
+
+[node name="MessageLabel" type="Label" parent="MessagePanel/MarginContainer" unique_id=656681082]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(520, 28)
+layout_mode = 2
+text = "Interaction message"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="InteractionPromptPanel" type="PanelContainer" parent="." unique_id=480626468]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -88.0
+offset_right = 150.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_prompt")
+
+[node name="MarginContainer" type="MarginContainer" parent="InteractionPromptPanel" unique_id=987426175]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 9
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 9
+
+[node name="PromptLabel" type="Label" parent="InteractionPromptPanel/MarginContainer" unique_id=95318505]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(268, 24)
+layout_mode = 2
+text = "Press E to interact"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MessageTimer" type="Timer" parent="." unique_id=207770689]
+unique_name_in_owner = true
+wait_time = 3.0
+one_shot = true
+
+[connection signal="timeout" from="MessageTimer" to="." method="_on_message_timer_timeout"]

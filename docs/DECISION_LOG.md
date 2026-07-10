@@ -491,31 +491,278 @@ Review controller support after the keyboard-and-mouse player prototype works.
 
 ---
 
-## D-012 — Renderer Choice Remains Open Until Project Creation
+## D-012 — Use the Compatibility Renderer for the Greybox Prototype
 
 **Date:** 2026-07-10  
-**Status:** Proposed  
+**Status:** Accepted  
 **Decision owner:** Lead developer
 
 ### Context
 
-Godot project creation requires a renderer choice. The best initial option depends on the development computer, visual target, and performance needs.
+The first runnable milestone uses only primitive meshes, basic lighting, and a simple environment. Broad hardware compatibility and easy startup are more important than advanced rendering features at this stage.
 
 ### Decision
 
-Choose either Compatibility or Forward+ when creating the real project, then replace this proposed entry with an accepted renderer decision.
+Use Godot's Compatibility renderer for the initial greybox project.
+
+The project may move to Forward+ later if the final visual target requires its desktop rendering features.
 
 ### Consequences
 
-- Folder and documentation work can proceed immediately.
-- Rendering features should not be designed around an unrecorded assumption.
-- The selected renderer must be tested on the actual development computer.
+- The primitive test milestone should run on a wider range of development computers.
+- The current project does not depend on advanced Forward+ effects.
+- Renderer-specific visual work is postponed.
+- Changing to Forward+ later requires testing and a new decision-log entry.
 
 ### Alternatives considered
 
-- Select a renderer without checking the machine.
-- Treat the renderer as unimportant and never record it.
+- Use Forward+ immediately.
+- Leave the renderer unrecorded.
 
 ### Follow-up
 
-Update this entry during M0 project setup.
+Test the Compatibility build on the development computer before adding detailed environment art.
+
+---
+
+## D-013 — Combine Bootstrap and Basic Player Into One Runnable Greybox Milestone
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The project foundation is documented, and the next useful result is a small scene that can be opened and tested immediately. A bootstrap-only scene would not yet prove movement, camera behaviour, jumping, gravity, or collision.
+
+### Decision
+
+Combine the earlier bootstrap milestone and basic third-person-player milestone into one contained milestone named **M1 — Bootstrap and Third-Person Greybox**.
+
+The milestone includes only:
+
+- A main scene.
+- A primitive test world.
+- A `CharacterBody3D` player.
+- Camera-relative movement.
+- Mouse camera control.
+- Jumping and gravity.
+- Hold-to-sprint.
+- Visual facing rotation.
+- Mouse capture toggling.
+
+### Consequences
+
+- The first runnable build provides a meaningful movement test.
+- Primitive shapes are used instead of external assets.
+- Combat, enemies, NPCs, quests, saving, inventory, and multiplayer remain postponed.
+- The next milestone becomes interaction and one NPC.
+
+### Alternatives considered
+
+- Create only an empty bootstrap scene.
+- Add combat and enemies at the same time.
+- Build detailed Floor 1 art before testing movement.
+
+### Follow-up
+
+Complete every local verification item in `CURRENT_TASKS.md` before beginning M2.
+
+---
+
+## D-014 — Use Requested Beginner-Facing Scene and Script Paths for M1
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The long-term architecture prefers feature-oriented folders that keep related scenes, scripts, and resources together. The requested first milestone uses explicit beginner-facing paths:
+
+```text
+res://scenes/player/player.tscn
+res://scripts/player/player_controller.gd
+res://scenes/world/test_world.tscn
+res://scenes/main.tscn
+```
+
+### Decision
+
+Use the requested paths for M1 as a documented temporary exception.
+
+The long-term feature-oriented direction in D-004 remains the target. Before the project gains many gameplay systems, review whether the player and world files should migrate into the long-term `game/` and `app/` structure.
+
+### Consequences
+
+- The downloadable milestone matches the exact requested paths.
+- The first project is easier for a beginner to locate and understand.
+- Scene and script files are temporarily separated by file type.
+- Future migration may require path updates in scenes and documentation.
+- No additional unrelated global `scripts/` dumping ground should be created without another decision.
+
+### Alternatives considered
+
+- Ignore the requested paths and use only the long-term architecture.
+- Permanently replace the feature-oriented architecture with global scene and script folders.
+
+### Follow-up
+
+Revisit the folder layout before M3 or before adding several new actor types.
+
+## D-015 — Use a Reusable Interactable Base Class
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The same player input must eventually activate NPC dialogue, doors, chests, pickups, shops, quest objects, and floor teleporters. Hard-coding a separate player check for every object type would tightly couple the player to future systems.
+
+### Decision
+
+Create a reusable `Interactable` base class with three typed methods:
+
+- Check whether interaction is currently available.
+- Provide the current prompt text.
+- Perform the interaction and return optional UI message text.
+
+The player interactor depends on the base class rather than specific test objects.
+
+### Consequences
+
+- New interactable types can inherit the base without changing player movement.
+- Test messages remain simple during M2.
+- Future systems may override the methods and call dedicated dialogue, door, inventory, shop, quest, or transition services.
+- Returning a string is suitable for the prototype but may later be replaced or extended by structured interaction results.
+
+### Alternatives considered
+
+- Use `has_method("interact")` on arbitrary nodes.
+- Put sign, NPC, and chest logic inside the player script.
+- Create a global interaction autoload.
+
+### Follow-up
+
+Review whether structured interaction-result data is needed when dialogue and inventory systems begin.
+
+---
+
+## D-016 — Target From the Camera but Validate Distance From the Player
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+A third-person game needs interaction to follow the direction the player is looking, but the camera is several metres behind the character. Using only camera-to-object distance could allow interactions from too far away.
+
+### Decision
+
+Use one `RayCast3D` beneath the active third-person camera to select the closest object in the centre of the view.
+
+Then validate the selected object's distance from the player's `PlayerInteractor`.
+
+The ray checks both world geometry and interactable collision layers. The player body is added as a ray exception.
+
+### Consequences
+
+- Looking direction determines the candidate.
+- Player distance determines whether it is nearby enough.
+- Only one object can be targeted at a time.
+- Walls and greybox obstacles can block targeting.
+- The interaction ray requires the active camera scene hierarchy to remain correctly assigned through exported NodePaths.
+
+### Alternatives considered
+
+- Use only a sphere around the player.
+- Use camera distance alone.
+- Search every nearby interactable each frame.
+- Let the ray ignore world geometry.
+
+### Follow-up
+
+Consider a small `ShapeCast3D` or aim-assist option later if a controller requires more forgiving targeting.
+
+---
+
+## D-017 — Use Collision Layer 2 for Interaction Targeting
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The interaction ray must distinguish interactable physics bodies from ordinary world geometry while still allowing obstacles to block line of sight.
+
+### Decision
+
+Reserve collision layer 2 for interactable detection during the prototype.
+
+Test interactables use collision layer value `3`, which places them on:
+
+- Layer 1 for normal physical collision.
+- Layer 2 for interaction targeting.
+
+The interaction ray uses mask value `3` so it sees world geometry and interactables.
+
+### Consequences
+
+- The player can physically collide with test interactables.
+- The interaction ray can identify them.
+- Ordinary layer-1 geometry can block interactions.
+- Future collision-layer names should be configured in Project Settings before the layer plan grows.
+
+### Alternatives considered
+
+- Put interactables only on layer 1.
+- Make interactables non-colliding `Area3D` nodes.
+- Ignore geometry with the interaction ray.
+
+### Follow-up
+
+Name collision layers in Project Settings when the combat milestone introduces hitboxes and hurtboxes.
+
+---
+
+## D-018 — Continue the Beginner-Facing Scene and Script Paths Through M2
+
+**Date:** 2026-07-10  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+D-014 allowed the requested top-level `scenes/` and `scripts/` paths for M1. M2 explicitly requests matching interaction and UI paths.
+
+### Decision
+
+Continue the documented path exception through M2:
+
+```text
+res://scripts/interactions/
+res://scripts/ui/
+res://scenes/interactions/
+res://scenes/ui/
+```
+
+Do not move the existing working player during this milestone.
+
+### Consequences
+
+- The package matches the requested beginner-friendly paths.
+- Existing scene references remain stable.
+- The long-term feature-oriented architecture remains postponed.
+- A migration decision is required before the temporary layout becomes significantly larger.
+
+### Alternatives considered
+
+- Move all M1 files before implementing interaction.
+- Mix the new interaction system into the long-term `game/` structure while leaving the player elsewhere.
+
+### Follow-up
+
+Review the folder migration before or during M3, before several combat and actor systems are added.
