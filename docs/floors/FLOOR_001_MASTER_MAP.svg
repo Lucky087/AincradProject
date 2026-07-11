@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1200" viewBox="0 0 1400 1200">
+<defs>
+  <clipPath id="floorClip"><circle cx="570" cy="600" r="500"/></clipPath>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.25"/></filter>
+  <pattern id="reconstructedHatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="#ffffff" stroke-opacity="0.20" stroke-width="3"/></pattern>
+</defs>
+<rect width="100%" height="100%" fill="#eef2f5"/>
+<text x="40" y="45" font-family="sans-serif" font-size="28" font-weight="700" fill="#20252b">Floor 1 Master Map — Development Reconstruction</text>
+<text x="40" y="72" font-family="sans-serif" font-size="15" fill="#4b5560">10 km diameter • 1 px = 10 m • Not an official canon coordinate map</text>
+<g filter="url(#shadow)"><circle cx="570" cy="600" r="500" fill="#dce6cd" stroke="#24292f" stroke-width="4"/></g>
+<g clip-path="url(#floorClip)">
+<polygon points="520.0,1000.0 620.0,1000.0 620.0,1050.0 605.0,1080.0 570.0,1100.0 535.0,1080.0 520.0,1050.0" fill="#c7d4ea" fill-opacity="0.78" stroke="#374151" stroke-width="1.6" stroke-dasharray="3 5"/>
+<polygon points="520.0,1000.0 620.0,1000.0 620.0,1050.0 605.0,1080.0 570.0,1100.0 535.0,1080.0 520.0,1050.0" fill="url(#reconstructedHatch)" stroke="none"/>
+<polygon points="480.0,875.0 660.0,875.0 635.0,1005.0 505.0,1005.0" fill="#b9ddb1" fill-opacity="0.78" stroke="#374151" stroke-width="1.6" stroke-dasharray="3 5"/>
+<polygon points="480.0,875.0 660.0,875.0 635.0,1005.0 505.0,1005.0" fill="url(#reconstructedHatch)" stroke="none"/>
+<polygon points="450.0,660.0 690.0,660.0 660.0,885.0 480.0,885.0" fill="#d8e7ad" fill-opacity="0.78" stroke="#374151" stroke-width="1.6" stroke-dasharray="8 5"/>
+<polygon points="450.0,660.0 690.0,660.0 660.0,885.0 480.0,885.0" fill="url(#reconstructedHatch)" stroke="none"/>
+<polygon points="120.0,700.0 450.0,650.0 480.0,885.0 390.0,990.0 180.0,900.0" fill="#6fa66f" fill-opacity="0.78" stroke="#374151" stroke-width="1.6" stroke-dasharray="3 5"/>
+<polygon points="120.0,700.0 450.0,650.0 480.0,885.0 390.0,990.0 180.0,900.0" fill="url(#reconstructedHatch)" stroke="none"/>
+<polygon points="690.0,650.0 1020.0,700.0 960.0,900.0 750.0,990.0 660.0,885.0" fill="#91c9d8" fill-opacity="0.78" stroke="#374151" stroke-width="1.6" stroke-dasharray="3 5"/>
+<polygon points="690.0,650.0 1020.0,700.0 960.0,900.0 750.0,990.0 660.0,885.0" fill="url(#reconstructedHatch)" stroke="none"/>
+<polygon points="115.0,440.0 390.0,450.0 450.0,670.0 120.0,700.0" fill="#b49a7b" fill-opacity="0.78" stroke="#374151" stroke-width="1.6" stroke-dasharray="8 5"/>
+<polygon points="115.0,440.0 390.0,450.0 450.0,670.0 120.0,700.0" fill="url(#reconstructedHatch)" stroke="none"/>
+<polygon points="750.0,440.0 1025.0,450.0 1020.0,700.0 690.0,650.0" fill="#d5bc87" fill-opacity="0.78" stroke="#374151" stroke-width="1.6" stroke-dasharray="8 5"/>
+<polygon points="750.0,440.0 1025.0,450.0 1020.0,700.0 690.0,650.0" fill="url(#reconstructedHatch)" stroke="none"/>
+<polygon points="390.0,440.0 750.0,440.0 690.0,660.0 450.0,660.0" fill="#9e9b91" fill-opacity="0.78" stroke="#374151" stroke-width="1.6" stroke-dasharray="8 5"/>
+<polygon points="390.0,440.0 750.0,440.0 690.0,660.0 450.0,660.0" fill="url(#reconstructedHatch)" stroke="none"/>
+<polygon points="220.0,270.0 410.0,260.0 390.0,450.0 115.0,440.0" fill="#776f68" fill-opacity="0.78" stroke="#374151" stroke-width="1.6" stroke-dasharray="3 5"/>
+<polygon points="220.0,270.0 410.0,260.0 390.0,450.0 115.0,440.0" fill="url(#reconstructedHatch)" stroke="none"/>
+<polygon points="730.0,260.0 920.0,270.0 1025.0,450.0 750.0,440.0" fill="#78aaa2" fill-opacity="0.78" stroke="#374151" stroke-width="1.6" stroke-dasharray="8 5"/>
+<polygon points="730.0,260.0 920.0,270.0 1025.0,450.0 750.0,440.0" fill="url(#reconstructedHatch)" stroke="none"/>
+<polygon points="410.0,260.0 730.0,260.0 750.0,440.0 390.0,440.0" fill="#a89c8d" fill-opacity="0.78" stroke="#374151" stroke-width="1.6" stroke-dasharray="8 5"/>
+<polygon points="410.0,260.0 730.0,260.0 750.0,440.0 390.0,440.0" fill="url(#reconstructedHatch)" stroke="none"/>
+<polygon points="480.0,175.0 660.0,175.0 680.0,270.0 460.0,270.0" fill="#d8c9a1" fill-opacity="0.78" stroke="#374151" stroke-width="1.6" stroke-dasharray="3 5"/>
+<polygon points="480.0,175.0 660.0,175.0 680.0,270.0 460.0,270.0" fill="url(#reconstructedHatch)" stroke="none"/>
+<polygon points="480.0,125.0 660.0,125.0 660.0,175.0 480.0,175.0" fill="#817a75" fill-opacity="0.78" stroke="#374151" stroke-width="1.6" stroke-dasharray="3 5"/>
+<polygon points="480.0,125.0 660.0,125.0 660.0,175.0 480.0,175.0" fill="url(#reconstructedHatch)" stroke="none"/>
+<polygon points="540.0,102.0 600.0,102.0 600.0,150.0 540.0,150.0" fill="#5e5966" fill-opacity="0.78" stroke="#374151" stroke-width="1.6" stroke-dasharray="3 5"/>
+<polygon points="540.0,102.0 600.0,102.0 600.0,150.0 540.0,150.0" fill="url(#reconstructedHatch)" stroke="none"/>
+<polyline points="570.0,1000.0 570.0,920.0 570.0,820.0 570.0,710.0 570.0,620.0 570.0,510.0 570.0,410.0 570.0,300.0 570.0,240.0" fill="none" stroke="#8a5a2b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="570.0,950.0 500.0,920.0 420.0,880.0 330.0,840.0" fill="none" stroke="#8a5a2b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="330.0,840.0 270.0,720.0 250.0,620.0 330.0,520.0 570.0,450.0" fill="none" stroke="#8a5a2b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 5"/>
+<polyline points="570.0,950.0 660.0,920.0 750.0,870.0 830.0,820.0" fill="none" stroke="#8a5a2b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="830.0,820.0 870.0,730.0 855.0,630.0" fill="none" stroke="#8a5a2b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 5"/>
+<polyline points="855.0,630.0 820.0,550.0 740.0,490.0 570.0,450.0" fill="none" stroke="#8a5a2b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="7 5"/>
+<polyline points="570.0,450.0 540.0,380.0 595.0,310.0 570.0,260.0" fill="none" stroke="#8a5a2b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="570.0,260.0 570.0,220.0" fill="none" stroke="#8a5a2b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="570.0,220.0 590.0,180.0 555.0,150.0 570.0,130.0" fill="none" stroke="#8a5a2b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M 800.0,890.0 C 880.0,930.0 960.0,860.0 935.0,780.0 C 910.0,720.0 820.0,740.0 790.0,810.0 Z" fill="#5da9c6" fill-opacity="0.72" stroke="#2f6f89" stroke-width="2" stroke-dasharray="3 4"/>
+<path d="M 900.0,510.0 C 980.0,550.0 1040.0,430.0 1000.0,330.0 C 960.0,270.0 880.0,340.0 890.0,430.0 Z" fill="#5da9c6" fill-opacity="0.55" stroke="#2f6f89" stroke-width="2" stroke-dasharray="3 4"/>
+<rect x="552.5" y="966.0" width="35.0" height="35.0" fill="#ef4444" fill-opacity="0.12" stroke="#dc2626" stroke-width="3"/>
+<text x="595.5" y="983.5" font-family="sans-serif" font-size="12" font-weight="700" fill="#b91c1c">Current 350 m outskirts</text>
+<circle cx="570.0" cy="1050.0" r="8" fill="#fff" stroke="#111827" stroke-width="3"/>
+<circle cx="330.0" cy="840.0" r="8" fill="#fff" stroke="#111827" stroke-width="3"/>
+<circle cx="855.0" cy="630.0" r="8" fill="#fff" stroke="#111827" stroke-width="3"/>
+<text x="865.0" y="620.0" font-family="sans-serif" font-size="12" font-weight="700" fill="#111827">Medai Village</text>
+<circle cx="570.0" cy="220.0" r="8" fill="#fff" stroke="#111827" stroke-width="3"/>
+<circle cx="570.0" cy="720.0" r="6" fill="#fff" stroke="#6b7280" stroke-width="2" stroke-dasharray="3 2"/>
+<text x="580.0" y="710.0" font-family="sans-serif" font-size="12" font-weight="700" fill="#111827">Crossroads Rest</text>
+<path d="M 247.0,651.0 Q 255.0,635.0 263.0,651.0 Z" fill="#7e22ce" stroke="#3b0764" stroke-width="2"/>
+<path d="M 812.0,556.0 Q 820.0,540.0 828.0,556.0 Z" fill="#7e22ce" stroke="#3b0764" stroke-width="2"/>
+<path d="M 502.0,536.0 Q 510.0,520.0 518.0,536.0 Z" fill="#7e22ce" stroke="#3b0764" stroke-width="2"/>
+<rect x="558.0" y="114.0" width="24" height="32" fill="#4c1d95" stroke="#241043" stroke-width="3"/>
+<polygon points="570.0,103.0 580.0,113.0 570.0,123.0 560.0,113.0" fill="#7e22ce" stroke="#3b0764" stroke-width="2"/>
+<text x="570.0" y="1062.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">Town of</text>
+<text x="570.0" y="1076.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3">Beginnings</text>
+<text x="570.0" y="940.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">South Gate</text>
+<text x="570.0" y="954.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3">Outskirts</text>
+<text x="570.0" y="770.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">Rata Plains</text>
+<text x="305.0" y="835.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">Horunka Woodlands</text>
+<text x="860.0" y="845.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">East Lake</text>
+<text x="860.0" y="859.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3">District</text>
+<text x="260.0" y="595.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">Western Cave</text>
+<text x="260.0" y="609.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3">Hills</text>
+<text x="860.0" y="590.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">Medai Ruins</text>
+<text x="860.0" y="604.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3">Route</text>
+<text x="570.0" y="565.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">Central Highland</text>
+<text x="570.0" y="579.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3">Ruins</text>
+<text x="205.0" y="355.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">Western Rim</text>
+<text x="205.0" y="369.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3">Cliffs</text>
+<text x="935.0" y="370.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">Eastern Wetlands</text>
+<text x="570.0" y="355.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">Northern Valleys</text>
+<text x="570.0" y="223.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">Tolbana Vale</text>
+<text x="465.0" y="149.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">Labyrinth Foothills</text>
+<text x="622.0" y="114.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">First Floor</text>
+<text x="622.0" y="128.0" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1f2937" paint-order="stroke" stroke="#ffffff" stroke-width="3">Labyrinth</text>
+</g>
+<circle cx="570" cy="600" r="500" fill="none" stroke="#111827" stroke-width="4"/>
+<g transform="translate(570,70)">
+<line x1="0" y1="48" x2="0" y2="5" stroke="#111827" stroke-width="4"/>
+<polygon points="0,-8 -9,9 9,9" fill="#111827"/>
+<text x="0" y="68" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="700">N (-Z)</text>
+</g>
+<line x1="90" y1="1090" x2="290" y2="1090" stroke="#111827" stroke-width="6"/>
+<line x1="90" y1="1082" x2="90" y2="1098" stroke="#111827" stroke-width="3"/><line x1="190.0" y1="1082" x2="190.0" y2="1098" stroke="#111827" stroke-width="3"/><line x1="290" y1="1082" x2="290" y2="1098" stroke="#111827" stroke-width="3"/>
+<text x="90" y="1118" font-family="sans-serif" font-size="13">0</text><text x="175.0" y="1118" font-family="sans-serif" font-size="13">1 km</text><text x="262" y="1118" font-family="sans-serif" font-size="13">2 km</text>
+<rect x="1035" y="95" width="330" height="920" rx="14" fill="#ffffff" stroke="#c2c8cf" stroke-width="2"/>
+<text x="1110" y="130" font-family="sans-serif" font-size="22" font-weight="700">Legend</text>
+<circle cx="1120" cy="163" r="7" fill="#ffffff" stroke="#111827" stroke-width="2"/>
+<text x="1146" y="168" font-family="sans-serif" font-size="14">Confirmed official anchor</text>
+<circle cx="1120" cy="197" r="7" fill="#ffffff" stroke="#6b7280" stroke-width="2" stroke-dasharray="3 2"/>
+<text x="1146" y="202" font-family="sans-serif" font-size="14">Reconstructed settlement</text>
+<line x1="1110" y1="231" x2="1134" y2="231" stroke="#8a5a2b" stroke-width="4"/>
+<text x="1146" y="236" font-family="sans-serif" font-size="14">Road / travel route</text>
+<path d="M 1110,272 Q 1120,255 1130,272 Z" fill="#7e22ce"/>
+<text x="1146" y="270" font-family="sans-serif" font-size="14">Dungeon / cave</text>
+<rect x="1110" y="290" width="22" height="16" fill="#ef4444" fill-opacity="0.15" stroke="#dc2626" stroke-width="2"/>
+<text x="1146" y="304" font-family="sans-serif" font-size="14">Current outskirts scene</text>
+<line x1="1110" y1="334" x2="1134" y2="334" stroke="#374151" stroke-width="2"/><text x="1146" y="338" font-family="sans-serif" font-size="14">Confirmed broad relation</text>
+<line x1="1110" y1="368" x2="1134" y2="368" stroke="#374151" stroke-width="2" stroke-dasharray="8 5"/><text x="1146" y="372" font-family="sans-serif" font-size="14">Reasonable interpretation</text>
+<rect x="1110" y="390" width="24" height="18" fill="url(#reconstructedHatch)" stroke="#374151" stroke-dasharray="3 5"/><text x="1146" y="406" font-family="sans-serif" font-size="14">Original reconstruction</text>
+<text x="1110" y="454" font-family="sans-serif" font-size="18" font-weight="700">Locked scale</text>
+<text x="1110" y="482" font-family="sans-serif" font-size="14">Diameter: 10,000 m</text>
+<text x="1110" y="506" font-family="sans-serif" font-size="14">Playable radius: 4,850 m</text>
+<text x="1110" y="530" font-family="sans-serif" font-size="14">Outdoor chunk: 256 m</text>
+<text x="1110" y="554" font-family="sans-serif" font-size="14">Origin: floor centre</text>
+<text x="1110" y="578" font-family="sans-serif" font-size="14">North: -Z • East: +X</text>
+<text x="1110" y="620" font-family="sans-serif" font-size="18" font-weight="700">Reference warning</text>
+<text x="1110" y="646" font-family="sans-serif" font-size="14">Only broad anchors and a few</text>
+<text x="1110" y="668" font-family="sans-serif" font-size="14">measurements are confirmed.</text>
+<text x="1110" y="690" font-family="sans-serif" font-size="14">Coordinates, borders, secondary</text>
+<text x="1110" y="712" font-family="sans-serif" font-size="14">roads, and most names are</text>
+<text x="1110" y="734" font-family="sans-serif" font-size="14">project reconstruction.</text>
+<text x="1110" y="776" font-family="sans-serif" font-size="18" font-weight="700">Critical path</text>
+<text x="1110" y="804" font-family="sans-serif" font-size="14">Starting City</text>
+<text x="1110" y="826" font-family="sans-serif" font-size="14">→ South Gate Outskirts</text>
+<text x="1110" y="848" font-family="sans-serif" font-size="14">→ Rata / branch routes</text>
+<text x="1110" y="870" font-family="sans-serif" font-size="14">→ Central Highlands</text>
+<text x="1110" y="892" font-family="sans-serif" font-size="14">→ Northern Valleys</text>
+<text x="1110" y="914" font-family="sans-serif" font-size="14">→ Tolbana</text>
+<text x="1110" y="936" font-family="sans-serif" font-size="14">→ Labyrinth</text>
+</svg>

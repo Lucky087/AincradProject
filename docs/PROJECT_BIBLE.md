@@ -5,7 +5,7 @@
 **Engine:** Godot 4.7  
 **Language:** Typed GDScript  
 **Document status:** Living document  
-**Last updated:** 2026-07-10
+**Last updated:** 2026-07-11
 
 ---
 
@@ -457,3 +457,36 @@ When documents disagree:
 ## 22. Immediate Rule
 
 Finish a small, complete Floor 1 experience before expanding the map or adding additional floors.
+
+---
+
+## 23. Floor 1 Master Scale Lock
+
+Milestone 12 establishes the long-term production scale for Floor 1 without creating more geometry.
+
+Locked rules:
+
+- Floor 1 uses a 10,000-metre diameter and a 5,000-metre radius.
+- One Godot unit equals one metre.
+- Normal traversal uses a 4,850-metre playable radius, leaving a 150-metre rim boundary belt.
+- The floor origin is its horizontal centre.
+- `+X` is east, `-X` is west, `-Z` is north, `+Z` is south, and `+Y` is up.
+- Floor 1 remains a separate floor-local coordinate space; all 100 floors must not be stacked far apart in one live physics world.
+- Future outdoor streaming planning uses 256-by-256-metre chunks.
+- The current 350-by-350-metre outskirts scene is a southern gate-sector prototype, not the complete Floor 1 or complete southern outskirts.
+
+The complete map is a documented reconstruction guided by published scale and broad geographic anchors. It is not presented as a perfect official 1:1 map.
+
+Floor 1 planning sources:
+
+```text
+res://AincradProject/docs/floors/FLOOR_001_REFERENCE_AUDIT.md
+res://AincradProject/docs/floors/FLOOR_001_SCALE_GUIDE.md
+res://AincradProject/docs/floors/FLOOR_001_MASTER_PLAN.md
+res://AincradProject/docs/floors/FLOOR_001_REGION_LIST.md
+res://AincradProject/docs/floors/FLOOR_001_PRODUCTION_ORDER.md
+res://AincradProject/docs/floors/FLOOR_001_MASTER_MAP.svg
+res://AincradProject/data/floors/floor_001.json
+```
+
+The original-world rule remains active. Canonical names are reference anchors and must not silently become permanent public-release content.

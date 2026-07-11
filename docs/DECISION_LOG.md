@@ -2,7 +2,7 @@
 
 **Project:** Aincrad-Inspired RPG  
 **Format:** Lightweight architecture decision record  
-**Last updated:** 2026-07-10
+**Last updated:** 2026-07-11
 
 ---
 
@@ -2611,3 +2611,383 @@ Keep `SaveManager` and save version 4 unchanged.
 
 A later floor-transition milestone should add stable floor and zone IDs to the
 save schema and perform explicit cross-floor migrations.
+
+---
+
+## D-060 — Lock Floor 1 to a 10 km Diameter
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Published material supplies a strong Floor 1 scale anchor, while the existing 350-metre greybox was intentionally only a prototype route.
+
+### Decision
+
+Use one Godot unit per metre and lock Floor 1 to:
+
+```text
+Diameter:        10,000 m
+Radius:           5,000 m
+Playable radius:  4,850 m
+Rim buffer:         150 m
+```
+
+Terrain normally remains between -80 m and +320 m, with major structures allowed to reach approximately +450 m.
+
+### Consequences
+
+- The current outskirts is a tiny gate-sector prototype, not the full floor.
+- Travel, settlement, road, terrain, and chunk decisions now share one scale.
+- Any later scale change requires an explicit migration decision.
+
+### Alternatives considered
+
+- Treat 350 m as the complete floor.
+- Choose a smaller convenient MMO map without recording the deviation.
+- Claim a perfect official coordinate reconstruction.
+
+### Follow-up
+
+Use `FLOOR_001_SCALE_GUIDE.md` and `floor_001.json` for every new Floor 1 scene.
+
+---
+
+## D-061 — Use Floor-Local Coordinates and No Origin Shifting for Floor 1
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The project may eventually contain 100 floors, but single-precision physics should not operate across a giant coordinate stack.
+
+### Decision
+
+Place the Floor 1 origin at its centre. Use `+X` east, `-Z` north, and `+Y` up. Load every future floor near its own origin rather than placing all floors far apart in one live world.
+
+Do not implement world-origin shifting for Floor 1. Review it only if a loaded space exceeds roughly 20–50 km from the origin or profiling finds precision problems.
+
+### Consequences
+
+- Positions remain precise across the 5 km radius.
+- Future floor transitions require floor-local IDs and transforms.
+- Multiplayer can partition interest by floor and chunk.
+
+### Alternatives considered
+
+- Stack all floors vertically in one scene.
+- Enable origin shifting before a measured need exists.
+- Use arbitrary scene-local north directions per region.
+
+### Follow-up
+
+Future saves should add `floor_id`, `region_id`, and `chunk_id` through a versioned migration.
+
+---
+
+## D-062 — Treat Detailed Floor 1 Geography as a Documented Reconstruction
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Published material confirms major scale and geographic anchors but does not provide a complete survey map with exact coordinates and borders.
+
+### Decision
+
+Classify planning information as:
+
+```text
+confirmed_official
+reasonable_interpretation
+original_reconstruction
+```
+
+Use confirmed anchors for the 10 km circle, southern Starting City, northwest forest, northeast lake region, northern mountains/ruins, Tolbana, and the far-northern Labyrinth. Mark exact coordinates, road shapes, region borders, and most secondary landmarks as reconstruction.
+
+### Consequences
+
+- Fan maps and adaptation layouts cannot silently become canon.
+- The project can build a coherent floor without making false accuracy claims.
+- Canonical names remain temporary reference anchors under the original-world rule.
+
+### Alternatives considered
+
+- Present a fan map as official.
+- Refuse to plan areas without exact published coordinates.
+- Mix evidence and invention without labels.
+
+### Follow-up
+
+Maintain `FLOOR_001_REFERENCE_AUDIT.md` whenever new source material affects the plan.
+
+---
+
+## D-063 — Use a 256 Metre Outdoor Chunk Grid
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+A 10 km floor cannot remain one permanent detailed scene. The chunk grid needs enough traversal time for asynchronous loading without becoming too large to author and profile.
+
+### Decision
+
+Plan outdoor streaming around 256-by-256-metre chunks using mathematical floor coordinates:
+
+```text
+cx = floor(x / 256)
+cz = floor(z / 256)
+```
+
+Preload visuals to Chebyshev radius 2 and activate collision, navigation, interactables, and actors within radius 1. Keep important distant landmarks as region-level proxies.
+
+### Consequences
+
+- A player walking at 5 m/s takes about 51 seconds to cross one chunk.
+- Regions can span many chunks without becoming streaming units themselves.
+- Persistent placements need stable floor, region, chunk, and placement IDs.
+- Streaming remains unimplemented until a later milestone.
+
+### Alternatives considered
+
+- 1 km chunks with heavy activation spikes.
+- 64 m chunks with excessive scene and persistence overhead.
+- Stream entire regions as one unit.
+
+### Follow-up
+
+Prototype empty chunk loading and navigation seams before creating final terrain.
+
+---
+
+## D-064 — Place the Existing Outskirts as a Southern Gate-Sector Prototype
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The existing 350-by-350-metre scene already proves all gameplay systems but compresses a forest, ruins, and a fake Labyrinth blocker into one small test route.
+
+### Decision
+
+Keep the scene unchanged and give it this planning placement:
+
+```text
+Global scene origin: (0, 0, 3835)
+Global bounds: X -175..175, Z 3660..4010
+Region: region_city_gate_outskirts
+```
+
+Treat it as a vertical slice and regression scene. Reuse its integration logic and scale cues, but rebuild or relocate its miniature forest, ruins, perimeter, ground slab, and Labyrinth blocker during production.
+
+### Consequences
+
+- Existing testing remains available.
+- The city gate aligns with the planned northern Starting City rampart.
+- The scene is not scaled up or mistaken for the complete region.
+
+### Alternatives considered
+
+- Stretch the scene to 10 km.
+- Delete it and immediately rebuild everything.
+- Place the real Labyrinth only a few hundred metres from the city gate.
+
+### Follow-up
+
+Extract production content only after the floor shell and chunk prototype exist.
+
+---
+
+## D-065 — Use JSON as Planning Data and SVG as the Human Map
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Future tools need stable machine-readable IDs, while developers need an accessible visual map.
+
+### Decision
+
+Use:
+
+```text
+res://AincradProject/data/floors/floor_001.json
+res://AincradProject/docs/floors/FLOOR_001_MASTER_MAP.svg
+```
+
+The JSON stores scale, coordinates, regions, connections, settlements, roads, dungeons, landmarks, markers, checkpoints, streaming metadata, and confidence labels. The SVG visualizes the same planning decisions and clearly identifies reconstructed content.
+
+### Consequences
+
+- Future importers and validators have one structured data source.
+- Human review does not require opening Godot.
+- JSON and SVG must be updated together when locked map values change.
+
+### Alternatives considered
+
+- Store the plan only in prose.
+- Use the SVG as machine data.
+- Put planning data directly into gameplay scripts before the runtime architecture exists.
+
+### Follow-up
+
+A later floor-definition Resource may import or replace the JSON through a recorded migration.
+
+
+---
+
+## D-066 — Keep Blender Source Outside the Godot Import Tree
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Production terrain source files can become large. The uploaded project has an outer `aincrad/` folder and an inner `AincradProject/` content folder scanned by Godot.
+
+### Decision
+
+Store Blender scripts, working `.blend` files, and generation logs under:
+
+```text
+aincrad/BlenderSource/floor_001/
+```
+
+Store only runtime-facing GLB exports and their manifest under:
+
+```text
+aincrad/AincradProject/assets/environments/floor_001/terrain/
+```
+
+### Consequences
+
+- Godot does not repeatedly import large working `.blend` files.
+- Source generation and runtime assets remain clearly separated.
+- The outer and inner uploaded folder structure must remain intact.
+- Export scripts must resolve both roots safely.
+
+### Alternatives considered
+
+- Store `.blend` files inside `AincradProject/assets/`.
+- Export terrain outside the repository.
+- Put scripts and generated assets in one folder.
+
+### Follow-up
+
+All later Blender asset pipelines should follow the same source-versus-runtime separation unless a recorded decision replaces it.
+
+---
+
+## D-067 — Test the Nine Chunks Around Grid Coordinate X +00, Z +14
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The current outskirts planning reference is at Floor 1 coordinate `(0, 0, 3835)`. The locked outdoor chunk formula is:
+
+```text
+cx = floor(x / 256)
+cz = floor(z / 256)
+```
+
+### Decision
+
+Use chunk `(0, 14)` as the centre of the first Blender terrain-pipeline test.
+
+Generate the three-by-three grid:
+
+```text
+X: -1, 0, 1
+Z: 13, 14, 15
+```
+
+Use stable object and export names in this form:
+
+```text
+floor_001_chunk_x+00_z+14
+```
+
+### Consequences
+
+- The test is tied to the planned city-gate sector rather than unrelated coordinates.
+- It covers 768 × 768 metres around the reference area.
+- It validates negative, zero, and positive signed X names.
+- It does not define the final terrain shape of the entire South Gate Outskirts region.
+
+### Alternatives considered
+
+- Generate arbitrary chunks around the floor origin.
+- Generate the complete ten-kilometre floor.
+- Treat the existing 350 m scene as one terrain chunk.
+
+### Follow-up
+
+Confirm the generated grid in Blender and Godot before adding any larger terrain batch.
+
+---
+
+## D-068 — Use Global Height Sampling and Corner-Origin GLB Chunks
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Independent terrain chunks must share exact border heights and continuous future UV coordinates. Exported files also need a consistent origin for later data-driven placement.
+
+### Decision
+
+Generate every terrain vertex from the same deterministic function:
+
+```text
+height = terrain_height(global_x, global_z)
+```
+
+Use global Floor 1 coordinates for UV generation.
+
+Export each GLB with its local origin at the chunk's minimum-X/minimum-Z corner. Record that corner as `global_position` in the generated manifest.
+
+Create:
+
+```text
+LOD0:      65 × 65 vertices
+LOD1:      33 × 33 vertices
+Collision: 17 × 17 vertices
+```
+
+### Consequences
+
+- Matching border vertices receive identical inputs and heights.
+- Textures can align across future chunk borders.
+- Godot can place every GLB using manifest data.
+- Each resolution remains exactly 256 × 256 metres.
+- Seam failure stops export rather than being ignored.
+
+### Alternatives considered
+
+- Use an independent random seed or local noise origin per chunk.
+- Export every chunk with baked global transforms.
+- Use one very dense mesh for visuals and collision.
+- Hide seam errors with skirts before validating source geometry.
+
+### Follow-up
+
+After local Blender generation, verify GLB import orientation, scale, normals, and edge continuity in Godot before implementing streaming.

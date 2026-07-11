@@ -4,7 +4,7 @@
 **Engine:** Godot 4.7  
 **Language:** Typed GDScript  
 **Status:** Initial architecture  
-**Last updated:** 2026-07-10
+**Last updated:** 2026-07-11
 
 ---
 
@@ -962,3 +962,59 @@ Before adding a new system, ask:
 8. Does it directly control something it should only notify?
 9. Is this required for the current milestone?
 10. Is there a simpler solution for the prototype?
+
+---
+
+## 31. Floor-Local Coordinate and Scale Architecture
+
+Floor 1 uses:
+
+```text
+Diameter:        10,000 m
+Radius:           5,000 m
+Playable radius:  4,850 m
+Origin:            (0, 0, 0) at floor centre
+East/West:         +X / -X
+North/South:       -Z / +Z
+Up:                +Y
+```
+
+Each floor must be loaded near its own local origin. Do not place all 100 floors at increasingly large global Y or X/Z offsets in one persistent world. Floor transitions should exchange stable floor, region, chunk, and spawn IDs.
+
+Single-precision coordinates are sufficient at the 5 km Floor 1 radius. World-origin shifting is not required for Floor 1 and should only be reconsidered if a loaded world exceeds approximately 20–50 km from its origin or profiling reveals precision problems.
+
+---
+
+## 32. Floor Data and Future Streaming Grid
+
+The machine-readable Floor 1 plan lives at:
+
+```text
+res://AincradProject/data/floors/floor_001.json
+```
+
+It owns planning IDs, scale, region boundaries, connections, roads, settlements, dungeons, landmarks, markers, checkpoints, and streaming metadata. It does not create runtime gameplay by itself.
+
+Future outdoor chunks use a 256-metre grid:
+
+```text
+cx = floor(world_x / 256)
+cz = floor(world_z / 256)
+floor_001_cx_+000_cz_+015
+```
+
+Recommended future loading:
+
+- Chebyshev radius 2: visual preload.
+- Chebyshev radius 1: collision, navigation, interactables, enemies, and pickups.
+- Region-level far proxies: major city walls, mountains, windmills, and Labyrinth silhouette.
+
+A region is an authored content identity and may contain many chunks. A chunk is a streaming/persistence cell and may overlap an authored region border.
+
+Persistent placement keys should eventually follow:
+
+```text
+floor_id/region_id/chunk_id/persistent_placement_id
+```
+
+Streaming remains a future task. Milestone 12 only locks the plan.
