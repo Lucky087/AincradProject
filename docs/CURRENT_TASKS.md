@@ -1,8 +1,8 @@
 # Current Tasks
 
 **Project:** Aincrad-Inspired RPG  
-**Current milestone:** M15B.1 — North-Gate Road Collision Bugfix
-**Current phase:** Road and edging physics disabled in favour of terrain collision after confirmed runtime sticking; local Godot 4.7 road traversal and regression retest required before M15C
+**Current milestone:** M15C — North-Gate Production Acceptance and Provisional Region Integration
+**Current phase:** User-confirmed north-gate runtime acceptance recorded; one reusable greybox assembly integrated into the permanent southern region, with post-integration F6 regression still required
 **Last updated:** 2026-07-11
 
 ---
@@ -1811,3 +1811,68 @@ After local F6 acceptance and regression testing, proceed to **Milestone 15C —
 Do not begin Milestone 15C until every road traversal, architecture collision,
 terrain regression, and F5 check above passes locally.
 
+
+
+---
+
+## 30. Milestone 15C — North-Gate Production Acceptance and Provisional Region Integration
+
+**Status:** Implementation and static validation complete; post-integration local F6 regression required  
+**Date:** 2026-07-11
+
+### User-confirmed Milestone 15B.1 runtime results
+
+Only the following local results are recorded as user-confirmed:
+
+- [x] Gate renders correctly.
+- [x] Wall endpoints align.
+- [x] Player can walk through the open gate passage.
+- [x] Walls and towers block the player.
+- [x] The road-collision bug is fixed.
+- [x] Player can walk, sprint, jump, and land on the road.
+- [x] Player can cross road-piece joins without becoming stuck.
+- [x] Terrain streaming remains functional.
+
+No additional runtime result is inferred from these confirmations.
+
+### Production integration completed
+
+- [x] Instance the reusable north-gate assembly once beneath
+      `StaticContent/CityGateArchitecture`.
+- [x] Keep individual render and collision GLBs out of the production-region
+      scene file.
+- [x] Keep the production region free of player and player-owned systems.
+- [x] Preserve negative-Z gate orientation and the accepted manifest placement.
+- [x] Preserve terrain-authoritative flat-road and road-edging collision policy.
+- [x] Add region-side non-crashing validation for assembly presence, asset set,
+      manifest status, render/collision loads, and four production anchors.
+- [x] Add provisional architecture metadata to
+      `floor_001_southern_region.json` without removing existing fields.
+- [x] Remove the separate assembly instance from the north-gate preview.
+- [x] Point the north-gate preview debug controller to the assembly inside the
+      production region.
+- [x] Keep the southern-region preview unchanged so it automatically displays
+      production-integrated architecture through its region instance.
+- [x] Create `FLOOR_001_NORTH_GATE_ACCEPTANCE.md`.
+- [x] Create `HANDOFF_MILESTONE_15C.md`.
+
+### Local post-integration regression required
+
+- [ ] Run `floor_001_north_gate_preview.tscn` with F6 and confirm exactly one
+      visible gate assembly.
+- [ ] Run `floor_001_southern_region_preview.tscn` with F6 and confirm it now
+      displays the integrated gate.
+- [ ] Confirm the region architecture validation snapshot passes.
+- [ ] Reconfirm open-passage traversal and accepted road movement after nesting
+      the assembly beneath the production region.
+- [ ] Reconfirm walls and towers block the player.
+- [ ] Reconfirm terrain streaming remains functional.
+- [ ] Run the three technical terrain test scenes unchanged.
+- [ ] Press F5 and confirm the existing normal game remains unchanged.
+
+### Completion gate and next milestone
+
+After the post-integration regression above passes, proceed to **Milestone 16A —
+Starting City North-Gate District Layout and City-Side Plaza Greybox**. Keep the
+accepted gate assembly replaceable and do not begin final art, city interiors,
+NPC placement, enemies, quests, or navigation during that layout milestone.

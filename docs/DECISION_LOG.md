@@ -4142,3 +4142,63 @@ for the CharacterBody3D capsule.
 - Milestone 15C remains blocked until local walking, sprinting, jumping, landing,
   road-join, gate-passage, architecture-collision, regression, and F5 tests pass.
 
+
+
+---
+
+## D-091 — Provisionally Accept and Integrate One Reusable North-Gate Assembly
+
+**Date:** 2026-07-11  
+**Status:** Accepted for provisional production use  
+**Milestone:** 15C
+
+### Context
+
+The user locally confirmed that the north-gate renders correctly, wall endpoints
+align, the open passage is traversable, walls and towers block the player, the
+15B.1 road fix permits walking/sprinting/jumping/landing and join crossing, and
+terrain streaming remains functional.
+
+The permanent southern production region previously kept
+`StaticContent/CityGateArchitecture` empty while the F6 north-gate preview
+instanced a separate assembly beside the region.
+
+### Decision
+
+Instance exactly one reusable
+`floor_001_north_gate_assembly.tscn` beneath:
+
+```text
+Floor001SouthernRegion/StaticContent/CityGateArchitecture/NorthGateAssembly
+```
+
+The production region stores only this reusable scene instance. It must not copy
+individual architecture GLBs into the region scene.
+
+The north-gate preview must resolve and debug the assembly owned by its
+`SouthernRegion` instance instead of creating a second assembly. The existing
+southern-region preview automatically displays the integrated gate because it
+already instances the production region.
+
+The assembly remains provisional, greybox, replaceable content. Its accepted
+15B.1 collision policy remains unchanged:
+
+- Dedicated simplified collision GLBs remain the source for raised architecture.
+- Gate, towers, walls, connectors, stairs, and platform retain collision.
+- Flat road surfaces and road edging remain physics-disabled.
+- Streamed terrain remains the authoritative road walking surface.
+
+The production-region controller validates assembly presence, uniqueness,
+manifest status, 16 render and 16 collision asset loads, and gate/wall/road
+anchor errors. Missing or invalid architecture produces warnings rather than a
+region crash.
+
+### Consequences
+
+- Production and preview scenes use the same assembly instance path.
+- Duplicate gate render and collision nodes are avoided.
+- F5 remains unchanged because the southern production region is not the normal
+  startup world.
+- The gate can be disabled, replaced, or regenerated as one scene instance.
+- Final modelling, materials, ornamentation, weathering, banners, interiors,
+  navigation, actors, and full Starting City work remain deferred.

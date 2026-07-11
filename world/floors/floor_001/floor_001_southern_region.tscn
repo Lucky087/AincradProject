@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://AincradProject/scripts/world/floor_001_southern_region.gd" id="1_region"]
 [ext_resource type="Script" path="res://AincradProject/scripts/world/floor_chunk_streamer.gd" id="2_streamer"]
+[ext_resource type="PackedScene" path="res://AincradProject/world/floors/floor_001/architecture/floor_001_north_gate_assembly.tscn" id="3_north_gate"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_production"]
 sky_top_color = Color(0.18, 0.42, 0.72, 1)
@@ -37,7 +38,7 @@ script = ExtResource("1_region")
 metadata/region_id = &"region_floor_001_southern"
 metadata/floor_id = &"floor_001"
 metadata/terrain_dataset_id = &"floor_001_southern_region_v1"
-metadata/production_status = &"permanent_empty_shell"
+metadata/production_status = &"permanent_region_with_provisional_north_gate"
 
 [node name="RegionEnvironment" type="Node3D" parent="."]
 
@@ -86,6 +87,13 @@ wait_time = 0.2
 [node name="StaticContent" type="Node3D" parent="."]
 
 [node name="CityGateArchitecture" type="Node3D" parent="StaticContent"]
+metadata/content_status = &"provisional_accepted_greybox"
+metadata/replacement_allowed = true
+
+[node name="NorthGateAssembly" parent="StaticContent/CityGateArchitecture" instance=ExtResource("3_north_gate")]
+metadata/integration_milestone = &"15C"
+metadata/production_status = &"provisional_accepted"
+metadata/replacement_allowed = true
 
 [node name="Roads" type="Node3D" parent="StaticContent"]
 

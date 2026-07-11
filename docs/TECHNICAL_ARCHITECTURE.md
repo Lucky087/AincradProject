@@ -1236,3 +1236,40 @@ when local Godot 4.7 testing confirms:
 - No duplicate render roots or static bodies accumulate.
 - Architecture contact with the accepted terrain is usable as a greybox base.
 - Existing terrain previews and normal F5 gameplay still work unchanged.
+
+
+---
+
+## 31. Provisional North-Gate Production Integration
+
+Milestone 15C establishes the reusable north-gate assembly as provisional
+production content inside the permanent southern Floor 1 region.
+
+```text
+Floor001SouthernRegion
+└── StaticContent
+    └── CityGateArchitecture
+        └── NorthGateAssembly
+```
+
+Rules:
+
+1. The region owns exactly one assembly scene instance, never individual gate
+   GLB placements.
+2. `Floor001NorthGateAssembly` remains the only manifest loader and collision
+   builder for this asset set.
+3. `Floor001SouthernRegion` validates the integrated result but does not
+   duplicate architecture loading or placement logic.
+4. Architecture validation is non-fatal. Missing or invalid greybox content
+   emits warnings so terrain and region inspection can continue.
+5. The north-gate preview finds the assembly inside its production-region
+   instance; it must not create a second gate.
+6. The southern-region preview inherits the gate automatically from the
+   production region.
+7. Production regions still do not own a player, progression, inventory,
+   global quests, SaveManager, or global menus.
+8. Flat road and edging render pieces remain visual-only over terrain collision.
+9. The integrated assembly is provisional and may be disabled, regenerated, or
+   replaced without changing stable production markers.
+10. Normal F5 startup remains unchanged until a later explicit integration
+    milestone.

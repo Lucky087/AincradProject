@@ -3,7 +3,7 @@
 **Milestone:** North-Gate Godot Import and Production Placement Preview  
 **Date:** 2026-07-11  
 **Implementation status:** Complete  
-**Runtime acceptance status:** Failed on original road collision; 15B.1 fix implemented and awaiting local F6 retest
+**Runtime acceptance status:** 15B.1 road and gate behaviour accepted by user; provisionally integrated in Milestone 15C
 
 ---
 
@@ -20,8 +20,8 @@ The project contains:
 - A reusable manifest-driven Godot north-gate assembly.
 - A separate F6 placement and collision preview using the existing player.
 
-The north-gate assembly has not been added to the permanent production region
-and normal F5 startup is unchanged.
+Milestone 15C now instances the north-gate assembly once inside the permanent
+production region. Normal F5 startup remains unchanged.
 
 ---
 
@@ -394,3 +394,39 @@ Only after the complete 15B.1 road retest and all 15B regression checks pass:
 - Preserve all technical previews as regression tools.
 - Do not begin the full Starting City, final art, NPCs, enemies, quests, or
   navigation yet.
+
+
+---
+
+## Milestone 15C Completion Update
+
+The user confirmed these local Milestone 15B.1 results:
+
+- Gate renders correctly.
+- Wall endpoints align.
+- Player can walk through the open passage.
+- Walls and towers block the player.
+- The road-collision bug is fixed.
+- Player can walk, sprint, jump, and land on the road.
+- Player crosses road joins without becoming stuck.
+- Terrain streaming remains functional.
+
+No other checklist item is retroactively claimed.
+
+The assembly is now provisionally accepted and instanced once beneath:
+
+```text
+Floor001SouthernRegion/StaticContent/CityGateArchitecture/NorthGateAssembly
+```
+
+The north-gate preview no longer owns a second assembly. It uses the assembly
+inside its `SouthernRegion` instance and preserves all existing preview controls
+and diagnostics.
+
+The road-collision solution is permanent for this greybox placement: flat road
+and edging physics remain disabled and terrain remains authoritative. Raised
+architecture collision remains enabled.
+
+Milestone 15B is therefore no longer blocked by the original road failure.
+Post-integration F6/F5 regression remains required before starting **Milestone
+16A — Starting City North-Gate District Layout and City-Side Plaza Greybox**.

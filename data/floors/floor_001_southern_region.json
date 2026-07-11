@@ -3,7 +3,7 @@
   "region_id": "region_floor_001_southern",
   "floor_id": "floor_001",
   "display_name": "Floor 1 Southern Region",
-  "document_status": "permanent_production_shell",
+  "document_status": "permanent_production_region_with_provisional_north_gate",
   "last_updated": "2026-07-11",
   "terrain_dataset_id": "floor_001_southern_region_v1",
   "dataset_version": "14A.1",
@@ -330,5 +330,69 @@
     "exact_contour_confidence": "low",
     "production_acceptance": "accepted_as_iterable_world_base",
     "copyrighted_final_assets_included": false
+  },
+  "architecture": {
+    "architecture_set_id": "floor_001_starting_city_north_gate_architecture_v1",
+    "assembly_scene_path": "res://AincradProject/world/floors/floor_001/architecture/floor_001_north_gate_assembly.tscn",
+    "integration_node_path": "StaticContent/CityGateArchitecture/NorthGateAssembly",
+    "architecture_manifest_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/floor_001_north_gate_architecture_manifest.json",
+    "production_status": "provisional_accepted",
+    "accepted_local_test": {
+      "milestone": "15C",
+      "date": "2026-07-11",
+      "evidence_source": "user_confirmed_local_runtime_results",
+      "confirmed_results": [
+        "gate_renders_correctly",
+        "wall_endpoints_align",
+        "player_walks_through_open_gate_passage",
+        "walls_and_towers_block_player",
+        "road_collision_bug_fixed",
+        "player_walks_sprints_jumps_and_lands_on_road",
+        "player_crosses_road_piece_joins_without_sticking",
+        "terrain_streaming_remains_functional"
+      ]
+    },
+    "gate_centre": [
+      0.0,
+      9.0,
+      3835.0
+    ],
+    "wall_endpoints": {
+      "west": [
+        -210.0,
+        9.0,
+        3835.0
+      ],
+      "east": [
+        210.0,
+        9.0,
+        3835.0
+      ]
+    },
+    "road_start": [
+      0.0,
+      9.0,
+      3835.0
+    ],
+    "forward_direction": "-Z",
+    "passage_dimensions_m": {
+      "width": 14.0,
+      "height": 12.0
+    },
+    "collision_policy": {
+      "render_assets_used_as_collision": false,
+      "dedicated_simplified_collision_glbs_loaded": true,
+      "raised_architecture_collision_enabled": true,
+      "gate_passage_collision_open": true
+    },
+    "road_surface_collision_policy": {
+      "policy": "terrain_authoritative_visual_only",
+      "flat_road_collision_enabled": false,
+      "road_edging_collision_enabled": false,
+      "bugfix_milestone": "15B.1",
+      "reason": "avoid competing nearly coplanar concave road and terrain contacts"
+    },
+    "greybox_asset": true,
+    "replacement_allowed": true
   }
 }

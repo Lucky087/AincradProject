@@ -2,7 +2,7 @@
 
 **Milestone:** 15B — North-Gate Godot Import and Production Placement Preview  
 **Engine target:** Godot 4.7  
-**Status:** Milestone 15B.1 road-collision fix implemented; local F6 road and regression retest required  
+**Status:** Milestone 15B.1 runtime accepted by user; assembly provisionally integrated into the production region in Milestone 15C  
 **Normal F5 world changed:** No
 
 ---
@@ -25,7 +25,8 @@ The preview verifies:
 - Dedicated simplified collision assets.
 - Player movement through the greybox architecture.
 
-The assembly is not yet instanced into the permanent production region and the
+The assembly is now provisionally instanced once inside the permanent southern
+production region. The preview reuses that production-owned instance, while the
 normal F5 world remains unchanged.
 
 ---
@@ -556,7 +557,8 @@ assets.
 - Raised architecture still uses runtime-created concave trimesh shapes from
   the dedicated simplified collision GLBs. Flat road and edging collision are
   intentionally disabled in 15B.1 so terrain remains the walking surface.
-- Godot 4.7 runtime movement and collision acceptance must be completed locally.
+- Final production-nesting regression must still be completed locally after
+  Milestone 15C; the pre-integration road and gate results are user-confirmed.
 
 ---
 
@@ -618,3 +620,46 @@ That milestone should:
 - Preserve easy removal and regeneration.
 - Add only accepted foundation or terrain-contact adjustments.
 - Avoid full Starting City construction, final materials, actors, or navigation.
+
+
+---
+
+## 18. Milestone 15C Acceptance and Production Integration
+
+The user confirmed the following local runtime results after the 15B.1 road fix:
+
+- Gate renders correctly.
+- Wall endpoints align.
+- Player can walk through the open passage.
+- Walls and towers block the player.
+- The road-collision bug is fixed.
+- Walking, sprinting, jumping, and landing on the road work.
+- Road-piece joins can be crossed without sticking.
+- Terrain streaming remains functional.
+
+No additional result is inferred.
+
+The permanent region now owns one reusable assembly at:
+
+```text
+SouthernRegion/StaticContent/CityGateArchitecture/NorthGateAssembly
+```
+
+The north-gate preview no longer instances another assembly beside the region.
+All existing teleports, alignment information, passage detection, G marker
+toggle, C collision-source toggle, B chunk-boundary toggle, road diagnostics,
+and fall recovery resolve the integrated assembly instead.
+
+The accepted road policy remains:
+
+- Terrain collision is authoritative beneath flat road renders.
+- Flat road and edging physics remain disabled.
+- Raised and blocking architecture retains dedicated collision.
+
+See `FLOOR_001_NORTH_GATE_ACCEPTANCE.md` for the provisional acceptance record.
+
+## 19. Updated Recommended Next Milestone
+
+After the production-nesting F6 and normal F5 regression checklist passes,
+proceed to **Milestone 16A — Starting City North-Gate District Layout and
+City-Side Plaza Greybox**.

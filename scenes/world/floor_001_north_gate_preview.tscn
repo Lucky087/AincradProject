@@ -1,9 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dv0xn2d6rvi2n"]
 
-[ext_resource type="Script" path="res://AincradProject/scripts/world/floor_001_north_gate_preview.gd" id="1_preview"]
+[ext_resource type="Script" uid="uid://26xy8oc3j8wp" path="res://AincradProject/scripts/world/floor_001_north_gate_preview.gd" id="1_preview"]
 [ext_resource type="PackedScene" path="res://AincradProject/scenes/player/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://AincradProject/world/floors/floor_001/floor_001_southern_region.tscn" id="3_region"]
-[ext_resource type="PackedScene" path="res://AincradProject/world/floors/floor_001/architecture/floor_001_north_gate_assembly.tscn" id="4_assembly"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_preview_fall"]
 size = Vector3(2200, 36, 2200)
@@ -20,43 +19,42 @@ corner_radius_top_right = 7
 corner_radius_bottom_right = 7
 corner_radius_bottom_left = 7
 
-[node name="Floor001NorthGatePreview" type="Node3D"]
+[node name="Floor001NorthGatePreview" type="Node3D" unique_id=758296337]
 script = ExtResource("1_preview")
 metadata/preview_only = true
 metadata/normal_f5_world_changed = false
 
-[node name="Player" parent="." instance=ExtResource("2_player")]
+[node name="Player" parent="." unique_id=711158365 instance=ExtResource("2_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 60, 3771)
 
-[node name="SouthernRegion" parent="." instance=ExtResource("3_region")]
+[node name="SouthernRegion" parent="." unique_id=1164236732 instance=ExtResource("3_region")]
 
-[node name="NorthGateAssembly" parent="." instance=ExtResource("4_assembly")]
+[node name="PreviewSafety" type="Node3D" parent="." unique_id=592161935]
 
-[node name="PreviewSafety" type="Node3D" parent="."]
-
-[node name="FallRecoveryArea" type="Area3D" parent="PreviewSafety"]
+[node name="FallRecoveryArea" type="Area3D" parent="PreviewSafety" unique_id=398661187]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 128, -72, 3712)
 collision_layer = 0
 monitorable = false
 metadata/preview_only = true
 metadata/modifies_save_data = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PreviewSafety/FallRecoveryArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PreviewSafety/FallRecoveryArea" unique_id=572210094]
 shape = SubResource("BoxShape3D_preview_fall")
 
-[node name="DebugVisualization" type="Node3D" parent="."]
+[node name="DebugVisualization" type="Node3D" parent="." unique_id=1358938994]
 metadata/preview_only = true
 
-[node name="CurrentChunkBoundary" type="MeshInstance3D" parent="DebugVisualization"]
+[node name="CurrentChunkBoundary" type="MeshInstance3D" parent="DebugVisualization" unique_id=1474538216]
 cast_shadow = 0
 
-[node name="LoadedChunkBoundaries" type="MeshInstance3D" parent="DebugVisualization"]
+[node name="LoadedChunkBoundaries" type="MeshInstance3D" parent="DebugVisualization" unique_id=1225048235]
 cast_shadow = 0
 
-[node name="DebugUI" type="CanvasLayer" parent="."]
+[node name="DebugUI" type="CanvasLayer" parent="." unique_id=868351136]
 layer = 60
+visible = false
 
-[node name="DebugPanel" type="PanelContainer" parent="DebugUI"]
+[node name="DebugPanel" type="PanelContainer" parent="DebugUI" unique_id=544295554]
 offset_left = 18.0
 offset_top = 18.0
 offset_right = 790.0
@@ -64,18 +62,18 @@ offset_bottom = 520.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_preview_debug")
 
-[node name="MarginContainer" type="MarginContainer" parent="DebugUI/DebugPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="DebugUI/DebugPanel" unique_id=955349709]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 10
 
-[node name="ScrollContainer" type="ScrollContainer" parent="DebugUI/DebugPanel/MarginContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="DebugUI/DebugPanel/MarginContainer" unique_id=4566793]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="DebugLabel" type="Label" parent="DebugUI/DebugPanel/MarginContainer/ScrollContainer"]
+[node name="DebugLabel" type="Label" parent="DebugUI/DebugPanel/MarginContainer/ScrollContainer" unique_id=560772451]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -84,6 +82,6 @@ theme_override_font_sizes/font_size = 14
 text = "Preparing Floor 1 north-gate placement preview..."
 autowrap_mode = 2
 
-[node name="DebugUpdateTimer" type="Timer" parent="DebugUI"]
+[node name="DebugUpdateTimer" type="Timer" parent="DebugUI" unique_id=1428392540]
 wait_time = 0.25
 autostart = true

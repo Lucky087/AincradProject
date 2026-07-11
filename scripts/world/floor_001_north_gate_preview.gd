@@ -2,8 +2,9 @@ extends Node3D
 
 ## F6-only placement and collision preview for the Floor 1 north-gate assembly.
 ##
-## This wrapper instances the permanent southern region, reusable architecture
-## assembly, and existing player as separate scenes. It never changes F5 startup,
+## This wrapper instances the permanent southern region and existing player.
+## It reuses the architecture assembly integrated inside that region, preventing
+## duplicate render or collision instances. It never changes F5 startup,
 ## player progression, checkpoints, inventory, quests, equipment, gold, or saves.
 
 const PLAYER_GROUP: StringName = &"players"
@@ -17,7 +18,9 @@ const EAST_ENDPOINT_OFFSET: Vector3 = Vector3(194.0, 0.0, -16.0)
 
 @export_category("Required Nodes")
 @export var region_path: NodePath = NodePath("SouthernRegion")
-@export var assembly_path: NodePath = NodePath("NorthGateAssembly")
+@export var assembly_path: NodePath = NodePath(
+	"SouthernRegion/StaticContent/CityGateArchitecture/NorthGateAssembly"
+)
 @export var player_path: NodePath = NodePath("Player")
 @export var fall_recovery_area_path: NodePath = NodePath("PreviewSafety/FallRecoveryArea")
 @export var current_boundary_path: NodePath = NodePath("DebugVisualization/CurrentChunkBoundary")
