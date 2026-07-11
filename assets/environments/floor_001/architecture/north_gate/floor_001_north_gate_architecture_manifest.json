@@ -1,0 +1,922 @@
+{
+  "schema_version": 1,
+  "asset_set_id": "floor_001_starting_city_north_gate_architecture_v1",
+  "generation_version": "15A.1",
+  "floor_id": "floor_001",
+  "region_id": "region_floor_001_southern",
+  "display_name": "Floor 1 Starting City North-Gate Architecture Greybox",
+  "generation_status": "complete_blender_exports_generated",
+  "generation_timestamp_utc": "2026-07-11T17:31:38.673203+00:00",
+  "blender": {
+    "required_version": "5.1.2",
+    "practical_compatibility": "Blender 4.x where glTF API remains supported",
+    "available_in_execution_environment": true,
+    "executed": true,
+    "exports_generated": true,
+    "source_blend_path": "BlenderSource/floor_001/source/floor_001_north_gate_architecture.blend",
+    "source_blend_exists": true,
+    "generator_path": "BlenderSource/floor_001/scripts/generate_floor_001_north_gate_architecture.py",
+    "log_path": "BlenderSource/floor_001/logs/floor_001_north_gate_architecture.log"
+  },
+  "coordinate_system": {
+    "units_per_metre": 1.0,
+    "godot_axes": {
+      "east": "+X",
+      "west": "-X",
+      "north": "-Z",
+      "south": "+Z",
+      "up": "+Y"
+    },
+    "blender_to_godot_note": "Blender +X maps to Godot +X; Blender -Y maps to Godot +Z; Blender +Z maps to Godot +Y. The open gate and road point along Blender +Y, which becomes Godot -Z (north).",
+    "kit_export_origin": "local module origin",
+    "reference_assembly_origin": "CityGateCentre"
+  },
+  "source_data": {
+    "region_configuration": "res://AincradProject/data/floors/floor_001_southern_region.json",
+    "terrain_profile": "res://AincradProject/data/floors/floor_001_southern_terrain_profile.json",
+    "production_region_scene": "res://AincradProject/world/floors/floor_001/floor_001_southern_region.tscn",
+    "terrain_dataset_id": "floor_001_southern_region_v1",
+    "terrain_generation_version": "14A.1",
+    "terrain_meshes_modified": false
+  },
+  "locked_anchors": {
+    "CityGateCentre": {
+      "node_name": "CityGateCentre",
+      "stable_id": "landmark_city_gate_centre",
+      "node_path": "LandmarkMarkers/CityGateCentre",
+      "position": [
+        0.0,
+        9.0,
+        3835.0
+      ]
+    },
+    "CityWallWestConnection": {
+      "node_name": "CityWallWestConnection",
+      "stable_id": "landmark_city_wall_west_connection",
+      "node_path": "LandmarkMarkers/CityWallWestConnection",
+      "position": [
+        -210.0,
+        9.0,
+        3835.0
+      ]
+    },
+    "CityWallEastConnection": {
+      "node_name": "CityWallEastConnection",
+      "stable_id": "landmark_city_wall_east_connection",
+      "node_path": "LandmarkMarkers/CityWallEastConnection",
+      "position": [
+        210.0,
+        9.0,
+        3835.0
+      ]
+    },
+    "MainRoadStart": {
+      "node_name": "MainRoadStart",
+      "stable_id": "road_gate",
+      "node_path": "StreamingMarkers/MainRoadStart",
+      "position": [
+        0.0,
+        9.0,
+        3835.0
+      ]
+    }
+  },
+  "design_parameters": {
+    "gate_passage_width_m": 14.0,
+    "gate_passage_height_m": 12.0,
+    "gate_central_dimensions_m": [
+      30.0,
+      16.0,
+      24.0
+    ],
+    "tower_centre_x_m": 25.0,
+    "tower_dimensions_m": [
+      18.0,
+      18.0,
+      30.0
+    ],
+    "wall_module_length_m": 24.0,
+    "wall_full_modules_per_side": 6,
+    "wall_end_trim_length_m": 20.0,
+    "road_width_m": 14.0,
+    "road_module_length_m": 24.0,
+    "placeholder_materials_only": true,
+    "copyrighted_materials_included": false
+  },
+  "exports": {
+    "root": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/",
+    "render_directory": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/render/",
+    "collision_directory": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/collision/",
+    "piece_count": 16,
+    "expected_render_glb_count": 16,
+    "expected_collision_glb_count": 16,
+    "expected_total_glb_count": 32,
+    "actual_glb_count": 32,
+    "render_and_collision_are_separate": true
+  },
+  "pieces": [
+    {
+      "piece_id": "floor_001_arch_city_wall_straight",
+      "display_name": "Straight City-Wall Section",
+      "category": "city_wall",
+      "nominal_dimensions_m": [
+        24.0,
+        6.0,
+        16.0
+      ],
+      "description": "Reusable neutral straight wall section with a walkable parapet line.",
+      "origin_rule": "local origin at ground level and logical module centre",
+      "render_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/render/floor_001_arch_city_wall_straight_render.glb",
+      "collision_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/collision/floor_001_arch_city_wall_straight_collision.glb",
+      "collision_strategy": "single simplified wall box",
+      "render_exists": true,
+      "collision_exists": true
+    },
+    {
+      "piece_id": "floor_001_arch_city_wall_straight_outer",
+      "display_name": "Outer City-Wall Variant",
+      "category": "city_wall",
+      "nominal_dimensions_m": [
+        24.0,
+        8.0,
+        18.0
+      ],
+      "description": "North-facing outer wall variant with simple greybox buttresses.",
+      "origin_rule": "local origin at ground level and logical module centre",
+      "render_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/render/floor_001_arch_city_wall_straight_outer_render.glb",
+      "collision_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/collision/floor_001_arch_city_wall_straight_outer_collision.glb",
+      "collision_strategy": "single wall box including buttress depth",
+      "render_exists": true,
+      "collision_exists": true
+    },
+    {
+      "piece_id": "floor_001_arch_city_wall_straight_inner",
+      "display_name": "Inner City-Wall Variant",
+      "category": "city_wall",
+      "nominal_dimensions_m": [
+        24.0,
+        8.0,
+        16.0
+      ],
+      "description": "South-facing inner wall variant with a basic access ledge.",
+      "origin_rule": "local origin at ground level and logical module centre",
+      "render_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/render/floor_001_arch_city_wall_straight_inner_render.glb",
+      "collision_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/collision/floor_001_arch_city_wall_straight_inner_collision.glb",
+      "collision_strategy": "wall box plus access ledge box",
+      "render_exists": true,
+      "collision_exists": true
+    },
+    {
+      "piece_id": "floor_001_arch_north_gate_central_structure",
+      "display_name": "North-Gate Central Structure",
+      "category": "gate",
+      "nominal_dimensions_m": [
+        30.0,
+        16.0,
+        24.0
+      ],
+      "description": "Central gatehouse shell with a 14 m wide, 12 m high open passage.",
+      "origin_rule": "local origin at ground level and logical module centre",
+      "render_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/render/floor_001_arch_north_gate_central_structure_render.glb",
+      "collision_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/collision/floor_001_arch_north_gate_central_structure_collision.glb",
+      "collision_strategy": "two side piers and one overhead lintel; passage remains open",
+      "render_exists": true,
+      "collision_exists": true
+    },
+    {
+      "piece_id": "floor_001_arch_gate_tower_left",
+      "display_name": "Left Gate Tower",
+      "category": "gate_tower",
+      "nominal_dimensions_m": [
+        18.0,
+        18.0,
+        30.0
+      ],
+      "description": "Reusable left tower greybox with a battlement crown.",
+      "origin_rule": "local origin at ground level and logical module centre",
+      "render_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/render/floor_001_arch_gate_tower_left_render.glb",
+      "collision_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/collision/floor_001_arch_gate_tower_left_collision.glb",
+      "collision_strategy": "single simplified square tower box",
+      "render_exists": true,
+      "collision_exists": true
+    },
+    {
+      "piece_id": "floor_001_arch_gate_tower_right",
+      "display_name": "Right Gate Tower",
+      "category": "gate_tower",
+      "nominal_dimensions_m": [
+        18.0,
+        18.0,
+        30.0
+      ],
+      "description": "Mirrored stable-name right tower greybox.",
+      "origin_rule": "local origin at ground level and logical module centre",
+      "render_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/render/floor_001_arch_gate_tower_right_render.glb",
+      "collision_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/collision/floor_001_arch_gate_tower_right_collision.glb",
+      "collision_strategy": "single simplified square tower box",
+      "render_exists": true,
+      "collision_exists": true
+    },
+    {
+      "piece_id": "floor_001_arch_wall_to_tower_connector_left",
+      "display_name": "Left Wall-to-Tower Connector",
+      "category": "connector",
+      "nominal_dimensions_m": [
+        12.0,
+        10.0,
+        18.0
+      ],
+      "description": "Short left transition piece between tower and standard wall depth.",
+      "origin_rule": "local origin at ground level and logical module centre",
+      "render_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/render/floor_001_arch_wall_to_tower_connector_left_render.glb",
+      "collision_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/collision/floor_001_arch_wall_to_tower_connector_left_collision.glb",
+      "collision_strategy": "single simplified connector box",
+      "render_exists": true,
+      "collision_exists": true
+    },
+    {
+      "piece_id": "floor_001_arch_wall_to_tower_connector_right",
+      "display_name": "Right Wall-to-Tower Connector",
+      "category": "connector",
+      "nominal_dimensions_m": [
+        12.0,
+        10.0,
+        18.0
+      ],
+      "description": "Short right transition piece between tower and standard wall depth.",
+      "origin_rule": "local origin at ground level and logical module centre",
+      "render_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/render/floor_001_arch_wall_to_tower_connector_right_render.glb",
+      "collision_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/collision/floor_001_arch_wall_to_tower_connector_right_collision.glb",
+      "collision_strategy": "single simplified connector box",
+      "render_exists": true,
+      "collision_exists": true
+    },
+    {
+      "piece_id": "floor_001_arch_battlement_section",
+      "display_name": "Battlement Section",
+      "category": "battlement",
+      "nominal_dimensions_m": [
+        24.0,
+        2.5,
+        3.0
+      ],
+      "description": "Standalone crenellated parapet section for walls and platforms.",
+      "origin_rule": "local origin at ground level and logical module centre",
+      "render_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/render/floor_001_arch_battlement_section_render.glb",
+      "collision_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/collision/floor_001_arch_battlement_section_collision.glb",
+      "collision_strategy": "single parapet box without individual merlon collision",
+      "render_exists": true,
+      "collision_exists": true
+    },
+    {
+      "piece_id": "floor_001_arch_access_stairs",
+      "display_name": "Wall Access Stairs",
+      "category": "access",
+      "nominal_dimensions_m": [
+        4.0,
+        8.0,
+        4.0
+      ],
+      "description": "Ten-step basic access stair suitable for later wall-walk iteration.",
+      "origin_rule": "local origin at ground level and logical module centre",
+      "render_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/render/floor_001_arch_access_stairs_render.glb",
+      "collision_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/collision/floor_001_arch_access_stairs_collision.glb",
+      "collision_strategy": "single walkable ramp prism",
+      "render_exists": true,
+      "collision_exists": true
+    },
+    {
+      "piece_id": "floor_001_arch_access_platform",
+      "display_name": "Wall Access Platform",
+      "category": "access",
+      "nominal_dimensions_m": [
+        8.0,
+        5.0,
+        0.6
+      ],
+      "description": "Simple modular access platform with placeholder side rails.",
+      "origin_rule": "local origin at ground level and logical module centre",
+      "render_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/render/floor_001_arch_access_platform_render.glb",
+      "collision_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/collision/floor_001_arch_access_platform_collision.glb",
+      "collision_strategy": "single platform slab",
+      "render_exists": true,
+      "collision_exists": true
+    },
+    {
+      "piece_id": "floor_001_arch_stone_road_straight",
+      "display_name": "Straight Stone-Road Section",
+      "category": "road",
+      "nominal_dimensions_m": [
+        14.0,
+        24.0,
+        0.35
+      ],
+      "description": "Straight northbound road module centred on the locked road axis.",
+      "origin_rule": "local origin at ground level and logical module centre",
+      "render_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/render/floor_001_arch_stone_road_straight_render.glb",
+      "collision_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/collision/floor_001_arch_stone_road_straight_collision.glb",
+      "collision_strategy": "single thin road slab",
+      "render_exists": true,
+      "collision_exists": true
+    },
+    {
+      "piece_id": "floor_001_arch_stone_road_curved_left",
+      "display_name": "Curved Stone-Road Section Left",
+      "category": "road",
+      "nominal_dimensions_m": [
+        22.0,
+        21.0,
+        0.35
+      ],
+      "description": "Thirty-degree left-curving road module with a 30 m centre radius.",
+      "origin_rule": "local origin at ground level and logical module centre",
+      "render_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/render/floor_001_arch_stone_road_curved_left_render.glb",
+      "collision_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/collision/floor_001_arch_stone_road_curved_left_collision.glb",
+      "collision_strategy": "low-segment annular road prism",
+      "render_exists": true,
+      "collision_exists": true
+    },
+    {
+      "piece_id": "floor_001_arch_stone_road_curved_right",
+      "display_name": "Curved Stone-Road Section Right",
+      "category": "road",
+      "nominal_dimensions_m": [
+        22.0,
+        21.0,
+        0.35
+      ],
+      "description": "Mirrored thirty-degree right-curving road module.",
+      "origin_rule": "local origin at ground level and logical module centre",
+      "render_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/render/floor_001_arch_stone_road_curved_right_render.glb",
+      "collision_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/collision/floor_001_arch_stone_road_curved_right_collision.glb",
+      "collision_strategy": "low-segment annular road prism",
+      "render_exists": true,
+      "collision_exists": true
+    },
+    {
+      "piece_id": "floor_001_arch_stone_road_intersection",
+      "display_name": "Stone-Road Intersection",
+      "category": "road",
+      "nominal_dimensions_m": [
+        28.0,
+        28.0,
+        0.35
+      ],
+      "description": "Reusable four-way greybox road intersection piece.",
+      "origin_rule": "local origin at ground level and logical module centre",
+      "render_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/render/floor_001_arch_stone_road_intersection_render.glb",
+      "collision_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/collision/floor_001_arch_stone_road_intersection_collision.glb",
+      "collision_strategy": "two intersecting thin slabs",
+      "render_exists": true,
+      "collision_exists": true
+    },
+    {
+      "piece_id": "floor_001_arch_road_edging_straight",
+      "display_name": "Straight Road Edging",
+      "category": "road_edging",
+      "nominal_dimensions_m": [
+        0.8,
+        24.0,
+        0.55
+      ],
+      "description": "Simple low stone edge for either side of a road module.",
+      "origin_rule": "local origin at ground level and logical module centre",
+      "render_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/render/floor_001_arch_road_edging_straight_render.glb",
+      "collision_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/collision/floor_001_arch_road_edging_straight_collision.glb",
+      "collision_strategy": "single edging box",
+      "render_exists": true,
+      "collision_exists": true
+    }
+  ],
+  "reference_assembly": {
+    "exported_as_runtime_asset": false,
+    "purpose": "Blender-only placement proof aligned to permanent production markers.",
+    "world_origin": [
+      0.0,
+      9.0,
+      3835.0
+    ],
+    "wall_west_endpoint": [
+      -210.0,
+      9.0,
+      3835.0
+    ],
+    "wall_east_endpoint": [
+      210.0,
+      9.0,
+      3835.0
+    ],
+    "road_start": [
+      0.0,
+      9.0,
+      3835.0
+    ],
+    "placements": [
+      {
+        "placement_id": "assembly_gate_central",
+        "piece_id": "floor_001_arch_north_gate_central_structure",
+        "local_position_relative_to_city_gate_centre": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "Centred exactly on CityGateCentre and MainRoadStart."
+      },
+      {
+        "placement_id": "assembly_tower_left",
+        "piece_id": "floor_001_arch_gate_tower_left",
+        "local_position_relative_to_city_gate_centre": [
+          -25.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "West/left tower."
+      },
+      {
+        "placement_id": "assembly_tower_right",
+        "piece_id": "floor_001_arch_gate_tower_right",
+        "local_position_relative_to_city_gate_centre": [
+          25.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "East/right tower."
+      },
+      {
+        "placement_id": "assembly_connector_left",
+        "piece_id": "floor_001_arch_wall_to_tower_connector_left",
+        "local_position_relative_to_city_gate_centre": [
+          -40.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "Connects left tower to west wall run."
+      },
+      {
+        "placement_id": "assembly_connector_right",
+        "piece_id": "floor_001_arch_wall_to_tower_connector_right",
+        "local_position_relative_to_city_gate_centre": [
+          40.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "Connects right tower to east wall run."
+      },
+      {
+        "placement_id": "assembly_access_platform_left",
+        "piece_id": "floor_001_arch_access_platform",
+        "local_position_relative_to_city_gate_centre": [
+          -25.0,
+          4.0,
+          11.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "City-side tower access placeholder."
+      },
+      {
+        "placement_id": "assembly_access_stairs_left",
+        "piece_id": "floor_001_arch_access_stairs",
+        "local_position_relative_to_city_gate_centre": [
+          -25.0,
+          0.0,
+          17.5
+        ],
+        "local_rotation_y_degrees": 180.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "City-side access stair placeholder."
+      },
+      {
+        "placement_id": "assembly_wall_west_01",
+        "piece_id": "floor_001_arch_city_wall_straight_outer",
+        "local_position_relative_to_city_gate_centre": [
+          -58.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "Full outer wall module 1 on the west side."
+      },
+      {
+        "placement_id": "assembly_wall_west_02",
+        "piece_id": "floor_001_arch_city_wall_straight_outer",
+        "local_position_relative_to_city_gate_centre": [
+          -82.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "Full outer wall module 2 on the west side."
+      },
+      {
+        "placement_id": "assembly_wall_west_03",
+        "piece_id": "floor_001_arch_city_wall_straight_outer",
+        "local_position_relative_to_city_gate_centre": [
+          -106.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "Full outer wall module 3 on the west side."
+      },
+      {
+        "placement_id": "assembly_wall_west_04",
+        "piece_id": "floor_001_arch_city_wall_straight_outer",
+        "local_position_relative_to_city_gate_centre": [
+          -130.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "Full outer wall module 4 on the west side."
+      },
+      {
+        "placement_id": "assembly_wall_west_05",
+        "piece_id": "floor_001_arch_city_wall_straight_outer",
+        "local_position_relative_to_city_gate_centre": [
+          -154.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "Full outer wall module 5 on the west side."
+      },
+      {
+        "placement_id": "assembly_wall_west_06",
+        "piece_id": "floor_001_arch_city_wall_straight_outer",
+        "local_position_relative_to_city_gate_centre": [
+          -178.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "Full outer wall module 6 on the west side."
+      },
+      {
+        "placement_id": "assembly_wall_west_end_trim",
+        "piece_id": "floor_001_arch_city_wall_straight_outer",
+        "local_position_relative_to_city_gate_centre": [
+          -200.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          0.8333333333333334,
+          1.0,
+          1.0
+        ],
+        "purpose": "Scaled end module terminating exactly at the west connection marker."
+      },
+      {
+        "placement_id": "assembly_wall_east_01",
+        "piece_id": "floor_001_arch_city_wall_straight_outer",
+        "local_position_relative_to_city_gate_centre": [
+          58.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "Full outer wall module 1 on the east side."
+      },
+      {
+        "placement_id": "assembly_wall_east_02",
+        "piece_id": "floor_001_arch_city_wall_straight_outer",
+        "local_position_relative_to_city_gate_centre": [
+          82.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "Full outer wall module 2 on the east side."
+      },
+      {
+        "placement_id": "assembly_wall_east_03",
+        "piece_id": "floor_001_arch_city_wall_straight_outer",
+        "local_position_relative_to_city_gate_centre": [
+          106.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "Full outer wall module 3 on the east side."
+      },
+      {
+        "placement_id": "assembly_wall_east_04",
+        "piece_id": "floor_001_arch_city_wall_straight_outer",
+        "local_position_relative_to_city_gate_centre": [
+          130.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "Full outer wall module 4 on the east side."
+      },
+      {
+        "placement_id": "assembly_wall_east_05",
+        "piece_id": "floor_001_arch_city_wall_straight_outer",
+        "local_position_relative_to_city_gate_centre": [
+          154.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "Full outer wall module 5 on the east side."
+      },
+      {
+        "placement_id": "assembly_wall_east_06",
+        "piece_id": "floor_001_arch_city_wall_straight_outer",
+        "local_position_relative_to_city_gate_centre": [
+          178.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "Full outer wall module 6 on the east side."
+      },
+      {
+        "placement_id": "assembly_wall_east_end_trim",
+        "piece_id": "floor_001_arch_city_wall_straight_outer",
+        "local_position_relative_to_city_gate_centre": [
+          200.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          0.8333333333333334,
+          1.0,
+          1.0
+        ],
+        "purpose": "Scaled end module terminating exactly at the east connection marker."
+      },
+      {
+        "placement_id": "assembly_road_north_01",
+        "piece_id": "floor_001_arch_stone_road_straight",
+        "local_position_relative_to_city_gate_centre": [
+          0.0,
+          0.02,
+          -20.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "Northbound road demonstration aligned to MainRoadStart."
+      },
+      {
+        "placement_id": "assembly_road_edge_west_01",
+        "piece_id": "floor_001_arch_road_edging_straight",
+        "local_position_relative_to_city_gate_centre": [
+          -7.4,
+          0.02,
+          -20.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "West edge of the northbound road demonstration."
+      },
+      {
+        "placement_id": "assembly_road_edge_east_01",
+        "piece_id": "floor_001_arch_road_edging_straight",
+        "local_position_relative_to_city_gate_centre": [
+          7.4,
+          0.02,
+          -20.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "East edge of the northbound road demonstration."
+      },
+      {
+        "placement_id": "assembly_road_north_02",
+        "piece_id": "floor_001_arch_stone_road_straight",
+        "local_position_relative_to_city_gate_centre": [
+          0.0,
+          0.02,
+          -44.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "Northbound road demonstration aligned to MainRoadStart."
+      },
+      {
+        "placement_id": "assembly_road_edge_west_02",
+        "piece_id": "floor_001_arch_road_edging_straight",
+        "local_position_relative_to_city_gate_centre": [
+          -7.4,
+          0.02,
+          -44.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "West edge of the northbound road demonstration."
+      },
+      {
+        "placement_id": "assembly_road_edge_east_02",
+        "piece_id": "floor_001_arch_road_edging_straight",
+        "local_position_relative_to_city_gate_centre": [
+          7.4,
+          0.02,
+          -44.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "East edge of the northbound road demonstration."
+      },
+      {
+        "placement_id": "assembly_road_north_03",
+        "piece_id": "floor_001_arch_stone_road_straight",
+        "local_position_relative_to_city_gate_centre": [
+          0.0,
+          0.02,
+          -68.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "Northbound road demonstration aligned to MainRoadStart."
+      },
+      {
+        "placement_id": "assembly_road_edge_west_03",
+        "piece_id": "floor_001_arch_road_edging_straight",
+        "local_position_relative_to_city_gate_centre": [
+          -7.4,
+          0.02,
+          -68.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "West edge of the northbound road demonstration."
+      },
+      {
+        "placement_id": "assembly_road_edge_east_03",
+        "piece_id": "floor_001_arch_road_edging_straight",
+        "local_position_relative_to_city_gate_centre": [
+          7.4,
+          0.02,
+          -68.0
+        ],
+        "local_rotation_y_degrees": 0.0,
+        "local_scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "purpose": "East edge of the northbound road demonstration."
+      }
+    ]
+  },
+  "validation": {
+    "preflight_passed": true,
+    "checks_performed": 117,
+    "failures": [],
+    "city_gate_to_main_road_error_m": 0.0,
+    "west_wall_connection_error_m": 0.0,
+    "east_wall_connection_error_m": 0.0,
+    "open_gate_passage_preserved": true,
+    "gate_passage_width_m": 14.0,
+    "gate_passage_height_m": 12.0,
+    "terrain_untouched": true,
+    "generation_error": ""
+  },
+  "production_integration": {
+    "performed_in_milestone_15a": false,
+    "future_gate_container": "StaticContent/CityGateArchitecture",
+    "future_road_container": "StaticContent/Roads",
+    "normal_f5_world_changed": false,
+    "recommended_next_milestone": "15B north-gate Godot import and production placement preview"
+  },
+  "limitations": [
+    "Greybox proportions are an original project reconstruction, not canon-exact final architecture.",
+    "No final textures, colour grading, interiors, houses, vegetation, actors, or navigation are included.",
+    "The reference assembly is saved in Blender for inspection but is not exported as a monolithic runtime asset."
+  ]
+}

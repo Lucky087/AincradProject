@@ -3844,3 +3844,113 @@ it with the existing player.
 
 Run all three terrain regression scenes locally after any future streamer API or
 target-lifecycle change.
+
+---
+
+## D-085 — Export Local-Origin Architecture Modules and Validate Them with a Global Reference Assembly
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The Starting City north-gate architecture must align with permanent world
+markers at global Floor 1 coordinates, but exporting one monolithic gate-and-wall
+asset would reduce reuse and make later production iteration unnecessarily
+fragile. Individual kit pieces also need predictable origins for Godot placement.
+
+### Decision
+
+Generate every runtime architecture piece at a stable local origin and export it
+as an independent GLB. Create a separate Blender-only `ReferenceAssembly`
+collection that places render copies at the real `CityGateCentre` world anchor.
+
+The reference assembly must:
+
+- Centre the gate and outgoing road on `CityGateCentre` and `MainRoadStart`.
+- Run the wall east–west along the locked X axis.
+- Terminate the west wall at `CityWallWestConnection`.
+- Terminate the east wall at `CityWallEastConnection`.
+- Point the open passage and road toward north, which is negative Godot Z.
+- Remain inside the editable Blender source and not become a monolithic runtime
+  export.
+
+### Consequences
+
+- Modular assets remain reusable for later city-wall and road work.
+- World alignment can be inspected before Godot placement begins.
+- The production scene is not forced to load one oversized architecture GLB.
+- Future placement logic must read the manifest and instantiate modules beneath
+  the existing stable production containers.
+- Changing a module does not require rebuilding an unrelated combined runtime
+  asset.
+
+### Alternatives considered
+
+- Export one complete gate-and-wall assembly at global coordinates.
+- Export all pieces at their final world positions.
+- Place architecture directly into the permanent Godot region during 15A.
+- Change the stable production markers to fit the first greybox attempt.
+
+### Follow-up
+
+Milestone 15B should import the local-origin modules, reproduce the validated
+reference placement beneath `StaticContent/CityGateArchitecture` and
+`StaticContent/Roads`, and compare the resulting Godot transforms against the
+four locked markers.
+
+---
+
+## D-086 — Keep Architecture Render and Collision Exports Separate
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The north-gate greybox contains battlements, buttresses, stair steps, platform
+rails, road joints, and curved road geometry. Using visible render meshes as
+runtime collision would create unnecessary physics complexity and could block
+the required open gate passage.
+
+### Decision
+
+Generate one render GLB and one simplified collision GLB for each of the 16
+stable architecture pieces.
+
+Collision rules are:
+
+- Preserve the gate opening with two side piers and one overhead lintel.
+- Represent stairs with a walkable ramp prism.
+- Simplify battlements to a parapet box.
+- Use fewer segments for curved-road collision.
+- Use simple boxes for walls, towers, connectors, platforms, and road edging.
+- Never substitute a render GLB as hidden collision.
+
+When Blender is unavailable, write a manifest with status
+`preflight_validated_blender_export_pending` and create no fake GLBs or fake
+`.blend` source.
+
+### Consequences
+
+- Physics remains cheaper and more predictable than detailed render geometry.
+- The open north-gate passage can remain traversable.
+- Render detail can change without silently changing collision behaviour.
+- The manifest expects 16 render GLBs and 16 collision GLBs.
+- Local Blender completion is required before the asset set can be accepted for
+  Godot placement.
+
+### Alternatives considered
+
+- Use render meshes as collision.
+- Export only collision and use it as visible greybox geometry.
+- Export one combined collision mesh for the complete gate area.
+- Create empty placeholder GLBs when Blender cannot run.
+
+### Follow-up
+
+During Milestone 15B, build StaticBody3D physics only from the dedicated
+collision exports and verify that the player can walk through the open passage,
+use the road, and traverse basic access geometry without collision gaps.

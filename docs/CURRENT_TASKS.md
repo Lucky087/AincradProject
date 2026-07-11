@@ -1,8 +1,8 @@
 # Current Tasks
 
 **Project:** Aincrad-Inspired RPG  
-**Current milestone:** M14A — Actual Southern Floor 1 Terrain Generation
-**Current phase:** Map-aware 7 × 7 southern terrain generator and mathematical preflight complete; local Blender 5.1.2 export and inspection required
+**Current milestone:** M15A — Starting City North-Gate Architecture Greybox
+**Current phase:** Reusable north-gate architecture generator and marker-alignment preflight complete; local Blender 5.1.2 export and inspection required
 **Last updated:** 2026-07-11
 
 ---
@@ -21,9 +21,13 @@
 
 ## 2. Current Milestone Goal
 
-**M14A current goal:** Generate the first data-driven, map-aware southern Floor 1 terrain dataset around the Starting City gate while preserving all existing terrain tests, gameplay systems, scenes, `.uid` files, and the complete uploaded folder structure.
+**M15A current goal:** Create a reusable Blender-generated greybox architecture kit for the Floor 1 Starting City north-gate area while preserving the accepted southern terrain, permanent production shell, all technical tests, normal F5 startup, gameplay systems, `.uid` files, `.godot/`, and the complete uploaded folder structure.
 
-The delivered package contains the complete Blender generator, terrain-profile JSON, preflight manifest, generation log, documentation, and handoff. Blender was unavailable in the delivery environment, so the real 147 GLBs and `floor_001_southern_terrain.blend` must be generated locally in Blender 5.1.2 before M14A receives final local approval.
+The delivered package contains the Blender 5.1.2 generator, 16-piece architecture manifest, mathematical marker-alignment preflight, generation log, beginner documentation, and handoff. Blender was unavailable in the delivery environment, so the real 16 render GLBs, 16 collision GLBs, and `floor_001_north_gate_architecture.blend` must be generated locally before M15A receives final approval.
+
+**M14A historical goal:** Generate the first data-driven, map-aware southern Floor 1 terrain dataset around the Starting City gate while preserving all existing terrain tests, gameplay systems, scenes, `.uid` files, and the complete uploaded folder structure.
+
+The M14A generator, terrain-profile JSON, completed terrain manifest, real 147 GLBs, generation log, documentation, and handoff remain preserved as accepted production-base history.
 
 **M12 historical goal:** Lock the complete Floor 1 reference scale, coordinate system, region plan, future chunk grid, production order, SVG map, and machine-readable JSON without changing gameplay or 3D geometry.
 
@@ -1583,3 +1587,90 @@ technical terrain tests and is not the default F5 world.
 
 After the production preview and all three terrain regressions pass locally,
 proceed to **Milestone 15A — Starting City North-Gate Architecture Greybox**.
+
+---
+
+## 27. Milestone 15A — Starting City North-Gate Architecture Greybox
+
+**Status:** Generator and static preflight complete; local Blender 5.1.2 generation required  
+**Date:** 2026-07-11
+
+This milestone creates a reusable architecture asset kit. It does not place the
+kit into the permanent production region and does not change normal F5 startup.
+
+### Completed in the project package
+
+- [x] Preserve the complete outer `aincrad/` structure.
+- [x] Preserve the accepted southern terrain, all 147 terrain GLBs, manifests,
+      terrain generators, production region, preview, technical tests, player,
+      SaveManager, gameplay, `.uid` files, and `.godot/`.
+- [x] Read all files under `AincradProject/docs/`.
+- [x] Read and validate the permanent region JSON, terrain profile, and
+      production-region Marker3D nodes.
+- [x] Lock `CityGateCentre`, `CityWallWestConnection`,
+      `CityWallEastConnection`, and `MainRoadStart` as architecture anchors.
+- [x] Create
+      `BlenderSource/floor_001/scripts/generate_floor_001_north_gate_architecture.py`.
+- [x] Support Blender 5.1.2 with practical Blender 4.x glTF fallback.
+- [x] Use one unit as one metre and preserve Godot east +X, north -Z, up +Y.
+- [x] Add safe generator-owned collection and material cleanup.
+- [x] Stop instead of deleting untagged conflicting Blender content.
+- [x] Create 16 stable modular piece definitions.
+- [x] Include straight, outer, and inner city-wall variants.
+- [x] Include central gate structure, left/right towers, and left/right
+      wall-to-tower connectors.
+- [x] Preserve a 14 m wide and 12 m high open gate passage.
+- [x] Include battlements, access stairs, and access platform pieces.
+- [x] Include straight road, left/right curved roads, road intersection, and
+      straight road edging.
+- [x] Create separate render and simplified collision generation for every piece.
+- [x] Create a Blender-only reference assembly aligned to the permanent markers.
+- [x] Terminate the west and east reference walls exactly at X -210 and +210.
+- [x] Align the gate and northbound road to `(0, 9, 3835)`.
+- [x] Register 16 render paths and 16 collision paths in a valid manifest.
+- [x] Create an explicitly pending manifest when Blender is unavailable.
+- [x] Create `BlenderSource/floor_001/logs/floor_001_north_gate_architecture.log`.
+- [x] Create beginner-friendly generation and future-placement documentation.
+- [x] Create `docs/handoffs/HANDOFF_MILESTONE_15A.md`.
+- [x] Pass Python compilation and 117 architecture preflight checks.
+- [x] Confirm zero gate/road, west-wall, and east-wall alignment error.
+- [x] Confirm no terrain mesh or production scene was modified.
+
+### Local Blender 5.1.2 completion required
+
+- [ ] Run `generate_floor_001_north_gate_architecture.py` in Blender 5.1.2.
+- [ ] Confirm the generator creates only `Floor001NorthGateArchitecture`.
+- [ ] Confirm `KitRender` contains 16 reusable piece roots.
+- [ ] Confirm `KitCollision` contains 16 simplified collision roots.
+- [ ] Confirm `ReferenceAssembly` aligns with all four locked markers.
+- [ ] Confirm the gate passage remains open in render and collision.
+- [ ] Confirm road modules point toward negative Godot Z after import.
+- [ ] Confirm exactly 16 render GLBs are exported.
+- [ ] Confirm exactly 16 collision GLBs are exported.
+- [ ] Confirm `floor_001_north_gate_architecture.blend` is saved.
+- [ ] Confirm manifest status becomes `complete_blender_exports_generated`.
+- [ ] Confirm manifest actual GLB count becomes 32.
+- [ ] Confirm the log reports Blender execution and exports as true.
+- [ ] Rerun the script and confirm unrelated Blender objects remain untouched.
+- [ ] Open Godot 4.7 and allow all 32 GLBs to import.
+- [ ] Confirm correct one-metre scale, axes, local origins, and placeholder materials.
+- [ ] Run all terrain regression scenes unchanged.
+- [ ] Press F5 and confirm normal gameplay remains unchanged.
+
+### Explicitly not included
+
+- [x] No production-scene architecture placement.
+- [x] No full Starting City, houses, or interiors.
+- [x] No final gate, wall, road, shader, texture, or copyrighted SAO material.
+- [x] No vegetation, rocks, rivers, water, NPCs, enemies, quests, or navigation.
+- [x] No terrain changes.
+- [x] No main-game integration.
+
+### Completion gate and next milestone
+
+After the complete local Blender checklist passes, proceed to **Milestone 15B —
+North-Gate Godot Import and Production Placement Preview**. Use the completed
+architecture manifest, place render and collision assets beneath the existing
+production containers in an isolated F6 preview, and keep normal F5 startup and
+all existing regression scenes unchanged.
+
