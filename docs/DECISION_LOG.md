@@ -4202,3 +4202,69 @@ region crash.
 - The gate can be disabled, replaced, or regenerated as one scene instance.
 - Final modelling, materials, ornamentation, weathering, banners, interiors,
   navigation, actors, and full Starting City work remain deferred.
+
+
+---
+
+## D-092 — Use a Data-Driven Modular Spline for the Southern Main Road
+
+**Date:** 2026-07-11  
+**Status:** Accepted for Milestone 16A implementation  
+**Milestone:** 16A
+
+### Context
+
+The accepted north-gate assembly contains only a short three-piece road strip.
+The southern terrain profile already grades a protected corridor northward, and
+the permanent region exposes five stable route markers from the gate to the
+northern continuation edge.
+
+The terrain profile also contains a helper point called `road_04`, but that point
+is not present in the permanent region JSON or its stable Marker3D set.
+
+The previous north-gate road collision failure proved that flat concave road
+collision must not overlap the streamed terrain walking surface.
+
+### Decision
+
+Create stable route data with road ID:
+
+```text
+road_floor_001_starting_city_northbound
+```
+
+Use the five route anchors shared by the permanent region JSON and stable scene
+markers. Do not promote terrain-profile-only `road_04` into production route data
+until a later planning milestone explicitly adds a matching stable marker.
+
+Build an editable `Curve3D` from JSON positions and authored Bezier handle
+offsets. Sample that curve using the actual existing kit geometry:
+
+- 24-metre straight modules on low-curvature sections.
+- Existing 30-degree left/right curve modules where heading change exceeds the
+  configured threshold.
+- No intersection unless a real branch exists.
+- Predictable stable placement IDs beneath route-section containers.
+
+Reuse the accepted gate assembly's three straight road modules as the first 80
+metres. Keep the complete spline starting at `MainRoadStart`, but begin new
+module placement at distance 80 metres so the gate passage contains no duplicate
+road.
+
+Keep all flat route modules and edging visual-only. Streamed terrain collision
+remains authoritative. The road assembly must not load or convert road collision
+GLBs.
+
+### Consequences
+
+- Route data, asset data, and terrain data remain separate authorities.
+- The road can be edited by changing JSON control positions and handles without
+  rewriting placement transforms manually.
+- Static preflight predicts approximately 1,036.26 metres and about 41 modules.
+- Curved kit pieces approximate the spline between continuous endpoints; they do
+  not deform to it.
+- Minor visual terrain differences remain a greybox review item and must not be
+  hidden with overlapping physics.
+- The road remains preview-only until local traversal and regression acceptance.
+- F5, terrain, player code, SaveManager, existing assets, `.uid`, and `.godot/`
+  remain unchanged.

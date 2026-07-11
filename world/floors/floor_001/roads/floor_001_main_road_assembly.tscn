@@ -1,0 +1,44 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://AincradProject/scripts/world/floor_001_main_road_assembly.gd" id="1_road"]
+
+[node name="Floor001MainRoadAssembly" type="Node3D"]
+script = ExtResource("1_road")
+metadata/road_id = &"road_floor_001_starting_city_northbound"
+metadata/production_status = &"permanent_greybox_route_preview_pending_acceptance"
+metadata/flat_road_collision_created = false
+metadata/normal_f5_world_changed = false
+
+[node name="RoadPath" type="Path3D" parent="."]
+metadata/data_driven = true
+metadata/editable_curve = true
+
+[node name="RoadRender" type="Node3D" parent="."]
+
+[node name="GateApproach" type="Node3D" parent="RoadRender"]
+metadata/section_id = &"road_section_gate_approach"
+
+[node name="BeginnerGrasslands" type="Node3D" parent="RoadRender"]
+metadata/section_id = &"road_section_beginner_grasslands"
+
+[node name="NorthernContinuation" type="Node3D" parent="RoadRender"]
+metadata/section_id = &"road_section_northern_continuation"
+
+[node name="RoadEdging" type="Node3D" parent="."]
+visible = false
+metadata/visual_only = true
+metadata/collision_created = false
+
+[node name="PlacementMarkers" type="Node3D" parent="."]
+metadata/stable_runtime_markers = true
+
+[node name="Debug" type="Node3D" parent="."]
+metadata/production_visualization_enabled_by_default = false
+
+[node name="SplineVisualization" type="MeshInstance3D" parent="Debug"]
+visible = false
+cast_shadow = 0
+
+[node name="PlacementVisualization" type="MeshInstance3D" parent="Debug"]
+visible = false
+cast_shadow = 0

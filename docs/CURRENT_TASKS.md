@@ -1876,3 +1876,57 @@ After the post-integration regression above passes, proceed to **Milestone 16A �
 Starting City North-Gate District Layout and City-Side Plaza Greybox**. Keep the
 accepted gate assembly replaceable and do not begin final art, city interiors,
 NPC placement, enemies, quests, or navigation during that layout milestone.
+
+
+---
+
+## 31. Milestone 16A — Main Northbound Road Greybox and Spline Placement
+
+**Status:** Implementation and static validation complete; local F6 traversal required  
+**Date:** 2026-07-11
+
+### Completed
+
+- [x] Create stable road data at
+      `data/floors/floor_001_main_road.json`.
+- [x] Use the five control points shared by the region JSON and stable production
+      markers.
+- [x] Keep the terrain-profile-only `road_04` helper out of permanent road data.
+- [x] Create an editable data-driven `Path3D` route from the gate to the northern
+      continuation marker.
+- [x] Reuse the existing Milestone 15A road GLBs and manifest IDs.
+- [x] Create predictable straight, left-curve, and right-curve placement roots.
+- [x] Validate but do not place the intersection because no branch exists.
+- [x] Preserve the accepted terrain-authoritative flat-road collision policy.
+- [x] Reuse the integrated gate assembly's first 80 metres of road.
+- [x] Begin new modular placement after the accepted gate-road strip.
+- [x] Add sparse visual-only edging that is disabled by default.
+- [x] Create an isolated F6 road preview using the existing player and permanent
+      southern region.
+- [x] Add F1–F4 and N safe teleports without editing the Input Map.
+- [x] Add spline, placement, edging, and terrain-boundary debug controls.
+- [x] Create `FLOOR_001_MAIN_ROAD_PREVIEW.md`.
+- [x] Create `HANDOFF_MILESTONE_16A.md`.
+
+### Local route acceptance required
+
+- [ ] Run `floor_001_main_road_preview.tscn` with F6.
+- [ ] Confirm road status is READY and failed assets are zero.
+- [ ] Confirm no duplicate road begins inside the gate.
+- [ ] Walk and sprint from the gate to the northern exit.
+- [ ] Jump and land on straight and curved road sections.
+- [ ] Cross every visible module join without becoming stuck.
+- [ ] Leave the road onto terrain and re-enter it.
+- [ ] Confirm curve directions and rotations are correct.
+- [ ] Inspect spline, placements, sparse edging, and chunk boundaries.
+- [ ] Confirm terrain streaming works across the complete route.
+- [ ] Re-run the north-gate and southern-region previews.
+- [ ] Run all three existing technical terrain tests unchanged.
+- [ ] Press F5 and confirm normal gameplay remains unchanged.
+
+### Completion gate
+
+After the complete local checklist passes, proceed to **Milestone 16B — Main
+Northbound Road Acceptance and Provisional Southern Region Integration**. The
+production integration must use one reusable road assembly beneath
+`StaticContent/Roads` and must not copy individual GLBs.

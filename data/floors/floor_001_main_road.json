@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "road_id": "road_floor_001_starting_city_northbound",
+  "floor_id": "floor_001",
+  "region_id": "region_floor_001_southern",
+  "display_name": "Starting City Main Northbound Road",
+  "road_type": "primary_greybox_route",
+  "road_width_m": 14.0,
+  "start_marker_id": "road_gate",
+  "end_marker_id": "road_north_continuation",
+  "ordered_control_point_ids": [
+    "road_gate",
+    "road_01",
+    "road_02",
+    "road_03",
+    "road_north_continuation"
+  ],
+  "control_points": [
+    {
+      "control_point_id": "road_gate",
+      "marker_node": "MainRoadStart",
+      "position": [
+        0.0,
+        9.0,
+        3835.0
+      ],
+      "curve_in_handle": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "curve_out_handle": [
+        0.0,
+        -0.28,
+        -80.0
+      ]
+    },
+    {
+      "control_point_id": "road_01",
+      "marker_node": "MainRoadControl01",
+      "position": [
+        12.0,
+        8.3,
+        3665.0
+      ],
+      "curve_in_handle": [
+        -12.0,
+        0.2,
+        40.0
+      ],
+      "curve_out_handle": [
+        12.0685,
+        -0.2011,
+        -40.2282
+      ]
+    },
+    {
+      "control_point_id": "road_02",
+      "marker_node": "MainRoadControl02",
+      "position": [
+        -28.0,
+        8.8,
+        3480.0
+      ],
+      "curve_in_handle": [
+        -2.6995,
+        -0.2331,
+        47.2413
+      ],
+      "curve_out_handle": [
+        2.6995,
+        0.2331,
+        -47.2413
+      ]
+    },
+    {
+      "control_point_id": "road_03",
+      "marker_node": "MainRoadControl03",
+      "position": [
+        34.0,
+        10.2,
+        3280.0
+      ],
+      "curve_in_handle": [
+        -3.7743,
+        -0.4089,
+        52.2107
+      ],
+      "curve_out_handle": [
+        3.7743,
+        0.4089,
+        -52.2107
+      ]
+    },
+    {
+      "control_point_id": "road_north_continuation",
+      "marker_node": "MainRoadNorthernExit",
+      "position": [
+        20.0,
+        14.0,
+        2816.0
+      ],
+      "curve_in_handle": [
+        3.5,
+        -0.95,
+        116.0
+      ],
+      "curve_out_handle": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "source_consistency": {
+    "production_marker_set_is_authoritative": true,
+    "terrain_profile_extra_point_not_promoted": "road_04",
+    "reason": "road_04 exists in the terrain-grading profile but is not present in the approved production region marker set, so Milestone 16A uses the five points shared by the region JSON and stable Marker3D nodes."
+  },
+  "connected_road_ids": [],
+  "architecture_manifest_path": "res://AincradProject/assets/environments/floor_001/architecture/north_gate/floor_001_north_gate_architecture_manifest.json",
+  "road_asset_ids": {
+    "straight": "floor_001_arch_stone_road_straight",
+    "curve_left": "floor_001_arch_stone_road_curved_left",
+    "curve_right": "floor_001_arch_stone_road_curved_right",
+    "intersection": "floor_001_arch_stone_road_intersection",
+    "edging": "floor_001_arch_road_edging_straight"
+  },
+  "asset_geometry": {
+    "straight_piece_length_m": 24.0,
+    "curve_radius_m": 30.0,
+    "curve_angle_degrees": 30.0,
+    "curve_chord_length_m": 15.5291427062,
+    "curve_left_local_chord_m": [
+      -4.0192378865,
+      0.0,
+      -15.0
+    ],
+    "curve_right_local_chord_m": [
+      4.0192378865,
+      0.0,
+      -15.0
+    ],
+    "edging_piece_length_m": 24.0
+  },
+  "recommended_sampling_distance_m": 24.0,
+  "spline_policy": {
+    "type": "authored_bezier_handles",
+    "bake_interval_m": 2.0,
+    "curvature_selection_threshold_degrees": 9.0,
+    "preserve_northward_progression": true,
+    "self_intersections_allowed": false
+  },
+  "gate_transition": {
+    "policy": "reuse_existing_gate_road_then_continue",
+    "existing_gate_road_coverage_m": 80.0,
+    "existing_gate_road_piece_count": 3,
+    "new_road_placement_start_distance_m": 80.0,
+    "description": "The integrated north-gate assembly supplies the first three accepted straight road modules. The 16A spline begins at MainRoadStart for data continuity, while generated placements start at the north edge of those existing modules.",
+    "existing_gate_road_render_base_y_m": 9.02,
+    "height_blend_end_distance_m": 128.0,
+    "height_blend_policy": "smoothstep_from_accepted_gate_road_base_to_spline_offset"
+  },
+  "terrain_conformance_policy": {
+    "authoritative_height_source": "approved_control_point_y_values_and_graded_terrain_corridor",
+    "height_interpolation": "Curve3D authored Bezier interpolation",
+    "visual_offset_m": 0.05,
+    "terrain_mesh_modification_allowed": false,
+    "road_collision_allowed_to_hide_alignment": false,
+    "acceptable_greybox_difference_m": 0.25
+  },
+  "collision_policy": {
+    "policy_id": "terrain_authoritative_flat_road_visual_only",
+    "straight_surface_collision": false,
+    "curved_surface_collision": false,
+    "intersection_surface_collision": false,
+    "road_edging_collision": false,
+    "reason": "Preserves the user-accepted Milestone 15B.1 fix and avoids overlapping concave road and terrain contacts."
+  },
+  "edging_policy": {
+    "enabled_by_default": false,
+    "visual_only": true,
+    "placement_interval_straight_segments": 3,
+    "omit_on_curves": true,
+    "omit_inside_gate_transition": true
+  },
+  "section_policy": {
+    "gate_approach_ends_at_control_point_id": "road_01",
+    "northern_continuation_starts_at_distance_m": 760.0
+  },
+  "reconstruction_confidence": {
+    "classification": "project_reconstruction",
+    "route_anchor_confidence": "locked_project_data",
+    "spline_handle_confidence": "reasonable_interpretation",
+    "modular_placement_confidence": "greybox_iteration"
+  },
+  "production_status": "permanent_greybox_route_preview_pending_acceptance",
+  "dataset_version": "16A.1",
+  "normal_f5_world_changed": false
+}

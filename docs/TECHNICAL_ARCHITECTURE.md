@@ -1273,3 +1273,97 @@ Rules:
    replaced without changing stable production markers.
 10. Normal F5 startup remains unchanged until a later explicit integration
     milestone.
+
+
+---
+
+## 35. Data-Driven Permanent Road Routes
+
+Milestone 16A introduces a reusable route architecture for permanent Floor 1
+roads without integrating the route into normal F5 gameplay.
+
+### 35.1 Authority separation
+
+Road systems use three distinct sources:
+
+1. **Road JSON** — stable route ID, approved control points, editable spline
+   handles, placement policy, and collision policy.
+2. **Architecture manifest** — reusable road-piece IDs, paths, dimensions, and
+   completed Blender-export status.
+3. **Terrain and region data** — stable world markers, graded corridor, chunk
+   streaming, and authoritative walking collision.
+
+A road assembly must not duplicate GLBs or copy asset definitions into its scene.
+
+### 35.2 Assembly hierarchy
+
+```text
+Floor001MainRoadAssembly
+├── RoadPath
+├── RoadRender
+│   ├── GateApproach
+│   ├── BeginnerGrasslands
+│   └── NorthernContinuation
+├── RoadEdging
+├── PlacementMarkers
+└── Debug
+    ├── SplineVisualization
+    └── PlacementVisualization
+```
+
+The assembly owns route visuals and route-specific debug data only. It does not
+own terrain, a player, SaveManager, navigation, quests, enemies, or global UI.
+
+### 35.3 Spline and modular placement
+
+- Build `Curve3D` once from JSON positions and handle offsets.
+- Use baked-curve distance queries; do not recalculate the full route every
+  frame.
+- Load each required render `PackedScene` once and reuse it for placement.
+- Use actual module chord lengths when advancing along the spline.
+- Keep each module under a stable Node3D placement root.
+- Select curve direction from signed heading change.
+- Do not place intersection assets without an authored branch.
+- Limit generated placements with a defensive maximum count.
+
+### 35.4 Gate transition
+
+The integrated north-gate assembly owns its accepted three-piece approach. A
+connected main-road spline may include `MainRoadStart` as its data origin while
+skipping modular placement through the existing 80-metre strip.
+
+A preview must contain exactly one gate assembly and one main-road assembly. It
+must not place a second road inside the gate.
+
+### 35.5 Terrain-authoritative road physics
+
+Ground-level road assemblies follow the accepted policy:
+
+```text
+terrain_authoritative_flat_road_visual_only
+```
+
+Rules:
+
+- Do not load or convert straight, curved, intersection, or edging collision
+  GLBs for terrain-following roads.
+- Streamed terrain remains the player walking surface.
+- Visual road elevation may use a small configured offset.
+- Do not regenerate terrain or add physics to hide visual alignment issues.
+- Raised structures require separate, simple, non-overlapping authored
+  collision in later milestones.
+
+### 35.6 Preview-before-production integration
+
+A new permanent route first runs in a separate F6 preview containing:
+
+- The permanent production region.
+- One route assembly.
+- The existing player.
+- Preview-only safe placement and fall recovery.
+- Route and terrain diagnostics.
+
+Only after local acceptance may one reusable route assembly be instanced beneath
+a stable production container such as `StaticContent/Roads`. Individual GLBs and
+runtime-generated placement children must never be copied into the production
+region scene.
