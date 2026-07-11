@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://bm704y340gwjs"]
+
+[ext_resource type="Script" uid="uid://bk357xvgkuup3" path="res://AincradProject/scripts/world/floor_001_southern_region_preview.gd" id="1_preview"]
+[ext_resource type="PackedScene" path="res://AincradProject/scenes/player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://AincradProject/world/floors/floor_001/floor_001_southern_region.tscn" id="3_region"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_preview_fall"]
+size = Vector3(2200, 36, 2200)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_preview_debug"]
+bg_color = Color(0.025, 0.032, 0.045, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.38, 0.9, 0.58, 0.9)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[node name="Floor001SouthernRegionPreview" type="Node3D" unique_id=233762177]
+script = ExtResource("1_preview")
+
+[node name="Player" parent="." unique_id=1451122304 instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 60, 3835)
+
+[node name="SouthernRegion" parent="." unique_id=93967882 instance=ExtResource("3_region")]
+
+[node name="PreviewSafety" type="Node3D" parent="." unique_id=850829104]
+
+[node name="FallRecoveryArea" type="Area3D" parent="PreviewSafety" unique_id=1660334001]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 128, -72, 3712)
+collision_layer = 0
+monitorable = false
+metadata/preview_only = true
+metadata/modifies_save_data = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PreviewSafety/FallRecoveryArea" unique_id=1858890604]
+shape = SubResource("BoxShape3D_preview_fall")
+
+[node name="DebugVisualization" type="Node3D" parent="." unique_id=986775593]
+metadata/preview_only = true
+
+[node name="CurrentChunkBoundary" type="MeshInstance3D" parent="DebugVisualization" unique_id=475668371]
+cast_shadow = 0
+
+[node name="LoadedChunkBoundaries" type="MeshInstance3D" parent="DebugVisualization" unique_id=1029757556]
+cast_shadow = 0
+
+[node name="RegionGuides" type="MeshInstance3D" parent="DebugVisualization" unique_id=742493282]
+cast_shadow = 0
+
+[node name="DebugUI" type="CanvasLayer" parent="." unique_id=457994090]
+layer = 60
+
+[node name="DebugPanel" type="PanelContainer" parent="DebugUI" unique_id=1440563726]
+offset_left = 18.0
+offset_top = 18.0
+offset_right = 690.0
+offset_bottom = 430.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_preview_debug")
+
+[node name="MarginContainer" type="MarginContainer" parent="DebugUI/DebugPanel" unique_id=368370996]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="DebugUI/DebugPanel/MarginContainer" unique_id=91523752]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="DebugLabel" type="Label" parent="DebugUI/DebugPanel/MarginContainer/ScrollContainer" unique_id=1809935873]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.92, 1, 0.94, 1)
+theme_override_font_sizes/font_size = 14
+text = "Preparing Floor 1 southern production region preview..."
+autowrap_mode = 2
+
+[node name="DebugUpdateTimer" type="Timer" parent="DebugUI" unique_id=296861643]
+wait_time = 0.25
+autostart = true

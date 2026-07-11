@@ -8,7 +8,7 @@ extends Node3D
 ## Reusable manifest-driven outdoor terrain chunk streamer.
 ##
 ## The streamer owns the terrain registry and runtime chunk roots. It selects
-## visual LOD and collision independently from the player's floor-based grid
+## visual LOD and collision independently from a Node3D target's floor-based grid
 ## coordinate, requests PackedScene resources in background threads, prevents
 ## duplicate requests and instances, and unloads roots outside the configured
 ## retention radius.
@@ -80,7 +80,7 @@ const INVALID_GRID_COORDINATE: Vector2i = Vector2i(2147483647, 2147483647)
 @export var require_seam_validation_passed: bool = false
 @export var validate_manifest_resource_paths: bool = false
 
-var _player: CharacterBody3D = null
+var _player: Node3D = null
 var _loaded_chunks: Node3D = null
 var _update_timer: Timer = null
 
@@ -144,6 +144,23 @@ func force_streaming_update() -> void:
 
 	_force_recalculation = true
 	_update_streaming_cycle()
+
+
+func set_streaming_target(target: Node3D) -> void:
+	if target == null or not is_instance_valid(target):
+		_warn("FloorChunkStreamer rejected an invalid streaming target.")
+		return
+
+	_player = target
+	_force_recalculation = true
+	if _setup_is_valid and _manifest_ready:
+		if _update_timer != null and _update_timer.is_stopped():
+			_update_timer.start()
+		force_streaming_update()
+
+
+func get_streaming_target() -> Node3D:
+	return _player
 
 
 func is_manifest_ready() -> bool:
@@ -1189,10 +1206,10 @@ func _validate_exported_settings() -> void:
 func _resolve_required_nodes() -> bool:
 	var is_valid: bool = true
 	var player_node: Node = get_node_or_null(player_path)
-	if player_node is CharacterBody3D:
-		_player = player_node as CharacterBody3D
+	if player_node is Node3D:
+		_player = player_node as Node3D
 	else:
-		push_error("FloorChunkStreamer could not find Player at: %s" % player_path)
+		push_error("FloorChunkStreamer could not find a Node3D streaming target at: %s" % player_path)
 		is_valid = false
 
 	var loaded_chunks_node: Node = get_node_or_null(loaded_chunks_path)

@@ -1018,3 +1018,102 @@ floor_id/region_id/chunk_id/persistent_placement_id
 ```
 
 Streaming remains a future task. Milestone 12 only locks the plan.
+
+---
+
+## 33. Permanent Floor Region and Preview Architecture
+
+Milestone 14C introduces the first permanent production-region shell:
+
+```text
+res://AincradProject/world/floors/floor_001/floor_001_southern_region.tscn
+```
+
+Technical terrain scenes remain regression tools. They do not become production
+world ownership roots.
+
+### 33.1 Region ownership
+
+A production region owns:
+
+- Manifest-driven terrain streaming.
+- Regional environment and lighting.
+- Empty static and dynamic content containers.
+- Stable markers and neighboring-region connection anchors.
+- Safe-zone volumes and signals.
+- Navigation and audio placeholders.
+- Region bounds and fallback hooks.
+- Region metadata and configuration validation.
+
+A production region does not own:
+
+- Player progression or inventory.
+- Player quest, wallet, equipment, or respawn state.
+- SaveManager.
+- Global menus.
+- Duplicate player systems.
+
+### 33.2 Preview ownership
+
+Local F6 validation belongs in a separate preview scene:
+
+```text
+res://AincradProject/scenes/world/floor_001_southern_region_preview.tscn
+```
+
+The preview instances the permanent region and existing player separately. It
+may add temporary fall recovery, debug UI, chunk-boundary lines, safe-zone
+visualization, and marker guides. These preview helpers must not be copied into
+normal F5 gameplay by default.
+
+### 33.3 Streaming target contract
+
+`FloorChunkStreamer` accepts a `Node3D` streaming target. Existing scenes keep
+using the player `CharacterBody3D`. A production region may initialise around a
+stable `Marker3D`, then switch to a player, camera, server-interest anchor, or
+other authoritative world target through:
+
+```text
+set_streaming_target(target: Node3D)
+```
+
+Terrain selection depends only on the target's world position. The streamer does
+not own the target's progression or lifecycle.
+
+### 33.4 Region configuration
+
+Permanent region configuration lives in valid JSON and uses stable IDs:
+
+```text
+res://AincradProject/data/floors/floor_001_southern_region.json
+```
+
+It records:
+
+- Region and floor IDs.
+- Dataset and manifest paths.
+- Bounds and chunk range.
+- Spawn and checkpoint IDs.
+- Safe-zone dimensions.
+- Road-control references.
+- Neighboring region IDs.
+- Content-container paths.
+- Stable marker definitions.
+- Streaming values.
+- Reconstruction confidence.
+
+The region scene validates marker positions against this configuration. Display
+names are not persistence keys.
+
+### 33.5 Safe-zone contract
+
+A region safe zone is initially a data-driven `Area3D` with a stable ID and
+enter/exit signals. Combat disabling, enemy suppression, checkpoint activation,
+and save behaviour belong to future subscribing systems. The region volume must
+not directly mutate global player or save state.
+
+### 33.6 Reconstruction status
+
+The southern terrain and marker layout are project reconstruction guided by the
+locked Floor 1 master plan and official anchors. Production scenes must preserve
+that distinction and must not describe invented contours as official canon.

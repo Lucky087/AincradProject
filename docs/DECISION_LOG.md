@@ -3328,8 +3328,6 @@ unchanged. Handle test teleports locally with `Ctrl + Arrow`.
 Approve this architecture only after F6 testing confirms correct LOD counts,
 collision transitions, root unloading, no duplicate instances, and unchanged
 F5 gameplay.
-=======
->>>>>>> 61eba00fefd3ea4dbb53cd012620dfa990f1e2e0
 
 ---
 
@@ -3656,3 +3654,193 @@ streamer.
 
 Measure memory locally during 14B and select a production cache budget in or
 after Milestone 14C.
+
+---
+
+## Documentation Conflict Cleanup — Milestone 14C
+
+**Date:** 2026-07-11
+
+Two orphaned Git conflict-marker lines were found immediately after the D-074
+follow-up paragraph: a separator marker made from seven equals signs and a
+commit-tail marker referencing commit `61eba00fefd3ea4dbb53cd012620dfa990f1e2e0`.
+
+Only those two marker lines were removed. There was no remaining `<<<<<<<` line,
+no alternate decision block between the markers, and no meaningful project text
+was deleted or rewritten. Decisions D-074 and D-075 remain complete and
+separate.
+
+---
+
+## D-081 — Accept the Southern Dataset as an Iterative Production Base
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Milestone 14C begins after the user confirmed that the generated 49-chunk
+southern terrain dataset was validated locally. The project contains all 147
+GLBs, a completed manifest, passed seam metadata, and the isolated 14B streaming
+test. Detailed screenshots and per-check runtime measurements were not stored in
+the uploaded package.
+
+### Decision
+
+Accept `floor_001_southern_region_v1` as the permanent terrain base for
+production iteration, while explicitly retaining the three technical terrain
+scenes as regression tools.
+
+Acceptance locks the coordinate system, 256-metre grid, 49-chunk range, manifest
+path, dataset ID, and authored gate/road/transition anchors. It does not lock
+final contours, materials, vegetation, architecture, navigation, or gameplay
+placement.
+
+### Consequences
+
+- Permanent region scenes may reference the southern manifest.
+- The terrain remains a project reconstruction, not a canon-exact contour map.
+- Future regeneration requires seam validation and a production-placement impact
+  review.
+- Missing detailed local test measurements are not invented in documentation.
+
+### Follow-up
+
+Use the F6 production preview after every terrain, streamer, collision, or marker
+change, and keep the existing 13B, 13C, and 14B scenes unchanged.
+
+---
+
+## D-082 — Separate Permanent Region Ownership from Player Ownership
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The southern production scene needs to own terrain, environment, stable content
+containers, markers, safe-zone data, and world hooks. The existing player scene
+contains progression, inventory, quests, wallet, respawn, UI, and save-facing
+components that must not become permanent children of a reusable world region.
+
+### Decision
+
+Create a player-independent permanent region scene:
+
+```text
+res://AincradProject/world/floors/floor_001/floor_001_southern_region.tscn
+```
+
+Create a separate F6 preview that instances both the permanent region and the
+existing player:
+
+```text
+res://AincradProject/scenes/world/floor_001_southern_region_preview.tscn
+```
+
+The region uses a stable `DefaultStreamingAnchor` marker when no external actor
+has been assigned. The preview replaces that target with the existing player
+through the reusable streamer's public API.
+
+### Consequences
+
+- The production world does not own global player data or duplicate player
+  systems.
+- Future main-world code may instantiate or restore a player independently.
+- The production region can initialise terrain without a player.
+- F5 remains on the existing outskirts scene until a later integration
+  milestone.
+
+### Follow-up
+
+Future world-loading architecture should instance a region first, then assign a
+restored player or another authoritative streaming target.
+
+---
+
+## D-083 — Use Data-Driven Stable Markers and a Signal-Only Safe-Zone Placeholder
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Production assets need durable placement anchors before walls, gates, roads,
+vegetation, NPCs, enemies, or navigation are authored. The safe-zone plateau
+also needs a runtime representation without prematurely implementing combat or
+spawn rules.
+
+### Decision
+
+Store production marker IDs, node paths, positions, content-container names,
+neighboring region IDs, safe-zone data, and streaming values in:
+
+```text
+res://AincradProject/data/floors/floor_001_southern_region.json
+```
+
+Marker coordinates must derive from the southern terrain profile and locked
+Floor 1 planning data. The production scene validates scene marker positions
+against the JSON at runtime.
+
+Represent the city-gate safe zone as a 305-metre-radius `Area3D` cylinder with a
+stable ID and enter/exit signals only. Do not suppress enemies, disable combat,
+change checkpoints, or write save data in Milestone 14C.
+
+### Consequences
+
+- Future content can target stable IDs rather than display names or scene-tree
+  guesses.
+- Marker and configuration drift becomes detectable.
+- Safe-zone gameplay can be added later by subscribing systems.
+- Debug visualization remains preview-only and disabled in production.
+
+### Follow-up
+
+Milestone 15A should use the gate centre, wall connections, main-road start, and
+safe-zone boundary as the first locked production asset anchors.
+
+---
+
+## D-084 — Broaden the Streamer Target from CharacterBody3D to Node3D
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The reusable streamer previously required its target node to be a
+`CharacterBody3D`. A player-independent production region needs a neutral marker
+target before a player is assigned, while all existing tests still use the
+existing `CharacterBody3D` player.
+
+### Decision
+
+Preserve every existing public method and default scene path, broaden the
+internal streaming target type to `Node3D`, and add:
+
+```text
+set_streaming_target(target: Node3D)
+get_streaming_target() -> Node3D
+```
+
+Existing test scenes continue resolving their player paths unchanged. The
+production region resolves a `Marker3D` default target and the preview replaces
+it with the existing player.
+
+### Consequences
+
+- Existing nine-chunk and southern technical tests remain compatible.
+- Production regions no longer need a fake or duplicate player.
+- Cameras, server-interest anchors, or future authoritative actors may also
+  become valid streaming targets.
+- Streamed terrain selection still uses only the target's world position.
+
+### Follow-up
+
+Run all three terrain regression scenes locally after any future streamer API or
+target-lifecycle change.

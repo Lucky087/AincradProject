@@ -1505,3 +1505,81 @@ outputs: 49 LOD0 GLBs, 49 LOD1 GLBs, 49 collision GLBs, and a manifest reporting
 Do not create the production shell until the complete 14B F6 route and both
 regression scenes pass locally. After approval, proceed to **Milestone 14C —
 Southern Terrain Acceptance and Empty Floor 1 Production Shell**.
+
+---
+
+## 26. Milestone 14C — Southern Terrain Acceptance and Empty Floor 1 Production Shell
+
+**Status:** Implementation and static validation complete; local Godot 4.7 F6 preview verification required  
+**Date:** 2026-07-11
+
+The user confirmed that the 49-chunk southern terrain dataset was generated and
+validated locally. The permanent production shell is now separate from all
+technical terrain tests and is not the default F5 world.
+
+### Completed in the project package
+
+- [x] Preserve the complete outer `aincrad/` structure.
+- [x] Keep `project.godot`, normal F5 startup, existing terrain tests, player,
+      SaveManager, gameplay systems, southern GLBs, manifests, Blender files,
+      `.uid` files, and `.godot/` unchanged.
+- [x] Inspect all documentation under `AincradProject/docs/`.
+- [x] Remove only the two orphaned Git conflict-marker lines after D-074.
+- [x] Preserve every meaningful decision in `DECISION_LOG.md`.
+- [x] Create the permanent production region at
+      `world/floors/floor_001/floor_001_southern_region.tscn`.
+- [x] Create the production controller at
+      `scripts/world/floor_001_southern_region.gd`.
+- [x] Create `data/floors/floor_001_southern_region.json`.
+- [x] Reuse the real 49-chunk southern terrain manifest.
+- [x] Reuse `floor_chunk_streamer.gd` rather than duplicate streaming code.
+- [x] Preserve all existing streamer methods and add a backwards-compatible
+      `Node3D` streaming-target API.
+- [x] Keep the production region player-independent.
+- [x] Add empty static, dynamic, navigation, audio, region-volume, and debug
+      containers for future content.
+- [x] Add stable spawn, checkpoint, gate, wall, road, field, and future-region
+      markers derived from the terrain profile and Floor 1 plan.
+- [x] Add a data-driven 305-metre city-gate safe-zone `Area3D` with enter/exit
+      signals only.
+- [x] Add production bounds and fallback-marker hooks without save changes.
+- [x] Use LOD0 radius 1, LOD1 radius 2, collision radius 1, unload radius 3, and
+      a 0.20-second update interval.
+- [x] Create an F6-only preview that instances the permanent region and existing
+      player separately.
+- [x] Add safe collision-derived preview spawn, fall recovery, debug counts,
+      chunk boundaries, stable-marker guides, and safe-zone visualization.
+- [x] Create `docs/floors/FLOOR_001_SOUTHERN_TERRAIN_ACCEPTANCE.md`.
+- [x] Create `docs/handoffs/HANDOFF_MILESTONE_14C.md`.
+- [x] Update `TECHNICAL_ARCHITECTURE.md` and `DECISION_LOG.md`.
+- [x] Pass the GDScript parser, `gdlint`, and 1,190 static validation checks.
+- [x] Keep roads, buildings, walls, vegetation, enemies, NPCs, navigation baking,
+      final materials, and normal-game integration out of this milestone.
+
+### Local Godot 4.7 verification required
+
+- [ ] Open `floor_001_southern_region.tscn` and confirm no missing resources.
+- [ ] Open `floor_001_southern_region_preview.tscn` and run it with F6.
+- [ ] Confirm region ID `region_floor_001_southern`.
+- [ ] Confirm manifest validation passes and 49 chunks register.
+- [ ] Confirm the existing player lands on exported collision at the city gate.
+- [ ] Confirm walking, sprinting, jumping, and camera controls remain normal.
+- [ ] Walk north across multiple 256-metre boundaries.
+- [ ] Confirm LOD0, LOD1, collision, and unloading behave as in 14B.
+- [ ] Confirm the debug panel reports correct chunk and safe-zone state.
+- [ ] Press B and confirm chunk-boundary guides toggle.
+- [ ] Press M and confirm stable-marker and safe-zone guides toggle.
+- [ ] Press F1 and confirm the player safely returns to the gate.
+- [ ] Fall below the terrain and confirm preview-only recovery.
+- [ ] Confirm no save, checkpoint, inventory, quest, XP, health, equipment, or gold
+      changes occur from preview recovery.
+- [ ] Run unchanged `terrain_chunk_test.tscn`.
+- [ ] Run unchanged `terrain_streaming_test.tscn`.
+- [ ] Run unchanged `floor_001_southern_streaming_test.tscn`.
+- [ ] Press F5 and confirm the existing normal game still starts.
+- [ ] Confirm no duplicate player or terrain systems appear.
+
+### Completion gate and next milestone
+
+After the production preview and all three terrain regressions pass locally,
+proceed to **Milestone 15A — Starting City North-Gate Architecture Greybox**.

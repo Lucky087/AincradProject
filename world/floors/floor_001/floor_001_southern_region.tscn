@@ -1,0 +1,211 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://AincradProject/scripts/world/floor_001_southern_region.gd" id="1_region"]
+[ext_resource type="Script" path="res://AincradProject/scripts/world/floor_chunk_streamer.gd" id="2_streamer"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_production"]
+sky_top_color = Color(0.18, 0.42, 0.72, 1)
+sky_horizon_color = Color(0.73, 0.86, 0.96, 1)
+ground_bottom_color = Color(0.09, 0.12, 0.09, 1)
+ground_horizon_color = Color(0.47, 0.58, 0.45, 1)
+sun_angle_max = 18.0
+sun_curve = 0.08
+
+[sub_resource type="Sky" id="Sky_production"]
+sky_material = SubResource("ProceduralSkyMaterial_production")
+
+[sub_resource type="Environment" id="Environment_production"]
+background_mode = 2
+sky = SubResource("Sky_production")
+ambient_light_source = 3
+ambient_light_color = Color(0.74, 0.82, 0.91, 1)
+ambient_light_energy = 0.65
+fog_enabled = true
+fog_light_color = Color(0.74, 0.82, 0.88, 1)
+fog_light_energy = 0.5
+fog_density = 0.00032
+fog_sky_affect = 0.18
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_safe_zone"]
+radius = 305.0
+height = 120.0
+
+[node name="Floor001SouthernRegion" type="Node3D"]
+script = ExtResource("1_region")
+
+[node name="RegionMetadata" type="Node" parent="."]
+metadata/region_id = &"region_floor_001_southern"
+metadata/floor_id = &"floor_001"
+metadata/terrain_dataset_id = &"floor_001_southern_region_v1"
+metadata/production_status = &"permanent_empty_shell"
+
+[node name="RegionEnvironment" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="RegionEnvironment"]
+environment = SubResource("Environment_production")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="RegionEnvironment"]
+transform = Transform3D(0.866025, 0.353553, -0.353553, 0, 0.707107, 0.707107, 0.5, -0.612372, 0.612372, 0, 0, 0)
+light_color = Color(1, 0.96, 0.87, 1)
+light_energy = 1.1
+shadow_enabled = true
+directional_shadow_max_distance = 1200.0
+
+[node name="FutureAudio" type="Node3D" parent="RegionEnvironment"]
+metadata/purpose = &"regional_audio_placeholder"
+
+[node name="Terrain" type="Node3D" parent="."]
+
+[node name="TerrainStreamer" type="Node3D" parent="Terrain"]
+script = ExtResource("2_streamer")
+manifest_path = "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_southern_manifest.json"
+player_path = NodePath("../../StreamingMarkers/DefaultStreamingAnchor")
+lod0_radius_chunks = 1
+lod1_visual_radius_chunks = 2
+collision_radius_chunks = 1
+unload_radius_chunks = 3
+update_interval_seconds = 0.2
+maximum_new_requests_per_update = 8
+use_sub_threads = true
+retain_loaded_resources_in_memory = false
+expected_dataset_id = "floor_001_southern_region_v1"
+expected_chunk_count = 49
+enforce_expected_grid_range = true
+expected_grid_min = Vector2i(-3, 11)
+expected_grid_max = Vector2i(3, 17)
+require_complete_blender_exports = true
+expected_actual_glb_count = 147
+require_seam_validation_passed = true
+validate_manifest_resource_paths = true
+
+[node name="LoadedChunks" type="Node3D" parent="Terrain/TerrainStreamer"]
+
+[node name="StreamingUpdateTimer" type="Timer" parent="Terrain/TerrainStreamer"]
+wait_time = 0.2
+
+[node name="StaticContent" type="Node3D" parent="."]
+
+[node name="CityGateArchitecture" type="Node3D" parent="StaticContent"]
+
+[node name="Roads" type="Node3D" parent="StaticContent"]
+
+[node name="Bridges" type="Node3D" parent="StaticContent"]
+
+[node name="Ruins" type="Node3D" parent="StaticContent"]
+
+[node name="Rocks" type="Node3D" parent="StaticContent"]
+
+[node name="Vegetation" type="Node3D" parent="StaticContent"]
+
+[node name="DynamicContent" type="Node3D" parent="."]
+
+[node name="NPCs" type="Node3D" parent="DynamicContent"]
+
+[node name="Enemies" type="Node3D" parent="DynamicContent"]
+
+[node name="Interactables" type="Node3D" parent="DynamicContent"]
+
+[node name="Loot" type="Node3D" parent="DynamicContent"]
+
+[node name="RuntimeObjects" type="Node3D" parent="DynamicContent"]
+
+[node name="Navigation" type="Node3D" parent="."]
+metadata/status = &"placeholder_not_baked"
+
+[node name="SafeZones" type="Node3D" parent="."]
+
+[node name="StartingCityGateSafeZone" type="Area3D" parent="SafeZones"]
+position = Vector3(0, 9, 3835)
+collision_layer = 0
+collision_mask = 1
+monitorable = false
+metadata/safe_zone_id = &"safe_zone_starting_city_gate_plateau"
+metadata/gameplay_rules_implemented = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SafeZones/StartingCityGateSafeZone"]
+shape = SubResource("CylinderShape3D_safe_zone")
+
+[node name="RegionVolumes" type="Node3D" parent="."]
+
+[node name="WorldBoundaryHooks" type="Node3D" parent="RegionVolumes"]
+metadata/bounds_min = Vector3(-768, -80, 2816)
+metadata/bounds_max = Vector3(1024, 120, 4608)
+metadata/automatic_save_changes = false
+
+[node name="SpawnMarkers" type="Node3D" parent="."]
+
+[node name="PlayerSpawnCityGate" type="Marker3D" parent="SpawnMarkers"]
+position = Vector3(0, 11, 3835)
+metadata/stable_id = &"spawn_player_city_gate"
+
+[node name="CheckpointCityGate" type="Marker3D" parent="SpawnMarkers"]
+position = Vector3(0, 9, 3890)
+metadata/stable_id = &"floor_001_starting_city_gate"
+
+[node name="LandmarkMarkers" type="Node3D" parent="."]
+
+[node name="CityGateCentre" type="Marker3D" parent="LandmarkMarkers"]
+position = Vector3(0, 9, 3835)
+metadata/stable_id = &"landmark_city_gate_centre"
+
+[node name="CityWallWestConnection" type="Marker3D" parent="LandmarkMarkers"]
+position = Vector3(-210, 9, 3835)
+metadata/stable_id = &"landmark_city_wall_west_connection"
+
+[node name="CityWallEastConnection" type="Marker3D" parent="LandmarkMarkers"]
+position = Vector3(210, 9, 3835)
+metadata/stable_id = &"landmark_city_wall_east_connection"
+
+[node name="BeginnerFieldWest" type="Marker3D" parent="LandmarkMarkers"]
+position = Vector3(-250, 12, 3480)
+metadata/stable_id = &"marker_beginner_field_west"
+
+[node name="BeginnerFieldCentre" type="Marker3D" parent="LandmarkMarkers"]
+position = Vector3(0, 10, 3480)
+metadata/stable_id = &"marker_beginner_field_centre"
+
+[node name="BeginnerFieldEast" type="Marker3D" parent="LandmarkMarkers"]
+position = Vector3(260, 7, 3480)
+metadata/stable_id = &"marker_beginner_field_east"
+
+[node name="FutureWesternWoodlandEntrance" type="Marker3D" parent="LandmarkMarkers"]
+position = Vector3(-650, 24, 3330)
+metadata/stable_id = &"connection_region_horunka_woodlands"
+
+[node name="FutureEasternLowlandEntrance" type="Marker3D" parent="LandmarkMarkers"]
+position = Vector3(760, 3, 3370)
+metadata/stable_id = &"connection_region_east_lake_district"
+
+[node name="FutureNorthernRegionConnection" type="Marker3D" parent="LandmarkMarkers"]
+position = Vector3(20, 14, 2816)
+metadata/stable_id = &"connection_region_rata_plains"
+
+[node name="StreamingMarkers" type="Node3D" parent="."]
+
+[node name="DefaultStreamingAnchor" type="Marker3D" parent="StreamingMarkers"]
+position = Vector3(0, 11, 3835)
+metadata/stable_id = &"stream_anchor_southern_default"
+
+[node name="MainRoadStart" type="Marker3D" parent="StreamingMarkers"]
+position = Vector3(0, 9, 3835)
+metadata/stable_id = &"road_gate"
+
+[node name="MainRoadControl01" type="Marker3D" parent="StreamingMarkers"]
+position = Vector3(12, 8.3, 3665)
+metadata/stable_id = &"road_01"
+
+[node name="MainRoadControl02" type="Marker3D" parent="StreamingMarkers"]
+position = Vector3(-28, 8.8, 3480)
+metadata/stable_id = &"road_02"
+
+[node name="MainRoadControl03" type="Marker3D" parent="StreamingMarkers"]
+position = Vector3(34, 10.2, 3280)
+metadata/stable_id = &"road_03"
+
+[node name="MainRoadNorthernExit" type="Marker3D" parent="StreamingMarkers"]
+position = Vector3(20, 14, 2816)
+metadata/stable_id = &"road_north_continuation"
+
+[node name="Debug" type="Node3D" parent="."]
+visible = false
+metadata/production_visualization_enabled_by_default = false

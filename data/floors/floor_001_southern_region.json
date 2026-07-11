@@ -1,0 +1,334 @@
+{
+  "schema_version": 1,
+  "region_id": "region_floor_001_southern",
+  "floor_id": "floor_001",
+  "display_name": "Floor 1 Southern Region",
+  "document_status": "permanent_production_shell",
+  "last_updated": "2026-07-11",
+  "terrain_dataset_id": "floor_001_southern_region_v1",
+  "dataset_version": "14A.1",
+  "terrain_manifest_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_southern_manifest.json",
+  "terrain_profile_path": "res://AincradProject/data/floors/floor_001_southern_terrain_profile.json",
+  "floor_plan_path": "res://AincradProject/data/floors/floor_001.json",
+  "coordinate_system": {
+    "units_per_metre": 1.0,
+    "east_axis": "+X",
+    "west_axis": "-X",
+    "north_axis": "-Z",
+    "south_axis": "+Z",
+    "up_axis": "+Y",
+    "floor_centre": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "region_bounds": {
+    "min": [
+      -768.0,
+      -80.0,
+      2816.0
+    ],
+    "max": [
+      1024.0,
+      120.0,
+      4608.0
+    ],
+    "horizontal_coverage_m": [
+      1792.0,
+      1792.0
+    ]
+  },
+  "chunk_range": {
+    "x_min": -3,
+    "x_max": 3,
+    "z_min": 11,
+    "z_max": 17,
+    "chunk_count": 49,
+    "centre_chunk_id": "floor_001_chunk_x+00_z+14"
+  },
+  "chunk_size_m": 256.0,
+  "region_centre": [
+    128.0,
+    9.0,
+    3712.0
+  ],
+  "starting_city_gate_position": [
+    0.0,
+    9.0,
+    3835.0
+  ],
+  "player_spawn_marker_id": "spawn_player_city_gate",
+  "checkpoint_marker_id": "floor_001_starting_city_gate",
+  "safe_zone": {
+    "safe_zone_id": "safe_zone_starting_city_gate_plateau",
+    "node_path": "SafeZones/StartingCityGateSafeZone",
+    "shape": "cylinder",
+    "centre": [
+      0.0,
+      9.0,
+      3835.0
+    ],
+    "radius_m": 305.0,
+    "height_m": 120.0,
+    "source_profile_field": "city_gate_plateau.safe_zone_radius_m",
+    "future_behaviour": [
+      "enemy_spawn_suppression",
+      "combat_rule_hooks",
+      "safe_zone_ui_state"
+    ],
+    "gameplay_behaviour_implemented": false,
+    "production_debug_visible_by_default": false
+  },
+  "road_control_point_references": [
+    {
+      "profile_id": "road_gate",
+      "marker_node": "MainRoadStart"
+    },
+    {
+      "profile_id": "road_01",
+      "marker_node": "MainRoadControl01"
+    },
+    {
+      "profile_id": "road_02",
+      "marker_node": "MainRoadControl02"
+    },
+    {
+      "profile_id": "road_03",
+      "marker_node": "MainRoadControl03"
+    },
+    {
+      "profile_id": "road_north_continuation",
+      "marker_node": "MainRoadNorthernExit"
+    }
+  ],
+  "neighboring_future_region_ids": [
+    "region_starting_city",
+    "region_rata_plains",
+    "region_horunka_woodlands",
+    "region_east_lake_district"
+  ],
+  "production_content_containers": {
+    "static": [
+      "StaticContent/CityGateArchitecture",
+      "StaticContent/Roads",
+      "StaticContent/Bridges",
+      "StaticContent/Ruins",
+      "StaticContent/Rocks",
+      "StaticContent/Vegetation"
+    ],
+    "dynamic": [
+      "DynamicContent/NPCs",
+      "DynamicContent/Enemies",
+      "DynamicContent/Interactables",
+      "DynamicContent/Loot",
+      "DynamicContent/RuntimeObjects"
+    ],
+    "systems": [
+      "Navigation",
+      "RegionVolumes",
+      "RegionEnvironment/FutureAudio"
+    ]
+  },
+  "spawn_markers": [
+    {
+      "marker_id": "spawn_player_city_gate",
+      "node_name": "PlayerSpawnCityGate",
+      "node_path": "SpawnMarkers/PlayerSpawnCityGate",
+      "position": [
+        0.0,
+        11.0,
+        3835.0
+      ],
+      "purpose": "preview and future world-entry fallback",
+      "source_reference": "city_gate_plateau.centre"
+    },
+    {
+      "marker_id": "floor_001_starting_city_gate",
+      "node_name": "CheckpointCityGate",
+      "node_path": "SpawnMarkers/CheckpointCityGate",
+      "position": [
+        0.0,
+        9.0,
+        3890.0
+      ],
+      "purpose": "future checkpoint placement hook",
+      "source_reference": "city_gate_plateau.checkpoint_clear_radius_m"
+    }
+  ],
+  "landmark_markers": [
+    {
+      "marker_id": "landmark_city_gate_centre",
+      "node_name": "CityGateCentre",
+      "node_path": "LandmarkMarkers/CityGateCentre",
+      "position": [
+        0.0,
+        9.0,
+        3835.0
+      ],
+      "source_reference": "city_gate_plateau.centre"
+    },
+    {
+      "marker_id": "landmark_city_wall_west_connection",
+      "node_name": "CityWallWestConnection",
+      "node_path": "LandmarkMarkers/CityWallWestConnection",
+      "position": [
+        -210.0,
+        9.0,
+        3835.0
+      ],
+      "source_reference": "city_gate_plateau.inner_radius_m"
+    },
+    {
+      "marker_id": "landmark_city_wall_east_connection",
+      "node_name": "CityWallEastConnection",
+      "node_path": "LandmarkMarkers/CityWallEastConnection",
+      "position": [
+        210.0,
+        9.0,
+        3835.0
+      ],
+      "source_reference": "city_gate_plateau.inner_radius_m"
+    },
+    {
+      "marker_id": "road_gate",
+      "node_name": "MainRoadStart",
+      "node_path": "StreamingMarkers/MainRoadStart",
+      "position": [
+        0.0,
+        9.0,
+        3835.0
+      ],
+      "source_reference": "main_northbound_road_corridor.control_points.road_gate"
+    },
+    {
+      "marker_id": "road_01",
+      "node_name": "MainRoadControl01",
+      "node_path": "StreamingMarkers/MainRoadControl01",
+      "position": [
+        12.0,
+        8.3,
+        3665.0
+      ],
+      "source_reference": "main_northbound_road_corridor.control_points.road_01"
+    },
+    {
+      "marker_id": "road_02",
+      "node_name": "MainRoadControl02",
+      "node_path": "StreamingMarkers/MainRoadControl02",
+      "position": [
+        -28.0,
+        8.8,
+        3480.0
+      ],
+      "source_reference": "main_northbound_road_corridor.control_points.road_02"
+    },
+    {
+      "marker_id": "road_03",
+      "node_name": "MainRoadControl03",
+      "node_path": "StreamingMarkers/MainRoadControl03",
+      "position": [
+        34.0,
+        10.2,
+        3280.0
+      ],
+      "source_reference": "main_northbound_road_corridor.control_points.road_03"
+    },
+    {
+      "marker_id": "road_north_continuation",
+      "node_name": "MainRoadNorthernExit",
+      "node_path": "StreamingMarkers/MainRoadNorthernExit",
+      "position": [
+        20.0,
+        14.0,
+        2816.0
+      ],
+      "source_reference": "main_northbound_road_corridor.control_points.road_north_continuation"
+    },
+    {
+      "marker_id": "marker_beginner_field_west",
+      "node_name": "BeginnerFieldWest",
+      "node_path": "LandmarkMarkers/BeginnerFieldWest",
+      "position": [
+        -250.0,
+        12.0,
+        3480.0
+      ],
+      "source_reference": "western_woodland_transition.mask_start_x_m"
+    },
+    {
+      "marker_id": "marker_beginner_field_centre",
+      "node_name": "BeginnerFieldCentre",
+      "node_path": "LandmarkMarkers/BeginnerFieldCentre",
+      "position": [
+        0.0,
+        10.0,
+        3480.0
+      ],
+      "source_reference": "road_02 corridor neighbourhood"
+    },
+    {
+      "marker_id": "marker_beginner_field_east",
+      "node_name": "BeginnerFieldEast",
+      "node_path": "LandmarkMarkers/BeginnerFieldEast",
+      "position": [
+        260.0,
+        7.0,
+        3480.0
+      ],
+      "source_reference": "eastern_lowland_transition.mask_start_x_m"
+    },
+    {
+      "marker_id": "connection_region_horunka_woodlands",
+      "node_name": "FutureWesternWoodlandEntrance",
+      "node_path": "LandmarkMarkers/FutureWesternWoodlandEntrance",
+      "position": [
+        -650.0,
+        24.0,
+        3330.0
+      ],
+      "source_reference": "height_control_points.west_low_ridge"
+    },
+    {
+      "marker_id": "connection_region_east_lake_district",
+      "node_name": "FutureEasternLowlandEntrance",
+      "node_path": "LandmarkMarkers/FutureEasternLowlandEntrance",
+      "position": [
+        760.0,
+        3.0,
+        3370.0
+      ],
+      "source_reference": "height_control_points.east_lowland"
+    },
+    {
+      "marker_id": "connection_region_rata_plains",
+      "node_name": "FutureNorthernRegionConnection",
+      "node_path": "LandmarkMarkers/FutureNorthernRegionConnection",
+      "position": [
+        20.0,
+        14.0,
+        2816.0
+      ],
+      "source_reference": "road_north_continuation and north dataset edge"
+    }
+  ],
+  "streaming_settings": {
+    "lod0_radius_chunks": 1,
+    "lod1_visual_radius_chunks": 2,
+    "collision_radius_chunks": 1,
+    "unload_radius_chunks": 3,
+    "update_interval_seconds": 0.2,
+    "maximum_new_requests_per_update": 8,
+    "use_sub_threads": true,
+    "retain_loaded_resources_in_memory": false,
+    "default_streaming_anchor_marker_id": "stream_anchor_southern_default"
+  },
+  "reference_confidence": {
+    "classification": "project_reconstruction_guided_by_locked_official_anchors",
+    "official_anchor_confidence": "high",
+    "route_shape_confidence": "medium",
+    "exact_contour_confidence": "low",
+    "production_acceptance": "accepted_as_iterable_world_base",
+    "copyrighted_final_assets_included": false
+  }
+}
