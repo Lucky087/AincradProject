@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="QuestDefinition" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="QuestDefinition" format=3 uid="uid://33b4c55ebo31"]
 
-[ext_resource type="Script" path="res://AincradProject/scripts/quests/quest_definition.gd" id="1_quest_definition"]
+[ext_resource type="Script" uid="uid://dbgwsshjmasvs" path="res://AincradProject/scripts/quests/quest_definition.gd" id="1_quest_definition"]
 
 [resource]
 script = ExtResource("1_quest_definition")

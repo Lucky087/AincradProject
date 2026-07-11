@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
-[ext_resource type="PackedScene" path="res://AincradProject/scenes/world/test_world.tscn" id="1_test_world"]
+[ext_resource type="PackedScene" path="res://AincradProject/world/floors/floor_001/floor_001_outskirts.tscn" id="1_floor_001_outskirts"]
 
 [node name="Main" type="Node3D"]
 
-[node name="TestWorld" parent="." instance=ExtResource("1_test_world")]
+[node name="Floor001Outskirts" parent="." instance=ExtResource("1_floor_001_outskirts")]

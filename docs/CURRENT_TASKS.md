@@ -1,8 +1,8 @@
 # Current Tasks
 
 **Project:** Aincrad-Inspired RPG  
-**Current milestone:** M9 — Gold, Loot Drops, and Shop NPC
-**Current phase:** Gold/loot/shop implementation package created; local Godot verification remains
+**Current milestone:** M11 — Floor 1 Outskirts Greybox
+**Current phase:** Floor 1 outdoor greybox package created; local Godot verification remains
 **Last updated:** 2026-07-11
 
 ---
@@ -21,28 +21,30 @@
 
 ## 2. Current Milestone Goal
 
-Add one reusable player wallet, per-death boar gold and material loot, and one
-primitive weapon shop without replacing inventory, combat, interaction, quest,
-or save ownership boundaries.
+Create the first proper Floor 1 wilderness scene while preserving the reusable
+player, interaction, combat, progression, quest, inventory, economy, save,
+death, and checkpoint systems developed in M1 through M10.
 
 The milestone should prove that:
 
-- `PlayerWallet` owns all player gold and prevents negative balances.
-- A valid wild-boar death grants the killing player 12 gold exactly once.
-- Existing 40 XP and Boar Hunt progress still occur independently.
-- Each boar life performs one configurable 50-percent Boar Tusk drop roll.
-- Temporary world pickups add stable item IDs to `PlayerInventory` automatically.
-- Pickups disappear after loading and are not part of persistent save data.
-- Boar Tusks stack up to 99 through the existing inventory rules.
-- The shopkeeper opens a modal shop through the existing E interaction system.
-- Iron Sword costs 50 gold, cannot duplicate, and deals 45 damage when equipped.
-- Purchases validate ownership, inventory capacity, and gold before spending.
-- Save version 3 stores wallet data while versions 1 and 2 remain loadable.
-- Every M1–M8 feature remains functional.
+- `test_world.tscn` remains available as an unchanged debugging scene.
+- `floor_001_outskirts.tscn` provides an approximately 350-by-350-metre region.
+- The Starting City gate, safe area, road, grasslands, forest, ruins, and sealed
+  labyrinth entrance form a readable exploration route.
+- Existing player and HUD scenes are instantiated exactly once.
+- Existing quest, shop, sign, chest, checkpoint, and boar scenes work without
+  duplicated scripts or alternate systems.
+- Three separated boars provide sensible beginner encounters.
+- Stable spawn markers prepare later procedural spawning and streaming work.
+- Visible cliffs, city walls, water, and the sealed labyrinth stop players from
+  leaving the current prototype route.
+- A fall-safety volume returns the player to a safe transform.
+- Loaded positions outside Floor 1 bounds fall back to `PlayerSpawn`.
+- Invalid saved checkpoint transforms migrate to the city-gate checkpoint.
+- The existing save format remains version 4 because no persistent schema changed.
 
-Selling, armour, crafting, consumable effects, multiple currencies, random shop
-inventories, multiplayer trading, detailed graphics, and external assets remain
-outside this milestone.
+Final terrain, detailed city art, new enemies, bosses, dungeon interiors, world
+streaming, multiplayer, and external assets remain outside this milestone.
 
 ---
 
@@ -723,44 +725,230 @@ M9 is complete after all local checks pass.
 
 ---
 
-## 13. Current Work Limit
+## 13. M10 — Player Death, Respawning, and Checkpoints
 
-Do not add the following during M9:
+### Player death and respawn component
 
-- Selling items or player-to-player trading.
-- Armour, extra equipment slots, or consumable effects.
-- Crafting, item weight, gold sinks, or multiple currencies.
-- Random or rotating shop inventories.
-- Persistent world-drop state or loot containers.
-- Detailed item icons, models, animation, or external assets.
-- Multiplayer authority for gold, loot, or transactions.
-- Additional enemies, shops, or currencies.
+- [x] Create `scripts/components/player_respawn.gd`.
+- [x] Add `PlayerRespawn` as a direct player child.
+- [x] Observe the existing `HealthComponent.died` signal.
+- [x] Preserve the existing player scene instance instead of replacing it.
+- [x] Close inventory and shop if they are open.
+- [x] Disable movement, camera mouse input, attacks, and interactions while dead.
+- [x] Clear player velocity at death and again at respawn.
+- [x] Wait 3 seconds before the black fade.
+- [x] Move the same player to the active checkpoint at full black.
+- [x] Restore health to maximum.
+- [x] Fade back and restore normal controls.
+- [x] Add typed death, respawn, checkpoint, and protection signals.
 
-M9 is only one wallet, boar gold, one material drop, one temporary pickup, one
-shopkeeper, one purchasable sword, HUD updates, and save-version compatibility.
+### Death UI and protection
+
+- [x] Create `scenes/ui/death_ui.tscn` and `scripts/ui/death_ui.gd`.
+- [x] Display `You Died` and the safe-area respawn message.
+- [x] Add a separate full-screen fade overlay.
+- [x] Keep all existing HUD scenes in place beneath the death UI.
+- [x] Add a temporary `Respawn protection` indicator.
+- [x] Use the existing health invulnerability property for 2 seconds.
+- [x] Keep player movement enabled during post-respawn protection.
+
+### Checkpoint system
+
+- [x] Create `scenes/interactions/checkpoint_crystal.tscn`.
+- [x] Create `scripts/interactions/checkpoint_crystal.gd`.
+- [x] Reuse the existing `Interactable` base and E interaction path.
+- [x] Use stable ID `test_world_safe_zone`.
+- [x] Use a child `RespawnPoint` marker instead of the collision-body origin.
+- [x] Fully heal the player on first activation.
+- [x] Change the primitive visual from inactive blue to active green.
+- [x] Prevent repeated activation effects on the already-active checkpoint.
+- [x] Support multiple future checkpoint scenes through the `checkpoints` group.
+- [x] Preserve the original player spawn as fallback.
+- [x] Add the checkpoint near the starting NPC area in `test_world.tscn`.
+
+### Boar integration
+
+- [x] Preserve all existing boar AI, combat, rewards, loot, quest, and respawn code.
+- [x] Resolve the player's direct `PlayerRespawn` component safely.
+- [x] Cancel an active boar attack immediately on `player_died`.
+- [x] Stop treating dead, respawning, and protected players as valid targets.
+- [x] Return the boar toward its original spawn after player death.
+- [x] Allow normal detection again only after protection ends and range rules pass.
+
+### Save compatibility
+
+- [x] Increase the save writer to version 4.
+- [x] Save active checkpoint ID, position, and rotation.
+- [x] Restore checkpoint data through `PlayerRespawn.load_save_data()`.
+- [x] Continue accepting versions 1, 2, and 3.
+- [x] Use original-spawn fallback when older saves have no checkpoint section.
+- [x] Keep player, health, progression, quest, inventory, equipment, and wallet data unchanged.
+- [x] Exclude temporary death, fade, immunity, and enemy state from save data.
+- [x] Reject saving during the death/black-screen respawn sequence.
+
+### File safety and documentation
+
+- [x] Preserve every existing file and folder path.
+- [x] Create new files only inside existing approved folders.
+- [x] Do not manually create, edit, or delete `.uid` files.
+- [x] Add `docs/MILESTONE_10_SETUP.md`.
+- [x] Update `docs/CURRENT_TASKS.md` and `docs/DECISION_LOG.md`.
+
+### Local verification still required
+
+- [~] Open the project in Godot 4.7 and allow new script UIDs to be generated.
+- [ ] Activate the checkpoint and confirm full healing plus active visual.
+- [ ] Confirm repeated interaction cannot repeat activation effects.
+- [ ] Let the boar kill the player and confirm all gameplay inputs stop.
+- [ ] Confirm open inventory and shop close immediately.
+- [ ] Confirm the death message, 3-second delay, fade, teleport, and fade-back order.
+- [ ] Confirm the player respawns at the active checkpoint with maximum health.
+- [ ] Confirm velocity is cleared and normal controls return.
+- [ ] Confirm 2 seconds of visible damage immunity while movement remains enabled.
+- [ ] Confirm the boar cancels attacks and returns to spawn during death/protection.
+- [ ] Confirm XP, gold, items, equipment, quest progress, and levels do not change.
+- [ ] Save an active checkpoint, restart, load, and confirm later death uses it.
+- [ ] Load versions 1–3 and confirm original-spawn fallback without crashing.
+- [ ] Confirm every M1–M9 system still works.
+- [ ] Confirm no critical debugger errors appear.
+
+M10 is complete after all local checks pass.
 
 ---
 
-## 14. Next Milestone Preview
+## 14. M11 — Floor 1 Outskirts Greybox
 
-## M10 — Floor 1 Vertical Slice
+### New Floor 1 scene
+
+- [x] Create `world/floors/floor_001/floor_001_outskirts.tscn`.
+- [x] Keep `scenes/world/test_world.tscn` unchanged and manually openable.
+- [x] Use one Godot unit as one metre.
+- [x] Build an approximately 350-by-350-metre playable ground area.
+- [x] Use only primitive meshes, simple materials, and existing scenes.
+- [x] Organize content beneath clear zone and system parents.
+
+### Region layout
+
+- [x] Add the closed Starting City wall, gate, towers, safe plaza, and outgoing road.
+- [x] Add open beginner grasslands with rocks and broad primitive hill caps.
+- [x] Add one main road with readable forest and ruins branches.
+- [x] Add a grouped primitive-tree forest with a clear path.
+- [x] Add ancient ruins with broken walls, columns, and a raised platform.
+- [x] Reserve the ruins platform for a future miniboss without creating one.
+- [x] Add a large sealed labyrinth entrance visible from the southern road.
+- [x] Add an unavailable-prototype sign at the labyrinth route.
+- [x] Add visible cliff, wall, water, and sealed-door boundaries.
+
+### Existing systems and placements
+
+- [x] Instance the existing player scene once near the city gate.
+- [x] Reuse every existing player-owned HUD and gameplay component through that scene.
+- [x] Place the existing checkpoint with ID `floor_001_starting_city_gate`.
+- [x] Place the existing Road Warden and Shopkeeper in the safe area.
+- [x] Place existing sign and chest scenes without replacing their behavior.
+- [x] Place three existing boars in separated grassland encounter locations.
+- [x] Give each boar its own deterministic loot seed and scene-captured spawn transform.
+- [x] Keep the training dummy only in the test world.
+
+### Stable markers and future preparation
+
+- [x] Add `PlayerSpawn`.
+- [x] Add `CityGateCheckpoint`.
+- [x] Add `GrasslandsEnemySpawn01` through `GrasslandsEnemySpawn03`.
+- [x] Add `FutureForestEnemySpawn`.
+- [x] Add `FutureRuinsMinibossSpawn`.
+- [x] Add `FutureLabyrinthEntrance`.
+- [x] Keep the current floor as one scene while preserving zone parent boundaries.
+
+### Environment and performance
+
+- [x] Add a procedural daytime sky and brighter directional lighting.
+- [x] Add light distance fog that keeps the route readable.
+- [x] Reuse materials and primitive mesh resources across repeated objects.
+- [x] Keep decorative rocks and trees free of unnecessary collision.
+- [x] Use simplified collision only on terrain, boundaries, large rocks, and structures.
+- [x] Add no processing scripts for decoration.
+
+### Startup, fall safety, and save compatibility
+
+- [x] Create `scripts/world/floor_001_outskirts.gd`.
+- [x] Add a below-map `Area3D` fall-safety volume.
+- [x] Return a fallen player to an active valid checkpoint or `PlayerSpawn`.
+- [x] Validate loaded player positions against Floor 1 bounds after a successful load.
+- [x] Use `PlayerSpawn` when a loaded position is outside the region or below terrain.
+- [x] Validate saved checkpoint transforms and migrate invalid ones to the gate checkpoint.
+- [x] Preserve all version-1-through-version-4 save compatibility.
+- [x] Keep SaveManager and its version-4 schema unchanged.
+- [x] Point `scenes/main.tscn` at the new Floor 1 scene.
+- [x] Make `scenes/main.tscn` the project startup scene.
+
+### File safety and documentation
+
+- [x] Preserve every existing path and file.
+- [x] Do not modify `scenes/world/test_world.tscn`.
+- [x] Create new files only inside the approved floor, script, and docs folders.
+- [x] Do not manually create, edit, or delete `.uid` files.
+- [x] Create `docs/MILESTONE_11_SETUP.md`.
+- [x] Update `docs/CURRENT_TASKS.md` and `docs/DECISION_LOG.md`.
+
+### Local verification still required
+
+- [~] Open the project in Godot 4.7 and let new script UIDs generate normally.
+- [ ] Confirm the project starts through `scenes/main.tscn` in Floor 1 outskirts.
+- [ ] Confirm the player appears near the Starting City gate with every HUD visible.
+- [ ] Activate the gate checkpoint and confirm healing, active visual, death respawn, and saving.
+- [ ] Confirm Road Warden quest acceptance, progress, turn-in, and one-time reward.
+- [ ] Confirm Shopkeeper purchase behavior and inventory/equipment integration.
+- [ ] Confirm the chest, signs, inventory, save/load, and modal input gates still work.
+- [ ] Confirm all three boars are separated and do not aggro together from the road.
+- [ ] Confirm each boar still grants XP, gold, loot, and active quest progress once per life.
+- [ ] Confirm the road, forest branch, ruins branch, and labyrinth route are readable.
+- [ ] Confirm the labyrinth doorway remains sealed and its sign is readable.
+- [ ] Confirm cliffs and walls stop ordinary boundary escape.
+- [ ] Fall below the map and confirm safe recovery.
+- [ ] Load an out-of-bounds position and confirm `PlayerSpawn` fallback.
+- [ ] Load versions 1 through 4 and confirm no persistent data is lost.
+- [ ] Open `scenes/world/test_world.tscn` manually and complete its regression checks.
+- [ ] Confirm no critical debugger or missing-resource errors appear.
+
+M11 is complete after all local checks pass.
+
+---
+
+## 15. Current Work Limit
+
+Do not add the following during M11:
+
+- Final Starting City buildings or detailed architecture.
+- Terrain plugins, imported heightmaps, Blender models, or external assets.
+- New enemies, minibosses, bosses, or labyrinth interiors.
+- World streaming, chunk loading, procedural spawning, or multiplayer.
+- Crafting, skills, armour, additional currencies, or unrelated systems.
+- Detailed vegetation collision, high-density props, or final textures.
+
+M11 is one readable, complete outdoor greybox that reuses the existing vertical
+slice systems and prepares stable markers and zone boundaries for later work.
+
+---
+
+## 16. Next Milestone Preview
+
+## M12 — Prototype Polish
 
 Planned tasks:
 
-- [ ] Replace the single test-space layout with a small Starting City section,
-  road, and field while preserving reusable systems.
-- [ ] Place the Road Warden, shopkeeper, chest, sign, test NPC, training target,
-  and boar encounters into a readable route.
-- [ ] Add landmarks and blocked future paths using primitive greybox geometry.
-- [ ] Preserve the complete combat, progression, quest, inventory, economy, and save loop.
-- [ ] Keep future floor zones and streaming boundaries in mind without building
-  all 100 floors.
+- [ ] Complete a full start-to-finish Floor 1 playthrough and regression pass.
+- [ ] Improve combat, hit, quest, purchase, checkpoint, and loot feedback.
+- [ ] Add placeholder audio using only properly licensed or original sources.
+- [ ] Profile the outdoor scene and reduce any unnecessary greybox cost.
+- [ ] Fix navigation, collision, UI overlap, and readability issues found locally.
+- [ ] Review which greybox zones should become future streamable chunks.
 
-Begin M10 only after M9 passes local testing.
+Begin M12 only after M11 passes local testing.
 
 ---
 
-## 15. Updated Milestone Order
+## 17. Updated Milestone Order
 
 ### M0 — Project Foundation
 
@@ -803,21 +991,27 @@ chest reward, combat integration, and save version 2.
 
 Player wallet, boar gold, Boar Tusk pickup, weapon shop, Iron Sword, and save version 3.
 
-### M10 — Floor 1 Vertical Slice
+### M10 — Player Death, Respawning, and Checkpoints
 
-Starting City section, road, field, landmarks, economy placement, and complete route.
+Death state, fade UI, stable safe checkpoint, boar disengagement, respawn
+protection, and save version 4.
 
-### M11 — Prototype Polish
+### M11 — Floor 1 Outskirts Greybox
+
+Starting City gate, road, grasslands, forest, ruins, sealed labyrinth landmark,
+stable markers, boundary recovery, and the complete reusable gameplay loop.
+
+### M12 — Prototype Polish
 
 Feedback, audio, bug fixing, performance review, and full playthrough testing.
 
-### M12 — Multiplayer Technical Test
+### M13 — Multiplayer Technical Test
 
 Only after the complete local prototype works.
 
 ---
 
-## 16. Definition of Done for Any Task
+## 18. Definition of Done for Any Task
 
 A task is done when:
 
@@ -833,22 +1027,22 @@ A task is done when:
 
 ---
 
-## 17. Next Action
+## 19. Next Action
 
-Open the project in Godot 4.7 and complete the M9 test sequence in
-`docs/MILESTONE_9_SETUP.md`.
+Open the project in Godot 4.7 and complete the M11 test sequence in
+`docs/MILESTONE_11_SETUP.md`.
 
 Prioritize these exact checks:
 
 ```text
-One boar death:        +40 XP, +12 gold, active quest +1
-Loot sequence:         both tusk drops and non-drops occur
-Pickup:                automatic collection and correct stacking
-Shop below 50 gold:    purchase fails with no gold removed
-Shop at 50+ gold:      exactly 50 removed and one Iron Sword added
-Iron Sword equipped:   attacks deal 45 damage
-Version 3 save:        gold, tusks, sword, and equipment survive restart/load
-Versions 1 and 2:      load without crashing and use zero gold
+Startup:                      Main wrapper loads Floor 1 outskirts
+Safe area:                    Player, HUD, checkpoint, quest NPC, shop, chest
+Route:                        Gate → road → grasslands → forest/ruins → labyrinth
+Encounters:                   Three separated boars retain every reward system
+Death and checkpoint:         Respawn at floor_001_starting_city_gate
+Save/load:                    Valid position restore plus out-of-bounds fallback
+Fall recovery:                Below-map volume returns player safely
+Debug scene:                  test_world.tscn remains manually playable
 ```
 
-Run the complete M1–M8 regression checklist before considering M9 complete.
+Run the complete M1–M10 regression checklist before considering M11 complete.

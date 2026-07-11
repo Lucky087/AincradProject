@@ -37,6 +37,7 @@ var _setup_is_valid: bool = false
 var _is_open: bool = false
 var _purchase_in_progress: bool = false
 var _previous_mouse_mode: Input.MouseMode = Input.MOUSE_MODE_CAPTURED
+var _external_open_blocked: bool = false
 
 
 func _ready() -> void:
@@ -79,7 +80,7 @@ func _input(event: InputEvent) -> void:
 
 ## Opens the shop, releases the mouse, and disables gameplay input.
 func open_shop() -> void:
-	if not _setup_is_valid or _is_open:
+	if not _setup_is_valid or _is_open or _external_open_blocked:
 		return
 
 	_is_open = true
@@ -107,6 +108,13 @@ func close_shop() -> void:
 
 func is_shop_open() -> bool:
 	return _is_open
+
+
+## Blocks opening while another system, such as death/respawn, owns input.
+func set_external_open_blocked(is_blocked: bool) -> void:
+	_external_open_blocked = is_blocked
+	if is_blocked and _is_open:
+		close_shop()
 
 
 func _try_purchase_selected_item() -> void:

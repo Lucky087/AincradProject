@@ -2241,3 +2241,373 @@ stable item IDs.
 
 Before version 4, add explicit migration helpers if any existing field changes
 meaning rather than only adding an optional component section.
+
+## D-052 — Let PlayerRespawn Coordinate Death Without Replacing the Player
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Player death must stop every gameplay input mode, preserve all persistent
+components, and return the same player instance to a safe location. Replacing
+or re-instantiating the player would risk losing inventory, quest, wallet, UI,
+and signal connections.
+
+### Decision
+
+Add one direct-child `PlayerRespawn` component. It observes the existing
+`HealthComponent.died` signal and coordinates existing public input gates,
+modal UI close methods, two Timer children, and the separate `DeathUI`.
+
+The existing `CharacterBody3D` is never deleted. At full black it is moved to
+the active respawn transform, velocity is cleared, and existing health is reset.
+The component emits typed death, respawn, checkpoint, and invulnerability
+signals for enemies and future systems.
+
+### Consequences
+
+- Progression, quests, inventory, equipment, and wallet state remain in place.
+- Death behavior has one owner instead of being duplicated in controller,
+  combat, enemy, or UI scripts.
+- Inventory and shop close before controls are disabled.
+- Saving temporary death or respawn state is deliberately rejected.
+
+### Alternatives considered
+
+- Delete and instantiate a new player scene.
+- Put death sequencing in `PlayerController`.
+- Pause the complete scene tree.
+- Let `DeathUI` own gameplay state.
+
+### Follow-up
+
+Future floor transitions should reuse the respawn transform interface instead
+of adding another player replacement path.
+
+---
+
+## D-053 — Store Stable Checkpoint IDs and Marker Transforms
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Checkpoints must support multiple future safe areas and remain reliable if
+visible names, scene placement structure, or localized text changes.
+
+### Decision
+
+Each `CheckpointCrystal` uses a stable `StringName` ID and a child
+`RespawnPoint` marker. `PlayerRespawn` owns the active ID and full global marker
+transform. The original player transform captured at startup remains the
+fallback when no checkpoint is active.
+
+Checkpoint scenes join the `checkpoints` group. Activating or loading a
+checkpoint refreshes every loaded checkpoint visual so only the matching stable
+ID appears active.
+
+### Consequences
+
+- Player spawn position is separate from the crystal's collision body.
+- More checkpoint scenes can be added without changing player code.
+- Repeated interaction with the active checkpoint cannot repeatedly heal or
+  replay activation effects.
+- Unloaded future checkpoints can still be represented by saved ID and transform.
+
+### Alternatives considered
+
+- Save a fragile NodePath to the checkpoint.
+- Use the checkpoint display name as identity.
+- Always respawn at the player's current saved position.
+- Put checkpoint state on each world scene instead of the player component.
+
+### Follow-up
+
+A future world/floor transition system may validate checkpoint IDs against
+floor definitions before accepting remote or migrated saves.
+
+---
+
+## D-054 — Treat Death and Respawn Protection as Untargetable Enemy States
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The boar already checks living health, but health is restored before the fade
+finishes. Without a separate targeting rule it could reacquire or damage the
+player during the protected return to play.
+
+### Decision
+
+Let the boar resolve the player's `PlayerRespawn` component in addition to
+`HealthComponent`. The boar immediately cancels its active attack on
+`player_died` and returns toward spawn. Its existing living-target check also
+rejects dead, respawning, and respawn-invulnerable players.
+
+Damage immunity uses the existing `HealthComponent.is_invulnerable` property
+for 2 seconds after the fade returns. Movement remains enabled during this
+protection window.
+
+### Consequences
+
+- No separate enemy target manager is required for the current prototype.
+- An attack tween cannot land after the player's death.
+- The boar returns home during the death screen and may detect again only after
+  protection ends and normal range rules pass.
+- Existing boar rewards and lifecycle behavior remain independent.
+
+### Alternatives considered
+
+- Temporarily change player collision layers.
+- Delete or disable all enemies during death.
+- Keep the player at zero health until the protection timer ends.
+- Let every enemy maintain unrelated death checks.
+
+### Follow-up
+
+A future reusable enemy base or threat system should consume the same
+`can_be_targeted_by_enemies()` contract.
+
+---
+
+## D-055 — Advance Save Format to Version 4 for Checkpoint Data
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The active checkpoint must survive restarts, while versions 1 through 3 contain
+no checkpoint section and must remain safe to load.
+
+### Decision
+
+Write save version 4 and add:
+
+```text
+respawn.active_checkpoint_id
+respawn.checkpoint_position.{x,y,z}
+respawn.checkpoint_rotation.{x,y,z}
+```
+
+Continue accepting versions 1, 2, 3, and 4. Missing checkpoint data is passed as
+an empty Dictionary to `PlayerRespawn`, which restores the original scene spawn
+fallback. Temporary death, fade, immunity, and enemy state are never saved.
+
+### Consequences
+
+- Activated checkpoints persist with all existing saved systems.
+- Older saves remain loadable without migration files.
+- SaveManager still coordinates component-owned data instead of becoming the
+  runtime owner of checkpoint state.
+- A zero-health or hand-edited save recovers at the safe respawn transform.
+
+### Alternatives considered
+
+- Add checkpoint fields without changing the declared version.
+- Reject versions 1 through 3.
+- Save the checkpoint scene path or NodePath.
+- Serialize Timer and fade state.
+
+### Follow-up
+
+Before version 5, add explicit migration helpers if existing fields change
+meaning rather than only adding another optional component section.
+
+---
+
+## D-056 — Keep the Test World and Add Floor 1 as Separate Content
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The project needs its first proper outdoor region, but the compact test world is
+still valuable for fast movement, combat, interaction, shop, quest, save, and
+respawn debugging. Replacing that scene would remove a useful regression space.
+
+### Decision
+
+Keep `scenes/world/test_world.tscn` unchanged and create the new region at:
+
+```text
+world/floors/floor_001/floor_001_outskirts.tscn
+```
+
+The Floor 1 scene instances the same player, checkpoint, NPC, chest, sign, and
+boar scenes instead of copying their scripts or rebuilding their systems.
+
+### Consequences
+
+- Developers retain a small debugging scene and a larger integration scene.
+- Floor-specific content begins living in the established `floor_001` folder.
+- Reusable systems remain outside the floor folder.
+- Regression testing must cover both scenes.
+
+### Alternatives considered
+
+- Expand the test world into Floor 1.
+- Delete the test world after moving its content.
+- Duplicate all test systems inside new floor-specific scenes.
+
+### Follow-up
+
+Future floors must continue instancing reusable actors and systems rather than
+copying their scripts into floor folders.
+
+---
+
+## D-057 — Build M11 as One Organized Greybox Scene Without Streaming
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The architecture anticipates zones and chunks, but M11 must first prove a
+readable 350-by-350-metre route. Adding streaming before the actual layout is
+locally tested would increase complexity without solving a current problem.
+
+### Decision
+
+Build the outskirts as one scene with strong hierarchy boundaries:
+
+```text
+Environment
+Terrain
+CityGateArea
+MainRoad
+Grasslands
+Forest
+Ruins
+LabyrinthEntrance
+WorldBoundaries
+SafeZone
+NPCs
+Enemies
+Interactables
+SpawnMarkers
+DebugLabels
+```
+
+Use shared primitive mesh and material subresources. Decorative trees and small
+rocks receive no collision, while terrain, structures, major rocks, and visible
+boundaries use simplified collision.
+
+### Consequences
+
+- The complete route can be tested immediately.
+- Parent nodes provide future extraction boundaries for chunks or zones.
+- The scene remains larger than the test world but avoids thousands of nodes.
+- Streaming and procedural spawning remain deferred until real profiling exists.
+
+### Alternatives considered
+
+- Add chunk streaming during the same milestone.
+- Generate the full map procedurally at runtime.
+- Use imported terrain, Blender models, or external asset packs.
+
+### Follow-up
+
+During M12, profile the scene and identify which hierarchy parents should become
+future loadable chunks.
+
+---
+
+## D-058 — Route Startup Through Main and Preserve Manual Debug Access
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+`scenes/main.tscn` already exists as a lightweight wrapper, but `project.godot`
+currently bypasses it and launches the test world directly. Floor 1 should
+become the normal play route without removing the debug scene.
+
+### Decision
+
+Update `scenes/main.tscn` to instance `floor_001_outskirts.tscn`, and set:
+
+```text
+run/main_scene = res://AincradProject/scenes/main.tscn
+```
+
+Keep `test_world.tscn` at its existing path for manual F6 testing.
+
+### Consequences
+
+- F5 starts the proper Floor 1 region.
+- The application has one stable wrapper for later menus or floor routing.
+- The player and its UI are instantiated only by the active world scene.
+- The test world remains one manual scene open away.
+
+### Alternatives considered
+
+- Point `project.godot` directly at the new floor scene.
+- Leave the test world as the startup scene.
+- Put a second player or HUD in `main.tscn`.
+
+### Follow-up
+
+Future startup menus or scene routers should replace the wrapper's content flow
+without moving the existing floor scene.
+
+---
+
+## D-059 — Validate Floor Positions Without Changing Save Version 4
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Older saves contain valid player and checkpoint transforms from the compact test
+world. Some hand-edited or future migrated positions may also be outside the new
+Floor 1 boundaries or below its terrain. No persistent field meaning changes in
+M11, so increasing the save version would be unnecessary.
+
+### Decision
+
+Add `scripts/world/floor_001_outskirts.gd` as a floor-level safety coordinator.
+It listens for `SaveManager.load_completed`, validates the loaded player and
+checkpoint transforms against stable Floor 1 bounds, and uses:
+
+- `PlayerSpawn` for an invalid loaded player position.
+- `floor_001_starting_city_gate` for an invalid saved checkpoint transform.
+- The active valid checkpoint, otherwise `PlayerSpawn`, for below-map recovery.
+
+Keep `SaveManager` and save version 4 unchanged.
+
+### Consequences
+
+- Versions 1 through 4 remain loadable.
+- Player, health, progression, quest, inventory, equipment, gold, and checkpoint
+  data keep their existing ownership and schema.
+- The floor owns geographic validation without duplicating persistent data.
+- Test-world positions that are still inside Floor 1 bounds remain valid.
+
+### Alternatives considered
+
+- Reject all older saves.
+- Add a floor ID and increase the save version during M11.
+- Put Floor 1 coordinate rules directly inside SaveManager.
+- Automatically erase every old checkpoint.
+
+### Follow-up
+
+A later floor-transition milestone should add stable floor and zone IDs to the
+save schema and perform explicit cross-floor migrations.

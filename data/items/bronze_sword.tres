@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="ItemDefinition" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="ItemDefinition" format=3 uid="uid://d2bb5w3unxxo"]
 
-[ext_resource type="Script" path="res://AincradProject/scripts/items/item_definition.gd" id="1_item_definition"]
+[ext_resource type="Script" uid="uid://bwoypy3gddni7" path="res://AincradProject/scripts/items/item_definition.gd" id="1_item_definition"]
 
 [resource]
 script = ExtResource("1_item_definition")
@@ -8,7 +8,6 @@ item_id = &"bronze_sword"
 display_name = "Bronze Sword"
 description = "A stronger bronze sword made for beginner adventurers."
 item_category = 0
-maximum_stack_size = 1
 can_be_equipped = true
 equipment_slot = 1
 weapon_damage = 35.0

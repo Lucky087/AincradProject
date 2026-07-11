@@ -1,0 +1,94 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://AincradProject/scripts/interactions/checkpoint_crystal.gd" id="1_checkpoint"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_base"]
+albedo_color = Color(0.16, 0.18, 0.23, 1)
+metallic = 0.35
+roughness = 0.58
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_inactive"]
+albedo_color = Color(0.16, 0.48, 0.9, 1)
+emission_enabled = true
+emission = Color(0.05, 0.22, 0.75, 1)
+emission_energy_multiplier = 1.4
+roughness = 0.28
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_active"]
+albedo_color = Color(0.3, 0.95, 0.72, 1)
+emission_enabled = true
+emission = Color(0.08, 0.95, 0.55, 1)
+emission_energy_multiplier = 2.4
+roughness = 0.2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_base"]
+material = SubResource("StandardMaterial3D_base")
+top_radius = 0.58
+bottom_radius = 0.72
+height = 0.36
+radial_segments = 20
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_inactive"]
+material = SubResource("StandardMaterial3D_inactive")
+top_radius = 0.12
+bottom_radius = 0.5
+height = 1.55
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_active"]
+material = SubResource("StandardMaterial3D_active")
+top_radius = 0.12
+bottom_radius = 0.5
+height = 1.55
+radial_segments = 8
+
+[sub_resource type="SphereMesh" id="SphereMesh_glow"]
+material = SubResource("StandardMaterial3D_active")
+radius = 0.18
+height = 0.36
+radial_segments = 16
+rings = 8
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_checkpoint"]
+radius = 0.62
+height = 1.9
+
+[node name="CheckpointCrystal" type="StaticBody3D" groups=["checkpoints"]]
+collision_layer = 3
+collision_mask = 1
+script = ExtResource("1_checkpoint")
+interaction_prompt = "Press E to activate checkpoint"
+checkpoint_id = &"test_world_safe_zone"
+
+[node name="Base" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.18, 0)
+mesh = SubResource("CylinderMesh_base")
+
+[node name="CrystalVisual" type="Node3D" parent="."]
+position = Vector3(0, 1.04, 0)
+rotation = Vector3(0, 0.392699, 0)
+
+[node name="InactiveCrystal" type="MeshInstance3D" parent="CrystalVisual"]
+mesh = SubResource("CylinderMesh_inactive")
+
+[node name="ActiveCrystal" type="MeshInstance3D" parent="CrystalVisual"]
+visible = false
+mesh = SubResource("CylinderMesh_active")
+
+[node name="ActiveGlow" type="MeshInstance3D" parent="CrystalVisual/ActiveCrystal"]
+position = Vector3(0, 0.9, 0)
+mesh = SubResource("SphereMesh_glow")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.95, 0)
+shape = SubResource("CylinderShape3D_checkpoint")
+
+[node name="RespawnPoint" type="Marker3D" parent="."]
+position = Vector3(0, 0.05, -2)
+
+[node name="StatusLabel" type="Label3D" parent="."]
+position = Vector3(0, 2.25, 0)
+text = "Checkpoint"
+font_size = 28
+outline_size = 7
+billboard = 1
