@@ -2991,3 +2991,4 @@ Collision: 17 × 17 vertices
 ### Follow-up
 
 After local Blender generation, verify GLB import orientation, scale, normals, and edge continuity in Godot before implementing streaming.
+
