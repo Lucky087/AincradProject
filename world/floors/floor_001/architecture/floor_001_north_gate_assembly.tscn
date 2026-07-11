@@ -1,0 +1,82 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://AincradProject/scripts/world/floor_001_north_gate_assembly.gd" id="1_assembly"]
+
+[node name="Floor001NorthGateAssembly" type="Node3D"]
+script = ExtResource("1_assembly")
+flat_road_collision_enabled = false
+road_edging_collision_enabled = false
+metadata/asset_set_id = &"floor_001_starting_city_north_gate_architecture_v1"
+metadata/assembly_status = &"reusable_preview_validated_only"
+metadata/contains_player = false
+metadata/contains_terrain = false
+metadata/road_collision_policy = &"terrain_authoritative_visual_only"
+metadata/road_collision_bugfix = &"15B.1"
+
+[node name="Render" type="Node3D" parent="."]
+
+[node name="Gate" type="Node3D" parent="Render"]
+
+[node name="Towers" type="Node3D" parent="Render"]
+
+[node name="Connectors" type="Node3D" parent="Render"]
+
+[node name="Walls" type="Node3D" parent="Render"]
+
+[node name="Battlements" type="Node3D" parent="Render"]
+
+[node name="Stairs" type="Node3D" parent="Render"]
+
+[node name="Platforms" type="Node3D" parent="Render"]
+
+[node name="Roads" type="Node3D" parent="Render"]
+
+[node name="Collision" type="Node3D" parent="."]
+
+[node name="Gate" type="Node3D" parent="Collision"]
+
+[node name="Towers" type="Node3D" parent="Collision"]
+
+[node name="Connectors" type="Node3D" parent="Collision"]
+
+[node name="Walls" type="Node3D" parent="Collision"]
+
+[node name="Battlements" type="Node3D" parent="Collision"]
+
+[node name="Stairs" type="Node3D" parent="Collision"]
+
+[node name="Platforms" type="Node3D" parent="Collision"]
+
+[node name="Roads" type="Node3D" parent="Collision"]
+
+[node name="PlacementMarkers" type="Node3D" parent="."]
+
+[node name="GateCentre" type="Marker3D" parent="PlacementMarkers"]
+metadata/stable_id = &"landmark_city_gate_centre"
+
+[node name="WestWallEndpoint" type="Marker3D" parent="PlacementMarkers"]
+position = Vector3(-210, 0, 0)
+metadata/stable_id = &"landmark_city_wall_west_connection"
+
+[node name="EastWallEndpoint" type="Marker3D" parent="PlacementMarkers"]
+position = Vector3(210, 0, 0)
+metadata/stable_id = &"landmark_city_wall_east_connection"
+
+[node name="MainRoadStart" type="Marker3D" parent="PlacementMarkers"]
+metadata/stable_id = &"road_gate"
+
+[node name="GateForward" type="Marker3D" parent="PlacementMarkers"]
+position = Vector3(0, 0, -20)
+metadata/stable_id = &"north_gate_forward_negative_z"
+
+[node name="Debug" type="Node3D" parent="."]
+metadata/preview_only = true
+
+[node name="CollisionVisuals" type="Node3D" parent="Debug"]
+visible = false
+metadata/uses_collision_glbs_only = true
+metadata/physics_source = false
+
+[node name="PlacementMarkerVisualization" type="MeshInstance3D" parent="Debug"]
+visible = false
+cast_shadow = 0

@@ -3954,3 +3954,191 @@ When Blender is unavailable, write a manifest with status
 During Milestone 15B, build StaticBody3D physics only from the dedicated
 collision exports and verify that the player can walk through the open passage,
 use the road, and traverse basic access geometry without collision gaps.
+
+---
+
+## D-087 — Reproduce the Blender Reference Assembly from the Architecture Manifest at Runtime
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Milestone 15A exported reusable local-origin modules and stored the exact tested
+reference placement in the architecture manifest. Copying transforms into a
+second hand-authored data file or directly placing individual GLBs in a preview
+would create drift and weaken stable asset IDs.
+
+### Decision
+
+Create one reusable architecture-only Godot assembly that reads the completed
+15A manifest, loads all 16 stable render and collision resources, and reproduces
+the manifest `reference_assembly.placements` records.
+
+The assembly root is positioned at `CityGateCentre`. Every child placement keeps
+its manifest `placement_id`, `piece_id`, local position, Y rotation, and scale.
+The assembly validates its gate centre, west endpoint, east endpoint, road
+centreline, and negative-Z forward direction with a 0.05-metre target tolerance.
+
+Do not create `floor_001_north_gate_placement.json` because the manifest already
+contains complete placement records.
+
+### Consequences
+
+- Blender and Godot share one placement authority.
+- Stable module IDs remain reusable.
+- Regeneration does not require manually editing a Godot scene full of GLB
+  instances.
+- The runtime assembly can later be instanced as one unit beneath the permanent
+  region's city-gate container.
+- Curved roads, intersection, inner wall, neutral wall, and standalone
+  battlement can be loaded and validated without being forced into the current
+  gate layout.
+
+### Follow-up
+
+After local acceptance, production integration must instance only the reusable
+assembly, never copy its generated child placements into the production region.
+
+---
+
+## D-088 — Convert Dedicated Collision GLBs into Placement-Local Static Bodies
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Godot imports the simplified collision GLBs as ordinary scene meshes. The
+project needs runtime physics from those meshes while preserving the open gate
+passage and avoiding use of detailed render geometry as collision.
+
+### Decision
+
+For each manifest placement:
+
+1. Load the matching dedicated collision `PackedScene`.
+2. Recursively find its `MeshInstance3D` nodes.
+3. Preserve each mesh transform relative to the imported root.
+4. Create a trimesh `Shape3D` from the dedicated collision mesh.
+5. Add the shape below one placement-local `StaticBody3D`.
+6. Apply the exact same manifest transform used by the matching render root.
+7. Free the temporary collision source instance.
+
+A hidden transparent-red debug copy may remain under the assembly's Debug
+container for C-key inspection, but it is not the physics source.
+
+### Consequences
+
+- Render GLBs are never silent collision substitutes.
+- The three-part gate collision preserves the 14-by-12-metre passage.
+- Stair physics uses the generated ramp rather than individual visible steps.
+- Collision can be inspected independently from materials and visible meshes.
+- Runtime profiling is still required before this strategy is treated as final
+  production collision for a complete city.
+
+### Follow-up
+
+Verify the two non-uniformly scaled wall end trims locally in Godot physics. A
+future optimized collision pipeline may bake final static compounds after the
+layout is accepted.
+
+---
+
+## D-089 — Keep North-Gate Placement Preview-Only Until Local Acceptance
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The permanent southern region has an empty stable
+`StaticContent/CityGateArchitecture` container, but the imported gate has not yet
+been traversed or terrain-contact checked in Godot 4.7.
+
+### Decision
+
+Create a separate F6 preview that instances:
+
+- The unchanged permanent southern region.
+- The reusable north-gate assembly.
+- The existing player scene.
+
+Do not edit `floor_001_southern_region.tscn` during Milestone 15B. The preview
+owns safe teleports, debug UI, collision visualization, terrain chunk
+boundaries, and fall recovery. All controls are handled locally without Input
+Map changes.
+
+### Consequences
+
+- Normal F5 gameplay remains unchanged.
+- Existing terrain and production previews remain regression tools.
+- Architecture can be rejected or regenerated without production-scene cleanup.
+- Runtime acceptance must explicitly cover passage traversal, collision,
+  endpoints, terrain contact, scale, and orientation.
+
+### Follow-up
+
+Milestone 15C may instance the reusable assembly beneath
+`StaticContent/CityGateArchitecture` only after local 15B acceptance is recorded.
+
+---
+
+## D-090 — Use Terrain Collision as the Authoritative Surface Beneath Flat North-Gate Roads
+
+**Date:** 2026-07-11  
+**Status:** Accepted for Milestone 15B.1; local runtime retest required
+
+### Context
+
+Local Godot testing of the Milestone 15B north-gate preview found that the
+existing player moved normally on terrain but became unable to move after
+standing or landing on the stone road. Teleporting away immediately restored
+movement.
+
+Static inspection confirmed that the original assembly created concave trimesh
+physics for three straight road slabs and six road-edging boxes. The straight
+road slab's top triangles are wound downward, its bottom triangles are wound
+upward, and its lower surface is placed at world Y 9.02 where the graded terrain
+intersects or closely approaches it. Adjacent modules also meet with coincident
+vertical end faces. The road intersection kit collision contains two overlapping
+slabs. These surfaces create competing terrain, floor, side, and seam contacts
+for the CharacterBody3D capsule.
+
+### Decision
+
+- Keep all architecture render and collision GLBs unchanged and validated.
+- Do not modify the player controller, player shape, terrain, or terrain
+  streamer.
+- Disable physics creation for flat straight, curved, and intersection road
+  surfaces by default.
+- Disable straight road-edging physics by default because the thin concave curb
+  also intersects terrain and can wedge the capsule.
+- Use existing streamed terrain collision as the walking surface beneath the
+  visual road.
+- Keep dedicated collision active for walls, towers, gate piers, connectors,
+  stairs, platforms, and other raised architecture.
+- Preserve C-key collision-source visualization, showing active sources in red
+  and deliberately disabled sources in amber.
+- Expose road collision counts, duplicate detection, transforms, and road-height
+  versus terrain-height diagnostics in the isolated preview.
+- Keep the permanent production region and normal F5 startup unchanged.
+
+### Consequences
+
+- The current reference assembly should build 21 active architecture bodies and
+  23 active shapes, with zero active road bodies/shapes, nine disabled
+  road/edging placements, and zero duplicate placements.
+- Flat road visuals remain greybox geometry and may show minor sinking or
+  floating relative to the graded terrain. That visual contact must be reviewed
+  separately and must not be solved by reintroducing overlapping concave road
+  collision.
+- Future raised roads or bridges require authored non-overlapping simple
+  collision such as boxes or convex shapes rather than this terrain-authoritative
+  policy.
+- Milestone 15C remains blocked until local walking, sprinting, jumping, landing,
+  road-join, gate-passage, architecture-collision, regression, and F5 tests pass.
+

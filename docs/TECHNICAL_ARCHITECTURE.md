@@ -1117,3 +1117,122 @@ not directly mutate global player or save state.
 The southern terrain and marker layout are project reconstruction guided by the
 locked Floor 1 master plan and official anchors. Production scenes must preserve
 that distinction and must not describe invented contours as official canon.
+
+---
+
+## 34. Manifest-Driven Modular Architecture Assembly
+
+Floor-local modular architecture generated outside Godot should be represented
+by one reusable assembly scene rather than direct GLB instances scattered across
+production scenes.
+
+For the Floor 1 Starting City north gate:
+
+```text
+res://AincradProject/world/floors/floor_001/architecture/floor_001_north_gate_assembly.tscn
+```
+
+owns only:
+
+- Manifest validation.
+- Stable architecture resource registration.
+- Manifest placement reproduction.
+- Render instance category containers.
+- Dedicated static collision conversion.
+- Placement markers.
+- Architecture-local debug visualization.
+
+It must not own:
+
+- Terrain streaming.
+- The player.
+- Player progression or inventory.
+- Global quests or menus.
+- SaveManager.
+- NPCs or enemies.
+- Navigation.
+
+### 34.1 Placement authority
+
+The Blender-generated architecture manifest is the placement authority when it
+contains complete stable records. Do not create a duplicate placement JSON or
+copy transforms into production scenes unless the manifest schema is no longer
+sufficient.
+
+The assembly root is placed at the stable world anchor, while each module keeps
+its local manifest transform:
+
+```text
+assembly_world_transform × placement_local_transform × imported_asset_transform
+```
+
+World validation compares dedicated assembly markers to the permanent region's
+locked coordinates. Current north-gate target error is 0.05 metres or less.
+
+### 34.2 Render resource contract
+
+- Load every stable render resource so the complete kit is validated.
+- Instance only the pieces referenced by the accepted assembly layout.
+- Keep each placement under a predictable Node3D named from its stable
+  placement ID.
+- Preserve imported placeholder materials.
+- Do not merge the kit into one runtime mesh.
+- Do not add random corrective scale or rotation.
+
+Unused kit modules may remain loaded and validated without being placed merely
+for visual completeness.
+
+### 34.3 Dedicated collision conversion
+
+Architecture physics must originate only from the dedicated simplified collision
+GLBs.
+
+For each placed module:
+
+```text
+PlacementRoot
+└── StaticBody3D
+    ├── CollisionShape_00
+    ├── CollisionShape_01
+    └── ...
+```
+
+Collision-mesh transforms relative to the imported GLB root must be preserved.
+The placement root must use the same manifest transform as the visible module.
+Temporary source meshes are freed after shape creation. Optional hidden debug
+visuals may show collision-source GLBs but must never become physics sources.
+
+Render GLBs must not be used as fallback collision when a collision resource is
+missing. Missing resources cause a clear validation failure instead.
+
+### 34.4 Preview-before-production rule
+
+A new architecture assembly must first run in a separate F6 preview with:
+
+- The permanent region instanced unchanged.
+- The architecture assembly instanced separately.
+- The existing player instanced separately.
+- Safe placement and fall recovery that do not write save data.
+- Alignment, orientation, asset-count, and collision debug information.
+
+Only after local acceptance may the reusable assembly itself be instanced beneath
+a stable production content container. Individual generated GLBs and generated
+placement children must not be copied directly into the permanent region scene.
+
+### 34.5 North-gate runtime acceptance contract
+
+The Floor 1 north gate is accepted for provisional production integration only
+when local Godot 4.7 testing confirms:
+
+- 16/16 render resources load.
+- 16/16 collision resources load.
+- Failed asset count is zero.
+- Gate, west endpoint, east endpoint, and road alignment errors are at most
+  0.05 metres.
+- Forward direction agrees with negative Z.
+- The player crosses the passage in both directions.
+- Dedicated wall, tower, connector, road, stair, and platform collision behaves
+  correctly.
+- No duplicate render roots or static bodies accumulate.
+- Architecture contact with the accepted terrain is usable as a greybox base.
+- Existing terrain previews and normal F5 gameplay still work unchanged.

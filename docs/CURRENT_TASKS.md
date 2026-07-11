@@ -1,8 +1,8 @@
 # Current Tasks
 
 **Project:** Aincrad-Inspired RPG  
-**Current milestone:** M15A — Starting City North-Gate Architecture Greybox
-**Current phase:** Reusable north-gate architecture generator and marker-alignment preflight complete; local Blender 5.1.2 export and inspection required
+**Current milestone:** M15B.1 — North-Gate Road Collision Bugfix
+**Current phase:** Road and edging physics disabled in favour of terrain collision after confirmed runtime sticking; local Godot 4.7 road traversal and regression retest required before M15C
 **Last updated:** 2026-07-11
 
 ---
@@ -21,9 +21,9 @@
 
 ## 2. Current Milestone Goal
 
-**M15A current goal:** Create a reusable Blender-generated greybox architecture kit for the Floor 1 Starting City north-gate area while preserving the accepted southern terrain, permanent production shell, all technical tests, normal F5 startup, gameplay systems, `.uid` files, `.godot/`, and the complete uploaded folder structure.
+**M15B current goal:** Import and validate the completed 16-piece north-gate architecture kit in Godot through a reusable architecture-only assembly and a separate F6 preview. Verify scale, negative-Z orientation, stable marker placement, the open gate passage, wall endpoints, road alignment, dedicated simplified collision, and existing-player traversal without modifying the permanent production region or normal F5 startup.
 
-The delivered package contains the Blender 5.1.2 generator, 16-piece architecture manifest, mathematical marker-alignment preflight, generation log, beginner documentation, and handoff. Blender was unavailable in the delivery environment, so the real 16 render GLBs, 16 collision GLBs, and `floor_001_north_gate_architecture.blend` must be generated locally before M15A receives final approval.
+The uploaded M15A project now contains the completed Blender source, 16 render GLBs, 16 collision GLBs, a complete 32-GLB manifest, and Godot import metadata. M15B reproduces the manifest reference placement in an isolated preview. Runtime acceptance in Godot 4.7 remains required before provisional production integration.
 
 **M14A historical goal:** Generate the first data-driven, map-aware southern Floor 1 terrain dataset around the Starting City gate while preserving all existing terrain tests, gameplay systems, scenes, `.uid` files, and the complete uploaded folder structure.
 
@@ -1592,7 +1592,7 @@ proceed to **Milestone 15A — Starting City North-Gate Architecture Greybox**.
 
 ## 27. Milestone 15A — Starting City North-Gate Architecture Greybox
 
-**Status:** Generator and static preflight complete; local Blender 5.1.2 generation required  
+**Status:** Blender generation complete in the uploaded project; Godot placement verification moved to M15B  
 **Date:** 2026-07-11
 
 This milestone creates a reusable architecture asset kit. It does not place the
@@ -1638,21 +1638,21 @@ kit into the permanent production region and does not change normal F5 startup.
 
 ### Local Blender 5.1.2 completion required
 
-- [ ] Run `generate_floor_001_north_gate_architecture.py` in Blender 5.1.2.
-- [ ] Confirm the generator creates only `Floor001NorthGateArchitecture`.
-- [ ] Confirm `KitRender` contains 16 reusable piece roots.
-- [ ] Confirm `KitCollision` contains 16 simplified collision roots.
-- [ ] Confirm `ReferenceAssembly` aligns with all four locked markers.
-- [ ] Confirm the gate passage remains open in render and collision.
-- [ ] Confirm road modules point toward negative Godot Z after import.
-- [ ] Confirm exactly 16 render GLBs are exported.
-- [ ] Confirm exactly 16 collision GLBs are exported.
-- [ ] Confirm `floor_001_north_gate_architecture.blend` is saved.
-- [ ] Confirm manifest status becomes `complete_blender_exports_generated`.
-- [ ] Confirm manifest actual GLB count becomes 32.
-- [ ] Confirm the log reports Blender execution and exports as true.
+- [x] Run `generate_floor_001_north_gate_architecture.py` in Blender 5.1.2.
+- [x] Confirm the generator creates only `Floor001NorthGateArchitecture` through the saved source and generation log.
+- [x] Confirm `KitRender` contains 16 reusable piece roots.
+- [x] Confirm `KitCollision` contains 16 simplified collision roots.
+- [x] Confirm `ReferenceAssembly` records zero error against all four locked markers.
+- [x] Confirm the gate passage remains open in render and collision data.
+- [x] Confirm the manifest records the road and gate forward direction as negative Godot Z.
+- [x] Confirm exactly 16 render GLBs are exported.
+- [x] Confirm exactly 16 collision GLBs are exported.
+- [x] Confirm `floor_001_north_gate_architecture.blend` is saved.
+- [x] Confirm manifest status is `complete_blender_exports_generated`.
+- [x] Confirm manifest actual GLB count is 32.
+- [x] Confirm the log and manifest report Blender execution and exports as true.
 - [ ] Rerun the script and confirm unrelated Blender objects remain untouched.
-- [ ] Open Godot 4.7 and allow all 32 GLBs to import.
+- [x] Confirm all 32 Godot `.import` records exist in the uploaded project.
 - [ ] Confirm correct one-metre scale, axes, local origins, and placeholder materials.
 - [ ] Run all terrain regression scenes unchanged.
 - [ ] Press F5 and confirm normal gameplay remains unchanged.
@@ -1673,4 +1673,141 @@ North-Gate Godot Import and Production Placement Preview**. Use the completed
 architecture manifest, place render and collision assets beneath the existing
 production containers in an isolated F6 preview, and keep normal F5 startup and
 all existing regression scenes unchanged.
+
+
+
+---
+
+## 28. Milestone 15B — North-Gate Godot Import and Production Placement Preview
+
+**Status:** Runtime acceptance failed on road collision; Milestone 15B.1 fix implemented and awaiting local retest  
+**Date:** 2026-07-11
+
+This milestone keeps the permanent southern production region unchanged and creates a reusable architecture-only assembly plus an isolated F6 preview. Local testing confirmed that the original concave road collisions wedged the player, so M15C is blocked until the 15B.1 retest passes.
+
+### Completed in the project package
+
+- [x] Preserve the complete outer `aincrad/` structure.
+- [x] Read every file under `AincradProject/docs/`.
+- [x] Preserve all terrain GLBs, architecture GLBs, Blender generators, manifests, existing previews, player scripts, gameplay systems, SaveManager, `project.godot`, `.uid` files, and `.godot/`.
+- [x] Validate manifest status `complete_blender_exports_generated`.
+- [x] Validate 16 unique render assets, 16 unique collision assets, and 32 total GLBs.
+- [x] Parse all 32 GLBs and confirm non-empty geometry.
+- [x] Confirm one unit per metre, north `-Z`, passage width 14 m, and passage height 12 m.
+- [x] Confirm the central collision has two side piers and one overhead lintel.
+- [x] Reuse the manifest's 30 exact placement records instead of creating duplicate placement data.
+- [x] Create `world/floors/floor_001/architecture/floor_001_north_gate_assembly.tscn`.
+- [x] Create `scripts/world/floor_001_north_gate_assembly.gd`.
+- [x] Keep the assembly free of terrain, player, global UI, SaveManager, actors, quests, and navigation.
+- [x] Load all 16 render and all 16 collision resources through stable piece IDs.
+- [x] Instance render placements below predictable category containers.
+- [x] Create StaticBody3D collision only from dedicated collision GLBs.
+- [x] Preserve exact matching render and collision transforms.
+- [x] Add hidden collision-source visualization for the C key.
+- [x] Add placement markers and 0.05-metre alignment validation.
+- [x] Create `scenes/world/floor_001_north_gate_preview.tscn`.
+- [x] Create `scripts/world/floor_001_north_gate_preview.gd`.
+- [x] Instance the permanent southern region, reusable assembly, and existing player separately.
+- [x] Add safe F1–F4 teleports without Input Map changes.
+- [x] Add G placement-marker, C collision-visual, and B chunk-boundary toggles.
+- [x] Add preview-only fall recovery with no save or progression changes.
+- [x] Add periodic manifest, asset-count, alignment, passage, player, and terrain debug information.
+- [x] Create `docs/floors/FLOOR_001_NORTH_GATE_GODOT_PREVIEW.md`.
+- [x] Create `docs/handoffs/HANDOFF_MILESTONE_15B.md`.
+- [x] Pass GDScript parsing, `gdlint`, `gdformat --check`, scene-reference, JSON, GLB, placement, and preservation validation.
+- [x] Keep `floor_001_southern_region.tscn` unchanged pending local acceptance.
+
+### Local Godot 4.7 acceptance required
+
+- [ ] Open `floor_001_north_gate_assembly.tscn` without missing resources.
+- [ ] Run `floor_001_north_gate_preview.tscn` with F6.
+- [ ] Confirm manifest status passes.
+- [ ] Confirm render assets report 16/16 and collision assets report 16/16.
+- [ ] Confirm failed assets remain zero.
+- [ ] Confirm gate, west, east, and road alignment errors are at most 0.05 m.
+- [ ] Confirm gate forward agrees with negative Z.
+- [ ] Walk from F1 through the physically open passage to the city side.
+- [ ] Confirm the passage debug state changes while inside.
+- [ ] Walk back out through the opening.
+- [ ] Test both towers, connectors, walls, road pieces, road edging, stair ramp, and platform collision.
+- [ ] Press C and compare the dedicated collision GLBs to the render placement.
+- [ ] Press G and inspect stable placement markers.
+- [ ] Press F3 and F4 and inspect both wall endpoints.
+- [ ] Confirm no large wall gaps, heavy overlap, buried gate, floating road, or blocked passage.
+- [ ] Confirm no duplicate render roots, StaticBody3D nodes, or collision shapes accumulate.
+- [ ] Trigger preview fall recovery and confirm no save or progression changes.
+- [ ] Run all four existing terrain/production regression scenes unchanged.
+- [ ] Press F5 and confirm the existing normal game still starts.
+
+### Completion gate and next milestone
+
+After local F6 acceptance and regression testing, proceed to **Milestone 15C — North-Gate Production Acceptance and Provisional Region Integration**. Instance only the reusable assembly beneath `StaticContent/CityGateArchitecture`; do not copy individual GLBs into the production region.
+
+---
+
+## 29. Bugfix Milestone 15B.1 — North-Gate Road Collision
+
+**Status:** Implementation and static validation complete; local Godot 4.7 F6 road retest required  
+**Date:** 2026-07-11
+
+### Confirmed failure
+
+- [x] Record that normal movement works on terrain.
+- [x] Record that standing or landing on the road prevents horizontal movement.
+- [x] Record that teleporting away restores movement.
+- [x] Confirm the player controller and player collision shape are unchanged.
+
+### Confirmed cause
+
+- [x] Inspect all road, curve, intersection, and edging collision GLBs.
+- [x] Confirm the placed straight road uses a thin concave trimesh slab.
+- [x] Confirm its top triangles face downward and bottom triangles face upward.
+- [x] Confirm the slab bottom is at world Y 9.02 while terrain intersects or
+      closely approaches that level.
+- [x] Confirm adjacent modules contain coincident vertical end faces.
+- [x] Confirm the intersection collision contains two overlapping slabs.
+- [x] Confirm the six concave edging bodies also overlap the terrain near the
+      road boundary.
+- [x] Confirm manifest placement IDs are unique and runtime rebuild cleanup is
+      not duplicating collision bodies.
+
+### Fix implemented
+
+- [x] Preserve all render GLBs, collision GLBs, manifest data, and Blender source.
+- [x] Keep all 16 collision resources loaded and validated.
+- [x] Disable flat road physics by default.
+- [x] Disable road-edging physics by default.
+- [x] Use streamed terrain collision as the authoritative walking surface.
+- [x] Keep walls, towers, gate piers, connectors, stairs, and platform collision.
+- [x] Preserve the C collision-source visualization toggle.
+- [x] Show active collision sources in red and disabled road sources in amber.
+- [x] Add road body, shape, disabled-placement, duplicate, and transform debug
+      diagnostics.
+- [x] Add road-render surface versus terrain-height diagnostics.
+- [x] Keep terrain, player movement, terrain streaming, SaveManager,
+      `project.godot`, `.uid`, and `.godot/` unchanged.
+
+### Local road retest required
+
+- [ ] Confirm flat road collision reports OFF.
+- [ ] Confirm road edging collision reports OFF.
+- [ ] Confirm active road collision bodies and shapes report zero.
+- [ ] Confirm disabled road placements report nine.
+- [ ] Confirm duplicate collision placements report zero.
+- [ ] Walk from terrain onto the visible road.
+- [ ] Walk and sprint along all three straight modules.
+- [ ] Cross every module join in both directions.
+- [ ] Jump and land on every module.
+- [ ] Jump and land across both joins.
+- [ ] Walk from road back to terrain.
+- [ ] Walk beside both road edges without wedging.
+- [ ] Walk through the gate passage in both directions.
+- [ ] Confirm gate piers, walls, towers, stairs, and platform still collide.
+- [ ] Run every terrain and southern-region regression preview unchanged.
+- [ ] Press F5 and confirm normal gameplay remains unchanged.
+
+### Completion gate
+
+Do not begin Milestone 15C until every road traversal, architecture collision,
+terrain regression, and F5 check above passes locally.
 
