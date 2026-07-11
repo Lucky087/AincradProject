@@ -1,0 +1,2652 @@
+{
+  "schema_version": 1,
+  "floor_id": "floor_001",
+  "floor_number": 1,
+  "display_name": "Floor 1 Master Plan",
+  "document_status": "scale_locked_development_reconstruction",
+  "last_updated": "2026-07-11",
+  "reference_policy": {
+    "confirmed_official": "Directly supported by published primary material or an official licensed source.",
+    "reasonable_interpretation": "A conservative spatial connection inferred from multiple supported facts.",
+    "original_reconstruction": "A project-authored choice required to make a coherent playable map; not official canon.",
+    "warning": "Coordinates and region borders are development reconstruction unless explicitly marked otherwise."
+  },
+  "scale": {
+    "godot_units_per_metre": 1.0,
+    "floor_diameter_m": 10000.0,
+    "floor_radius_m": 5000.0,
+    "playable_radius_m": 4850.0,
+    "outer_boundary_buffer_m": 150.0,
+    "approximate_surface_area_km2": 78.54,
+    "terrain_height_range_m": [
+      -80.0,
+      320.0
+    ],
+    "major_structure_height_limit_m": 450.0,
+    "current_player_walk_speed_mps": 5.0,
+    "current_player_sprint_speed_mps": 8.5,
+    "straight_diameter_walk_time_minutes": 33.3,
+    "straight_diameter_sprint_time_minutes": 19.6,
+    "target_first_time_city_to_labyrinth_minutes": [
+      45,
+      75
+    ]
+  },
+  "coordinate_system": {
+    "origin": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "origin_rule": "Floor centre at terrain reference elevation.",
+    "east_axis": "+X",
+    "west_axis": "-X",
+    "north_axis": "-Z",
+    "south_axis": "+Z",
+    "up_axis": "+Y",
+    "coordinates_are_floor_local": true,
+    "floating_point_strategy": "Keep each floor near its own origin and never place all 100 floors far apart in one coordinate space.",
+    "origin_shifting_required_for_floor_001": false,
+    "origin_shifting_review_threshold_m": 20000.0
+  },
+  "world_bounds": {
+    "shape": "circle",
+    "centre": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "radius_m": 5000.0,
+    "playable_radius_m": 4850.0,
+    "aabb": {
+      "min_x": -5000.0,
+      "max_x": 5000.0,
+      "min_y": -80.0,
+      "max_y": 450.0,
+      "min_z": -5000.0,
+      "max_z": 5000.0
+    }
+  },
+  "current_outskirts_integration": {
+    "scene_path": "res://AincradProject/world/floors/floor_001/floor_001_outskirts.tscn",
+    "local_size_m": [
+      350.0,
+      350.0
+    ],
+    "intended_global_scene_origin": [
+      0.0,
+      0.0,
+      3835.0
+    ],
+    "intended_global_bounds": {
+      "min_x": -175.0,
+      "max_x": 175.0,
+      "min_z": 3660.0,
+      "max_z": 4010.0
+    },
+    "represented_region_id": "region_city_gate_outskirts",
+    "production_role": "gate_sector_vertical_slice_and_regression_scene",
+    "suitable_as_complete_region": false,
+    "keep_later": [
+      "player_and_ui_integration",
+      "checkpoint_and_npc_flow",
+      "road_width_reference",
+      "boar_encounter_spacing",
+      "primitive_material_palette"
+    ],
+    "rebuild_or_relocate": [
+      "350_m_world_boundaries",
+      "miniature_forest",
+      "miniature_ruins",
+      "prototype_labyrinth_blocker",
+      "single_ground_slab",
+      "local_absolute_actor_placements"
+    ]
+  },
+  "regions": [
+    {
+      "region_id": "region_starting_city",
+      "display_name": "Town of Beginnings",
+      "region_type": "safe_city",
+      "centre": [
+        0.0,
+        0.0,
+        4500.0
+      ],
+      "approximate_bounds": {
+        "min_x": -520.0,
+        "max_x": 520.0,
+        "min_z": 4000.0,
+        "max_z": 5000.0
+      },
+      "boundary_polygon": [
+        [
+          -500,
+          4000
+        ],
+        [
+          500,
+          4000
+        ],
+        [
+          500,
+          4500
+        ],
+        [
+          350,
+          4800
+        ],
+        [
+          0,
+          5000
+        ],
+        [
+          -350,
+          4800
+        ],
+        [
+          -500,
+          4500
+        ]
+      ],
+      "recommended_scene_path": "res://AincradProject/world/floors/floor_001/regions/region_starting_city.tscn",
+      "recommended_chunk_size_m": 256,
+      "connected_regions": [
+        "region_city_gate_outskirts"
+      ],
+      "safe_zone": true,
+      "player_level_range": [
+        1,
+        1
+      ],
+      "enemy_families": [],
+      "settlements": [
+        "settlement_town_of_beginnings"
+      ],
+      "dungeons": [
+        "dungeon_black_iron_palace_hidden"
+      ],
+      "landmarks": [
+        "landmark_starting_city_north_gate",
+        "landmark_black_iron_palace",
+        "landmark_starting_city_central_plaza"
+      ],
+      "required_unique_assets": [
+        "starting_city_semicircular_rampart",
+        "starting_city_north_gate",
+        "black_iron_palace_silhouette",
+        "central_teleport_plaza"
+      ],
+      "required_modular_assets": [
+        "city_street_kit",
+        "city_house_kit",
+        "city_wall_kit",
+        "city_lamp_kit"
+      ],
+      "development_priority": "P1",
+      "production_order": 3,
+      "reference_confidence": {
+        "existence": "confirmed_official",
+        "general_location": "confirmed_official",
+        "exact_boundary": "original_reconstruction"
+      }
+    },
+    {
+      "region_id": "region_city_gate_outskirts",
+      "display_name": "South Gate Outskirts",
+      "region_type": "safe_transition_grassland",
+      "centre": [
+        0.0,
+        8.0,
+        3500.0
+      ],
+      "approximate_bounds": {
+        "min_x": -900.0,
+        "max_x": 900.0,
+        "min_z": 2750.0,
+        "max_z": 4050.0
+      },
+      "boundary_polygon": [
+        [
+          -900,
+          2750
+        ],
+        [
+          900,
+          2750
+        ],
+        [
+          650,
+          4050
+        ],
+        [
+          -650,
+          4050
+        ]
+      ],
+      "recommended_scene_path": "res://AincradProject/world/floors/floor_001/regions/region_city_gate_outskirts.tscn",
+      "recommended_chunk_size_m": 256,
+      "connected_regions": [
+        "region_starting_city",
+        "region_rata_plains",
+        "region_horunka_woodlands",
+        "region_east_lake_district"
+      ],
+      "safe_zone": false,
+      "player_level_range": [
+        1,
+        3
+      ],
+      "enemy_families": [
+        "wild_boar",
+        "dire_wolf",
+        "field_wasp"
+      ],
+      "settlements": [
+        "settlement_crossroads_rest"
+      ],
+      "dungeons": [],
+      "landmarks": [
+        "landmark_starting_city_north_gate",
+        "landmark_current_outskirts_prototype",
+        "landmark_south_road_crossroads"
+      ],
+      "required_unique_assets": [
+        "starting_city_exterior_gate_approach",
+        "south_road_waystone"
+      ],
+      "required_modular_assets": [
+        "grassland_foliage_kit",
+        "stone_road_kit",
+        "low_rock_kit",
+        "field_fence_kit"
+      ],
+      "development_priority": "P0",
+      "production_order": 2,
+      "reference_confidence": {
+        "existence": "reasonable_interpretation",
+        "general_location": "confirmed_official",
+        "exact_boundary": "original_reconstruction"
+      }
+    },
+    {
+      "region_id": "region_rata_plains",
+      "display_name": "Rata Plains",
+      "region_type": "central_grassland",
+      "centre": [
+        0.0,
+        15.0,
+        1750.0
+      ],
+      "approximate_bounds": {
+        "min_x": -1300.0,
+        "max_x": 1300.0,
+        "min_z": 600.0,
+        "max_z": 2850.0
+      },
+      "boundary_polygon": [
+        [
+          -1200,
+          600
+        ],
+        [
+          1200,
+          600
+        ],
+        [
+          900,
+          2850
+        ],
+        [
+          -900,
+          2850
+        ]
+      ],
+      "recommended_scene_path": "res://AincradProject/world/floors/floor_001/regions/region_rata_plains.tscn",
+      "recommended_chunk_size_m": 256,
+      "connected_regions": [
+        "region_city_gate_outskirts",
+        "region_central_highlands",
+        "region_horunka_woodlands",
+        "region_east_lake_district"
+      ],
+      "safe_zone": false,
+      "player_level_range": [
+        1,
+        4
+      ],
+      "enemy_families": [
+        "wild_boar",
+        "dire_wolf",
+        "field_wasp",
+        "beetle",
+        "worm"
+      ],
+      "settlements": [
+        "settlement_crossroads_rest"
+      ],
+      "dungeons": [],
+      "landmarks": [
+        "landmark_rata_central_road",
+        "landmark_south_road_crossroads",
+        "landmark_central_canyon_mouth"
+      ],
+      "required_unique_assets": [
+        "rata_plains_canyon_view",
+        "central_crossroads_waystone"
+      ],
+      "required_modular_assets": [
+        "grassland_foliage_kit",
+        "stone_road_kit",
+        "field_rock_kit",
+        "small_bridge_kit"
+      ],
+      "development_priority": "P0",
+      "production_order": 4,
+      "reference_confidence": {
+        "existence": "reasonable_interpretation",
+        "general_location": "reasonable_interpretation",
+        "exact_boundary": "original_reconstruction"
+      }
+    },
+    {
+      "region_id": "region_horunka_woodlands",
+      "display_name": "Horunka Woodlands",
+      "region_type": "deep_forest_and_village",
+      "centre": [
+        -2550.0,
+        35.0,
+        2250.0
+      ],
+      "approximate_bounds": {
+        "min_x": -4500.0,
+        "max_x": -900.0,
+        "min_z": 500.0,
+        "max_z": 3900.0
+      },
+      "boundary_polygon": [
+        [
+          -4500,
+          1000
+        ],
+        [
+          -1200,
+          500
+        ],
+        [
+          -900,
+          2850
+        ],
+        [
+          -1800,
+          3900
+        ],
+        [
+          -3900,
+          3000
+        ]
+      ],
+      "recommended_scene_path": "res://AincradProject/world/floors/floor_001/regions/region_horunka_woodlands.tscn",
+      "recommended_chunk_size_m": 256,
+      "connected_regions": [
+        "region_city_gate_outskirts",
+        "region_rata_plains",
+        "region_western_cave_hills"
+      ],
+      "safe_zone": false,
+      "player_level_range": [
+        1,
+        4
+      ],
+      "enemy_families": [
+        "wild_boar",
+        "dire_wolf",
+        "little_nepent",
+        "forest_insect"
+      ],
+      "settlements": [
+        "settlement_horunka"
+      ],
+      "dungeons": [
+        "dungeon_horunka_forest_cave"
+      ],
+      "landmarks": [
+        "landmark_horunka_village",
+        "landmark_horunka_old_growth",
+        "landmark_western_cave_mouth"
+      ],
+      "required_unique_assets": [
+        "horunka_quest_house",
+        "horunka_village_gate",
+        "old_growth_tree_landmark"
+      ],
+      "required_modular_assets": [
+        "forest_tree_kit",
+        "forest_ground_kit",
+        "village_house_kit",
+        "forest_path_kit"
+      ],
+      "development_priority": "P1",
+      "production_order": 5,
+      "reference_confidence": {
+        "existence": "confirmed_official",
+        "general_location": "confirmed_official",
+        "exact_boundary": "original_reconstruction"
+      }
+    },
+    {
+      "region_id": "region_east_lake_district",
+      "display_name": "East Lake District",
+      "region_type": "lake_shore_and_wet_grassland",
+      "centre": [
+        2700.0,
+        12.0,
+        2200.0
+      ],
+      "approximate_bounds": {
+        "min_x": 900.0,
+        "max_x": 4500.0,
+        "min_z": 400.0,
+        "max_z": 3900.0
+      },
+      "boundary_polygon": [
+        [
+          1200,
+          500
+        ],
+        [
+          4500,
+          1000
+        ],
+        [
+          3900,
+          3000
+        ],
+        [
+          1800,
+          3900
+        ],
+        [
+          900,
+          2850
+        ]
+      ],
+      "recommended_scene_path": "res://AincradProject/world/floors/floor_001/regions/region_east_lake_district.tscn",
+      "recommended_chunk_size_m": 256,
+      "connected_regions": [
+        "region_city_gate_outskirts",
+        "region_rata_plains",
+        "region_medai_ruins_route"
+      ],
+      "safe_zone": false,
+      "player_level_range": [
+        2,
+        5
+      ],
+      "enemy_families": [
+        "field_wasp",
+        "scavenger_toad",
+        "water_insect",
+        "dire_wolf"
+      ],
+      "settlements": [],
+      "dungeons": [],
+      "landmarks": [
+        "landmark_east_great_lake",
+        "landmark_lake_causeway",
+        "landmark_east_watch_hill"
+      ],
+      "required_unique_assets": [
+        "great_lake_shoreline",
+        "lake_causeway",
+        "waterfall_cliff"
+      ],
+      "required_modular_assets": [
+        "shoreline_kit",
+        "reed_kit",
+        "wetland_rock_kit",
+        "bridge_kit"
+      ],
+      "development_priority": "P1",
+      "production_order": 6,
+      "reference_confidence": {
+        "existence": "confirmed_official",
+        "general_location": "confirmed_official",
+        "exact_boundary": "original_reconstruction"
+      }
+    },
+    {
+      "region_id": "region_western_cave_hills",
+      "display_name": "Western Cave Hills",
+      "region_type": "rocky_hills_and_caves",
+      "centre": [
+        -3050.0,
+        75.0,
+        0.0
+      ],
+      "approximate_bounds": {
+        "min_x": -4850.0,
+        "max_x": -1200.0,
+        "min_z": -1800.0,
+        "max_z": 1000.0
+      },
+      "boundary_polygon": [
+        [
+          -4550,
+          -1600
+        ],
+        [
+          -1800,
+          -1500
+        ],
+        [
+          -1200,
+          700
+        ],
+        [
+          -4500,
+          1000
+        ]
+      ],
+      "recommended_scene_path": "res://AincradProject/world/floors/floor_001/regions/region_western_cave_hills.tscn",
+      "recommended_chunk_size_m": 256,
+      "connected_regions": [
+        "region_horunka_woodlands",
+        "region_central_highlands",
+        "region_western_rim_cliffs"
+      ],
+      "safe_zone": false,
+      "player_level_range": [
+        3,
+        6
+      ],
+      "enemy_families": [
+        "dire_wolf",
+        "cave_bat",
+        "rock_beetle",
+        "large_nepent"
+      ],
+      "settlements": [],
+      "dungeons": [
+        "dungeon_horunka_forest_cave"
+      ],
+      "landmarks": [
+        "landmark_western_cave_mouth",
+        "landmark_split_peak",
+        "landmark_west_rim_overlook"
+      ],
+      "required_unique_assets": [
+        "western_cave_entrance",
+        "split_peak_silhouette"
+      ],
+      "required_modular_assets": [
+        "rock_cliff_kit",
+        "cave_entrance_kit",
+        "mountain_path_kit"
+      ],
+      "development_priority": "P2",
+      "production_order": 8,
+      "reference_confidence": {
+        "existence": "reasonable_interpretation",
+        "general_location": "reasonable_interpretation",
+        "exact_boundary": "original_reconstruction"
+      }
+    },
+    {
+      "region_id": "region_medai_ruins_route",
+      "display_name": "Medai Ruins Route",
+      "region_type": "farmland_ruins_and_eastern_pass",
+      "centre": [
+        2850.0,
+        55.0,
+        0.0
+      ],
+      "approximate_bounds": {
+        "min_x": 1200.0,
+        "max_x": 4850.0,
+        "min_z": -1700.0,
+        "max_z": 1000.0
+      },
+      "boundary_polygon": [
+        [
+          1800,
+          -1600
+        ],
+        [
+          4550,
+          -1500
+        ],
+        [
+          4500,
+          1000
+        ],
+        [
+          1200,
+          500
+        ]
+      ],
+      "recommended_scene_path": "res://AincradProject/world/floors/floor_001/regions/region_medai_ruins_route.tscn",
+      "recommended_chunk_size_m": 256,
+      "connected_regions": [
+        "region_east_lake_district",
+        "region_central_highlands",
+        "region_eastern_wetlands"
+      ],
+      "safe_zone": false,
+      "player_level_range": [
+        3,
+        6
+      ],
+      "enemy_families": [
+        "dire_wolf",
+        "field_wasp",
+        "ruin_kobold",
+        "scavenger_toad"
+      ],
+      "settlements": [
+        "settlement_medai"
+      ],
+      "dungeons": [
+        "dungeon_medai_ruins"
+      ],
+      "landmarks": [
+        "landmark_medai_village",
+        "landmark_eastern_ruins_gate",
+        "landmark_old_aqueduct"
+      ],
+      "required_unique_assets": [
+        "medai_village_square",
+        "eastern_ruins_gateway",
+        "old_aqueduct"
+      ],
+      "required_modular_assets": [
+        "farmstead_kit",
+        "ruin_wall_kit",
+        "aqueduct_kit",
+        "stone_road_kit"
+      ],
+      "development_priority": "P2",
+      "production_order": 9,
+      "reference_confidence": {
+        "existence": "confirmed_official",
+        "general_location": "reasonable_interpretation",
+        "exact_boundary": "original_reconstruction"
+      }
+    },
+    {
+      "region_id": "region_central_highlands",
+      "display_name": "Central Highland Ruins",
+      "region_type": "mountains_valleys_and_ruins",
+      "centre": [
+        0.0,
+        110.0,
+        -400.0
+      ],
+      "approximate_bounds": {
+        "min_x": -1800.0,
+        "max_x": 1800.0,
+        "min_z": -1700.0,
+        "max_z": 700.0
+      },
+      "boundary_polygon": [
+        [
+          -1800,
+          -1600
+        ],
+        [
+          1800,
+          -1600
+        ],
+        [
+          1200,
+          600
+        ],
+        [
+          -1200,
+          600
+        ]
+      ],
+      "recommended_scene_path": "res://AincradProject/world/floors/floor_001/regions/region_central_highlands.tscn",
+      "recommended_chunk_size_m": 256,
+      "connected_regions": [
+        "region_rata_plains",
+        "region_western_cave_hills",
+        "region_medai_ruins_route",
+        "region_northern_valleys"
+      ],
+      "safe_zone": false,
+      "player_level_range": [
+        4,
+        7
+      ],
+      "enemy_families": [
+        "ruin_kobold",
+        "dire_wolf",
+        "rock_beetle",
+        "ambush_insect"
+      ],
+      "settlements": [],
+      "dungeons": [
+        "dungeon_central_ruins_catacombs"
+      ],
+      "landmarks": [
+        "landmark_central_canyon",
+        "landmark_ancient_ruins",
+        "landmark_highland_bridge"
+      ],
+      "required_unique_assets": [
+        "central_canyon",
+        "ancient_ruins_complex",
+        "highland_bridge"
+      ],
+      "required_modular_assets": [
+        "mountain_cliff_kit",
+        "ruin_column_kit",
+        "ruin_wall_kit",
+        "rope_bridge_kit"
+      ],
+      "development_priority": "P1",
+      "production_order": 7,
+      "reference_confidence": {
+        "existence": "confirmed_official",
+        "general_location": "reasonable_interpretation",
+        "exact_boundary": "original_reconstruction"
+      }
+    },
+    {
+      "region_id": "region_western_rim_cliffs",
+      "display_name": "Western Rim Cliffs",
+      "region_type": "rim_cliffs_and_high_danger_wilds",
+      "centre": [
+        -3900.0,
+        125.0,
+        -2450.0
+      ],
+      "approximate_bounds": {
+        "min_x": -5000.0,
+        "max_x": -1600.0,
+        "min_z": -4100.0,
+        "max_z": -500.0
+      },
+      "boundary_polygon": [
+        [
+          -3500,
+          -3300
+        ],
+        [
+          -1600,
+          -3400
+        ],
+        [
+          -1800,
+          -1500
+        ],
+        [
+          -4550,
+          -1600
+        ]
+      ],
+      "recommended_scene_path": "res://AincradProject/world/floors/floor_001/regions/region_western_rim_cliffs.tscn",
+      "recommended_chunk_size_m": 256,
+      "connected_regions": [
+        "region_western_cave_hills",
+        "region_northern_valleys"
+      ],
+      "safe_zone": false,
+      "player_level_range": [
+        5,
+        8
+      ],
+      "enemy_families": [
+        "dire_wolf",
+        "rock_beetle",
+        "cliff_wasp",
+        "elite_boar"
+      ],
+      "settlements": [],
+      "dungeons": [],
+      "landmarks": [
+        "landmark_west_rim_overlook",
+        "landmark_broken_rim_bridge"
+      ],
+      "required_unique_assets": [
+        "western_rim_cliff_face",
+        "broken_rim_bridge"
+      ],
+      "required_modular_assets": [
+        "rim_cliff_kit",
+        "mountain_path_kit",
+        "wind_bent_tree_kit"
+      ],
+      "development_priority": "P3",
+      "production_order": 12,
+      "reference_confidence": {
+        "existence": "original_reconstruction",
+        "general_location": "original_reconstruction",
+        "exact_boundary": "original_reconstruction"
+      }
+    },
+    {
+      "region_id": "region_eastern_wetlands",
+      "display_name": "Eastern Wetlands",
+      "region_type": "wetlands_lakes_and_rim_marsh",
+      "centre": [
+        3950.0,
+        20.0,
+        -2300.0
+      ],
+      "approximate_bounds": {
+        "min_x": 1600.0,
+        "max_x": 5000.0,
+        "min_z": -4000.0,
+        "max_z": -300.0
+      },
+      "boundary_polygon": [
+        [
+          1600,
+          -3400
+        ],
+        [
+          3500,
+          -3300
+        ],
+        [
+          4550,
+          -1500
+        ],
+        [
+          1800,
+          -1600
+        ]
+      ],
+      "recommended_scene_path": "res://AincradProject/world/floors/floor_001/regions/region_eastern_wetlands.tscn",
+      "recommended_chunk_size_m": 256,
+      "connected_regions": [
+        "region_medai_ruins_route",
+        "region_northern_valleys"
+      ],
+      "safe_zone": false,
+      "player_level_range": [
+        5,
+        8
+      ],
+      "enemy_families": [
+        "scavenger_toad",
+        "water_insect",
+        "field_wasp",
+        "marsh_wolf"
+      ],
+      "settlements": [],
+      "dungeons": [],
+      "landmarks": [
+        "landmark_eastern_marsh_delta",
+        "landmark_mirror_lake",
+        "landmark_east_rim_falls"
+      ],
+      "required_unique_assets": [
+        "marsh_delta",
+        "mirror_lake",
+        "east_rim_waterfall"
+      ],
+      "required_modular_assets": [
+        "wetland_foliage_kit",
+        "shoreline_kit",
+        "wooden_walkway_kit"
+      ],
+      "development_priority": "P3",
+      "production_order": 13,
+      "reference_confidence": {
+        "existence": "reasonable_interpretation",
+        "general_location": "reasonable_interpretation",
+        "exact_boundary": "original_reconstruction"
+      }
+    },
+    {
+      "region_id": "region_northern_valleys",
+      "display_name": "Northern Valleys",
+      "region_type": "mountain_passes_and_danger_corridors",
+      "centre": [
+        0.0,
+        150.0,
+        -2450.0
+      ],
+      "approximate_bounds": {
+        "min_x": -1800.0,
+        "max_x": 1800.0,
+        "min_z": -3500.0,
+        "max_z": -1500.0
+      },
+      "boundary_polygon": [
+        [
+          -1600,
+          -3400
+        ],
+        [
+          1600,
+          -3400
+        ],
+        [
+          1800,
+          -1600
+        ],
+        [
+          -1800,
+          -1600
+        ]
+      ],
+      "recommended_scene_path": "res://AincradProject/world/floors/floor_001/regions/region_northern_valleys.tscn",
+      "recommended_chunk_size_m": 256,
+      "connected_regions": [
+        "region_central_highlands",
+        "region_western_rim_cliffs",
+        "region_eastern_wetlands",
+        "region_tolbana_vale"
+      ],
+      "safe_zone": false,
+      "player_level_range": [
+        6,
+        9
+      ],
+      "enemy_families": [
+        "ruin_kobold",
+        "dire_wolf",
+        "large_nepent",
+        "elite_insect"
+      ],
+      "settlements": [],
+      "dungeons": [],
+      "landmarks": [
+        "landmark_northern_pass",
+        "landmark_three_valleys",
+        "landmark_tolbana_south_view"
+      ],
+      "required_unique_assets": [
+        "northern_pass_gate",
+        "three_valleys_landscape"
+      ],
+      "required_modular_assets": [
+        "mountain_cliff_kit",
+        "valley_road_kit",
+        "ruin_watchtower_kit"
+      ],
+      "development_priority": "P2",
+      "production_order": 10,
+      "reference_confidence": {
+        "existence": "confirmed_official",
+        "general_location": "reasonable_interpretation",
+        "exact_boundary": "original_reconstruction"
+      }
+    },
+    {
+      "region_id": "region_tolbana_vale",
+      "display_name": "Tolbana Vale",
+      "region_type": "safe_town_and_valley",
+      "centre": [
+        0.0,
+        55.0,
+        -3800.0
+      ],
+      "approximate_bounds": {
+        "min_x": -1100.0,
+        "max_x": 1100.0,
+        "min_z": -4300.0,
+        "max_z": -3300.0
+      },
+      "boundary_polygon": [
+        [
+          -900,
+          -4250
+        ],
+        [
+          900,
+          -4250
+        ],
+        [
+          1100,
+          -3300
+        ],
+        [
+          -1100,
+          -3300
+        ]
+      ],
+      "recommended_scene_path": "res://AincradProject/world/floors/floor_001/regions/region_tolbana_vale.tscn",
+      "recommended_chunk_size_m": 256,
+      "connected_regions": [
+        "region_northern_valleys",
+        "region_labyrinth_foothills"
+      ],
+      "safe_zone": true,
+      "player_level_range": [
+        6,
+        9
+      ],
+      "enemy_families": [],
+      "settlements": [
+        "settlement_tolbana"
+      ],
+      "dungeons": [],
+      "landmarks": [
+        "landmark_tolbana_windmills",
+        "landmark_tolbana_fountain_square",
+        "landmark_labyrinth_valley_view"
+      ],
+      "required_unique_assets": [
+        "tolbana_windmills",
+        "tolbana_fountain_square",
+        "tolbana_amphitheatre"
+      ],
+      "required_modular_assets": [
+        "tolbana_house_kit",
+        "windmill_kit",
+        "valley_wall_kit",
+        "town_fountain_kit"
+      ],
+      "development_priority": "P1",
+      "production_order": 11,
+      "reference_confidence": {
+        "existence": "confirmed_official",
+        "general_location": "confirmed_official",
+        "exact_boundary": "original_reconstruction"
+      }
+    },
+    {
+      "region_id": "region_labyrinth_foothills",
+      "display_name": "Labyrinth Foothills",
+      "region_type": "high_danger_approach",
+      "centre": [
+        0.0,
+        190.0,
+        -4475.0
+      ],
+      "approximate_bounds": {
+        "min_x": -1300.0,
+        "max_x": 1300.0,
+        "min_z": -4850.0,
+        "max_z": -4050.0
+      },
+      "boundary_polygon": [
+        [
+          -900,
+          -4750
+        ],
+        [
+          900,
+          -4750
+        ],
+        [
+          900,
+          -4250
+        ],
+        [
+          -900,
+          -4250
+        ]
+      ],
+      "recommended_scene_path": "res://AincradProject/world/floors/floor_001/regions/region_labyrinth_foothills.tscn",
+      "recommended_chunk_size_m": 256,
+      "connected_regions": [
+        "region_tolbana_vale",
+        "region_floor_001_labyrinth"
+      ],
+      "safe_zone": false,
+      "player_level_range": [
+        8,
+        10
+      ],
+      "enemy_families": [
+        "ruin_kobold",
+        "kobold_sentinel",
+        "elite_wolf"
+      ],
+      "settlements": [],
+      "dungeons": [
+        "dungeon_floor_001_labyrinth"
+      ],
+      "landmarks": [
+        "landmark_labyrinth_approach",
+        "landmark_first_floor_labyrinth_tower"
+      ],
+      "required_unique_assets": [
+        "labyrinth_foothill_stairs",
+        "labyrinth_outer_gate",
+        "tower_base_silhouette"
+      ],
+      "required_modular_assets": [
+        "kobold_ruin_kit",
+        "mountain_stair_kit",
+        "labyrinth_exterior_kit"
+      ],
+      "development_priority": "P1",
+      "production_order": 14,
+      "reference_confidence": {
+        "existence": "confirmed_official",
+        "general_location": "confirmed_official",
+        "exact_boundary": "original_reconstruction"
+      }
+    },
+    {
+      "region_id": "region_floor_001_labyrinth",
+      "display_name": "First Floor Labyrinth",
+      "region_type": "floor_labyrinth_and_boss_route",
+      "centre": [
+        0.0,
+        240.0,
+        -4800.0
+      ],
+      "approximate_bounds": {
+        "min_x": -300.0,
+        "max_x": 300.0,
+        "min_z": -5000.0,
+        "max_z": -4500.0
+      },
+      "boundary_polygon": [
+        [
+          -300,
+          -4980
+        ],
+        [
+          300,
+          -4980
+        ],
+        [
+          300,
+          -4500
+        ],
+        [
+          -300,
+          -4500
+        ]
+      ],
+      "recommended_scene_path": "res://AincradProject/world/floors/floor_001/regions/region_floor_001_labyrinth.tscn",
+      "recommended_chunk_size_m": 128,
+      "connected_regions": [
+        "region_labyrinth_foothills"
+      ],
+      "safe_zone": false,
+      "player_level_range": [
+        9,
+        12
+      ],
+      "enemy_families": [
+        "ruin_kobold",
+        "kobold_sentinel",
+        "floor_boss_minion"
+      ],
+      "settlements": [],
+      "dungeons": [
+        "dungeon_floor_001_labyrinth",
+        "boss_area_floor_001"
+      ],
+      "landmarks": [
+        "landmark_first_floor_labyrinth_tower",
+        "landmark_floor_001_boss_gate",
+        "landmark_stair_to_floor_002"
+      ],
+      "required_unique_assets": [
+        "floor_001_labyrinth_tower",
+        "floor_001_boss_gate",
+        "floor_002_stair_portal"
+      ],
+      "required_modular_assets": [
+        "labyrinth_wall_kit",
+        "labyrinth_stair_kit",
+        "boss_room_kit"
+      ],
+      "development_priority": "P1",
+      "production_order": 15,
+      "reference_confidence": {
+        "existence": "confirmed_official",
+        "general_location": "confirmed_official",
+        "exact_boundary": "original_reconstruction"
+      }
+    }
+  ],
+  "region_connections": [
+    {
+      "from_region_id": "region_starting_city",
+      "to_region_id": "region_city_gate_outskirts",
+      "route_id": "road_starting_city_north_gate",
+      "bidirectional": true
+    },
+    {
+      "from_region_id": "region_city_gate_outskirts",
+      "to_region_id": "region_rata_plains",
+      "route_id": "road_central_north",
+      "bidirectional": true
+    },
+    {
+      "from_region_id": "region_city_gate_outskirts",
+      "to_region_id": "region_horunka_woodlands",
+      "route_id": "road_horunka_branch",
+      "bidirectional": true
+    },
+    {
+      "from_region_id": "region_city_gate_outskirts",
+      "to_region_id": "region_east_lake_district",
+      "route_id": "road_east_lake_branch",
+      "bidirectional": true
+    },
+    {
+      "from_region_id": "region_rata_plains",
+      "to_region_id": "region_horunka_woodlands",
+      "route_id": "road_west_crosslink",
+      "bidirectional": true
+    },
+    {
+      "from_region_id": "region_rata_plains",
+      "to_region_id": "region_east_lake_district",
+      "route_id": "road_east_crosslink",
+      "bidirectional": true
+    },
+    {
+      "from_region_id": "region_rata_plains",
+      "to_region_id": "region_central_highlands",
+      "route_id": "road_central_north",
+      "bidirectional": true
+    },
+    {
+      "from_region_id": "region_horunka_woodlands",
+      "to_region_id": "region_western_cave_hills",
+      "route_id": "road_western_cave_route",
+      "bidirectional": true
+    },
+    {
+      "from_region_id": "region_east_lake_district",
+      "to_region_id": "region_medai_ruins_route",
+      "route_id": "road_medai_route",
+      "bidirectional": true
+    },
+    {
+      "from_region_id": "region_western_cave_hills",
+      "to_region_id": "region_central_highlands",
+      "route_id": "road_western_cave_route",
+      "bidirectional": true
+    },
+    {
+      "from_region_id": "region_medai_ruins_route",
+      "to_region_id": "region_central_highlands",
+      "route_id": "road_medai_ruins_route",
+      "bidirectional": true
+    },
+    {
+      "from_region_id": "region_western_cave_hills",
+      "to_region_id": "region_western_rim_cliffs",
+      "route_id": "trail_western_rim",
+      "bidirectional": true
+    },
+    {
+      "from_region_id": "region_medai_ruins_route",
+      "to_region_id": "region_eastern_wetlands",
+      "route_id": "trail_eastern_wetlands",
+      "bidirectional": true
+    },
+    {
+      "from_region_id": "region_central_highlands",
+      "to_region_id": "region_northern_valleys",
+      "route_id": "road_northern_pass",
+      "bidirectional": true
+    },
+    {
+      "from_region_id": "region_western_rim_cliffs",
+      "to_region_id": "region_northern_valleys",
+      "route_id": "trail_western_north",
+      "bidirectional": true
+    },
+    {
+      "from_region_id": "region_eastern_wetlands",
+      "to_region_id": "region_northern_valleys",
+      "route_id": "trail_eastern_north",
+      "bidirectional": true
+    },
+    {
+      "from_region_id": "region_northern_valleys",
+      "to_region_id": "region_tolbana_vale",
+      "route_id": "road_tolbana_south",
+      "bidirectional": true
+    },
+    {
+      "from_region_id": "region_tolbana_vale",
+      "to_region_id": "region_labyrinth_foothills",
+      "route_id": "road_labyrinth_approach",
+      "bidirectional": true
+    },
+    {
+      "from_region_id": "region_labyrinth_foothills",
+      "to_region_id": "region_floor_001_labyrinth",
+      "route_id": "road_labyrinth_gate",
+      "bidirectional": true
+    }
+  ],
+  "settlements": [
+    {
+      "settlement_id": "settlement_town_of_beginnings",
+      "display_name": "Town of Beginnings",
+      "region_id": "region_starting_city",
+      "centre": [
+        0,
+        0,
+        4500
+      ],
+      "approximate_diameter_m": 1000,
+      "safe_zone": true,
+      "status": "planned",
+      "reference_confidence": {
+        "existence": "confirmed_official",
+        "size": "confirmed_official",
+        "coordinates": "original_reconstruction"
+      }
+    },
+    {
+      "settlement_id": "settlement_horunka",
+      "display_name": "Horunka Village",
+      "region_id": "region_horunka_woodlands",
+      "centre": [
+        -2400,
+        30,
+        2400
+      ],
+      "approximate_diameter_m": 120,
+      "safe_zone": true,
+      "status": "planned",
+      "reference_confidence": {
+        "existence": "confirmed_official",
+        "size": "original_reconstruction",
+        "coordinates": "original_reconstruction"
+      }
+    },
+    {
+      "settlement_id": "settlement_medai",
+      "display_name": "Medai Village",
+      "region_id": "region_medai_ruins_route",
+      "centre": [
+        2850,
+        45,
+        300
+      ],
+      "approximate_diameter_m": 160,
+      "safe_zone": true,
+      "status": "planned",
+      "reference_confidence": {
+        "existence": "confirmed_official",
+        "size": "original_reconstruction",
+        "coordinates": "original_reconstruction"
+      }
+    },
+    {
+      "settlement_id": "settlement_tolbana",
+      "display_name": "Tolbana",
+      "region_id": "region_tolbana_vale",
+      "centre": [
+        0,
+        55,
+        -3800
+      ],
+      "approximate_diameter_m": 200,
+      "safe_zone": true,
+      "status": "planned",
+      "reference_confidence": {
+        "existence": "confirmed_official",
+        "size": "confirmed_official",
+        "coordinates": "original_reconstruction"
+      }
+    },
+    {
+      "settlement_id": "settlement_crossroads_rest",
+      "display_name": "Crossroads Rest",
+      "region_id": "region_rata_plains",
+      "centre": [
+        0,
+        10,
+        1200
+      ],
+      "approximate_diameter_m": 90,
+      "safe_zone": true,
+      "status": "original_reconstruction",
+      "reference_confidence": {
+        "existence": "original_reconstruction",
+        "size": "original_reconstruction",
+        "coordinates": "original_reconstruction"
+      }
+    }
+  ],
+  "roads": [
+    {
+      "road_id": "road_central_north",
+      "display_name": "Central North Road",
+      "route_type": "main_road",
+      "status": "reconstructed",
+      "width_target_m": 10,
+      "polyline": [
+        [
+          0,
+          0,
+          4000
+        ],
+        [
+          0,
+          0,
+          3200
+        ],
+        [
+          0,
+          0,
+          2200
+        ],
+        [
+          0,
+          10,
+          1100
+        ],
+        [
+          0,
+          55,
+          200
+        ],
+        [
+          0,
+          110,
+          -900
+        ],
+        [
+          0,
+          140,
+          -1900
+        ],
+        [
+          0,
+          110,
+          -3000
+        ],
+        [
+          0,
+          55,
+          -3600
+        ]
+      ],
+      "connected_settlements": [
+        "settlement_town_of_beginnings",
+        "settlement_crossroads_rest",
+        "settlement_tolbana"
+      ]
+    },
+    {
+      "road_id": "road_horunka_branch",
+      "display_name": "Horunka Road",
+      "route_type": "secondary_road",
+      "status": "reconstructed",
+      "width_target_m": 7,
+      "polyline": [
+        [
+          0,
+          0,
+          3500
+        ],
+        [
+          -700,
+          10,
+          3200
+        ],
+        [
+          -1500,
+          20,
+          2800
+        ],
+        [
+          -2400,
+          30,
+          2400
+        ]
+      ],
+      "connected_settlements": [
+        "settlement_town_of_beginnings",
+        "settlement_horunka"
+      ]
+    },
+    {
+      "road_id": "road_western_cave_route",
+      "display_name": "Western Cave Route",
+      "route_type": "danger_route",
+      "status": "reasonable_interpretation",
+      "width_target_m": 5,
+      "polyline": [
+        [
+          -2400,
+          30,
+          2400
+        ],
+        [
+          -3000,
+          60,
+          1200
+        ],
+        [
+          -3200,
+          80,
+          200
+        ],
+        [
+          -2400,
+          90,
+          -800
+        ],
+        [
+          0,
+          110,
+          -1500
+        ]
+      ],
+      "connected_settlements": [
+        "settlement_horunka"
+      ]
+    },
+    {
+      "road_id": "road_east_lake_branch",
+      "display_name": "East Lake Road",
+      "route_type": "secondary_road",
+      "status": "reconstructed",
+      "width_target_m": 7,
+      "polyline": [
+        [
+          0,
+          0,
+          3500
+        ],
+        [
+          900,
+          10,
+          3200
+        ],
+        [
+          1800,
+          8,
+          2700
+        ],
+        [
+          2600,
+          10,
+          2200
+        ]
+      ],
+      "connected_settlements": [
+        "settlement_town_of_beginnings"
+      ]
+    },
+    {
+      "road_id": "road_medai_route",
+      "display_name": "Medai Road",
+      "route_type": "secondary_road",
+      "status": "reasonable_interpretation",
+      "width_target_m": 6,
+      "polyline": [
+        [
+          2600,
+          10,
+          2200
+        ],
+        [
+          3000,
+          25,
+          1300
+        ],
+        [
+          2850,
+          45,
+          300
+        ]
+      ],
+      "connected_settlements": [
+        "settlement_medai"
+      ]
+    },
+    {
+      "road_id": "road_medai_ruins_route",
+      "display_name": "Eastern Ruins Route",
+      "route_type": "danger_route",
+      "status": "reasonable_interpretation",
+      "width_target_m": 5,
+      "polyline": [
+        [
+          2850,
+          45,
+          300
+        ],
+        [
+          2500,
+          70,
+          -500
+        ],
+        [
+          1700,
+          100,
+          -1100
+        ],
+        [
+          0,
+          110,
+          -1500
+        ]
+      ],
+      "connected_settlements": [
+        "settlement_medai"
+      ]
+    },
+    {
+      "road_id": "road_northern_pass",
+      "display_name": "Northern Pass Road",
+      "route_type": "main_road",
+      "status": "reconstructed",
+      "width_target_m": 8,
+      "polyline": [
+        [
+          0,
+          110,
+          -1500
+        ],
+        [
+          -300,
+          140,
+          -2200
+        ],
+        [
+          250,
+          155,
+          -2900
+        ],
+        [
+          0,
+          70,
+          -3400
+        ]
+      ],
+      "connected_settlements": [
+        "settlement_tolbana"
+      ]
+    },
+    {
+      "road_id": "road_tolbana_south",
+      "display_name": "Tolbana South Road",
+      "route_type": "main_road",
+      "status": "reconstructed",
+      "width_target_m": 9,
+      "polyline": [
+        [
+          0,
+          70,
+          -3400
+        ],
+        [
+          0,
+          55,
+          -3800
+        ]
+      ],
+      "connected_settlements": [
+        "settlement_tolbana"
+      ]
+    },
+    {
+      "road_id": "road_labyrinth_approach",
+      "display_name": "Labyrinth Approach",
+      "route_type": "danger_route",
+      "status": "confirmed_relation_reconstructed_geometry",
+      "width_target_m": 7,
+      "polyline": [
+        [
+          0,
+          55,
+          -3800
+        ],
+        [
+          200,
+          120,
+          -4200
+        ],
+        [
+          -150,
+          180,
+          -4500
+        ],
+        [
+          0,
+          220,
+          -4700
+        ]
+      ],
+      "connected_settlements": [
+        "settlement_tolbana"
+      ]
+    },
+    {
+      "road_id": "road_starting_city_north_gate",
+      "display_name": "Starting City North Gate Road",
+      "route_type": "safe_city_road",
+      "status": "reconstructed",
+      "width_target_m": 14,
+      "polyline": [
+        [
+          0,
+          0,
+          4550
+        ],
+        [
+          0,
+          0,
+          4200
+        ],
+        [
+          0,
+          0,
+          4000
+        ],
+        [
+          0,
+          0,
+          3800
+        ]
+      ],
+      "connected_settlements": [
+        "settlement_town_of_beginnings",
+        "settlement_crossroads_rest"
+      ]
+    },
+    {
+      "road_id": "road_west_crosslink",
+      "display_name": "Rata–Horunka Crossroad",
+      "route_type": "regional_road",
+      "status": "reconstructed",
+      "width_target_m": 7,
+      "polyline": [
+        [
+          -350,
+          10,
+          2300
+        ],
+        [
+          -900,
+          15,
+          2450
+        ],
+        [
+          -1550,
+          20,
+          2500
+        ],
+        [
+          -2200,
+          30,
+          2400
+        ]
+      ],
+      "connected_settlements": [
+        "settlement_crossroads_rest",
+        "settlement_horunka"
+      ]
+    },
+    {
+      "road_id": "road_east_crosslink",
+      "display_name": "Rata–Lake Crossroad",
+      "route_type": "regional_road",
+      "status": "reconstructed",
+      "width_target_m": 7,
+      "polyline": [
+        [
+          350,
+          10,
+          2300
+        ],
+        [
+          950,
+          12,
+          2450
+        ],
+        [
+          1650,
+          10,
+          2420
+        ],
+        [
+          2250,
+          5,
+          2200
+        ]
+      ],
+      "connected_settlements": [
+        "settlement_crossroads_rest"
+      ]
+    },
+    {
+      "road_id": "trail_western_rim",
+      "display_name": "Western Rim Trail",
+      "route_type": "mountain_trail",
+      "status": "reconstructed",
+      "width_target_m": 4,
+      "polyline": [
+        [
+          -3150,
+          70,
+          450
+        ],
+        [
+          -3800,
+          110,
+          100
+        ],
+        [
+          -4250,
+          150,
+          -650
+        ],
+        [
+          -4300,
+          170,
+          -1500
+        ]
+      ],
+      "connected_settlements": []
+    },
+    {
+      "road_id": "trail_eastern_wetlands",
+      "display_name": "Eastern Wetland Trail",
+      "route_type": "wetland_trail",
+      "status": "reconstructed",
+      "width_target_m": 4,
+      "polyline": [
+        [
+          2850,
+          45,
+          300
+        ],
+        [
+          3500,
+          25,
+          -100
+        ],
+        [
+          4000,
+          5,
+          -750
+        ],
+        [
+          4200,
+          10,
+          -1450
+        ]
+      ],
+      "connected_settlements": [
+        "settlement_medai"
+      ]
+    },
+    {
+      "road_id": "trail_western_north",
+      "display_name": "Western Northern Trail",
+      "route_type": "mountain_trail",
+      "status": "reconstructed",
+      "width_target_m": 4,
+      "polyline": [
+        [
+          -4300,
+          170,
+          -1500
+        ],
+        [
+          -3650,
+          190,
+          -2100
+        ],
+        [
+          -2500,
+          175,
+          -2600
+        ],
+        [
+          -1200,
+          155,
+          -2750
+        ]
+      ],
+      "connected_settlements": []
+    },
+    {
+      "road_id": "trail_eastern_north",
+      "display_name": "Eastern Northern Trail",
+      "route_type": "wetland_highland_trail",
+      "status": "reconstructed",
+      "width_target_m": 4,
+      "polyline": [
+        [
+          4200,
+          10,
+          -1450
+        ],
+        [
+          3650,
+          45,
+          -2050
+        ],
+        [
+          2500,
+          105,
+          -2550
+        ],
+        [
+          1200,
+          145,
+          -2750
+        ]
+      ],
+      "connected_settlements": []
+    },
+    {
+      "road_id": "road_labyrinth_gate",
+      "display_name": "Labyrinth Gate Causeway",
+      "route_type": "fortified_approach",
+      "status": "reconstructed",
+      "width_target_m": 12,
+      "polyline": [
+        [
+          0,
+          90,
+          -4300
+        ],
+        [
+          0,
+          125,
+          -4500
+        ],
+        [
+          0,
+          180,
+          -4700
+        ],
+        [
+          0,
+          220,
+          -4800
+        ]
+      ],
+      "connected_settlements": [
+        "settlement_tolbana"
+      ]
+    }
+  ],
+  "dungeons": [
+    {
+      "dungeon_id": "dungeon_horunka_forest_cave",
+      "display_name": "Western Forest Cave",
+      "region_id": "region_western_cave_hills",
+      "entrance": [
+        -3150,
+        70,
+        450
+      ],
+      "dungeon_type": "cave_route",
+      "status": "planned",
+      "boss_area_id": null,
+      "reference_confidence": "reasonable_interpretation"
+    },
+    {
+      "dungeon_id": "dungeon_medai_ruins",
+      "display_name": "Eastern Ruins Dungeon",
+      "region_id": "region_medai_ruins_route",
+      "entrance": [
+        2500,
+        70,
+        -500
+      ],
+      "dungeon_type": "ruins_dungeon",
+      "status": "planned",
+      "boss_area_id": null,
+      "reference_confidence": "reasonable_interpretation"
+    },
+    {
+      "dungeon_id": "dungeon_central_ruins_catacombs",
+      "display_name": "Central Ruins Catacombs",
+      "region_id": "region_central_highlands",
+      "entrance": [
+        -600,
+        85,
+        -700
+      ],
+      "dungeon_type": "optional_dungeon",
+      "status": "locked_future",
+      "boss_area_id": null,
+      "reference_confidence": "original_reconstruction"
+    },
+    {
+      "dungeon_id": "dungeon_black_iron_palace_hidden",
+      "display_name": "Black Iron Palace Hidden Dungeon",
+      "region_id": "region_starting_city",
+      "entrance": [
+        0,
+        -20,
+        4660
+      ],
+      "dungeon_type": "locked_story_dungeon",
+      "status": "locked_future",
+      "boss_area_id": null,
+      "reference_confidence": "confirmed_official"
+    },
+    {
+      "dungeon_id": "dungeon_floor_001_labyrinth",
+      "display_name": "First Floor Labyrinth",
+      "region_id": "region_floor_001_labyrinth",
+      "entrance": [
+        0,
+        220,
+        -4700
+      ],
+      "dungeon_type": "floor_labyrinth",
+      "status": "locked_future",
+      "boss_area_id": "boss_area_floor_001",
+      "reference_confidence": "confirmed_official"
+    },
+    {
+      "dungeon_id": "boss_area_floor_001",
+      "display_name": "First Floor Boss Chamber",
+      "region_id": "region_floor_001_labyrinth",
+      "entrance": [
+        0,
+        300,
+        -4870
+      ],
+      "dungeon_type": "floor_boss_area",
+      "status": "locked_future",
+      "boss_area_id": null,
+      "reference_confidence": "confirmed_official"
+    }
+  ],
+  "landmarks": [
+    {
+      "landmark_id": "landmark_starting_city_north_gate",
+      "display_name": "Starting City North Gate",
+      "region_id": "region_starting_city",
+      "position": [
+        0,
+        0,
+        4000
+      ],
+      "reference_confidence": "confirmed_relation_reconstructed_coordinates"
+    },
+    {
+      "landmark_id": "landmark_black_iron_palace",
+      "display_name": "Black Iron Palace",
+      "region_id": "region_starting_city",
+      "position": [
+        0,
+        0,
+        4660
+      ],
+      "reference_confidence": "confirmed_official"
+    },
+    {
+      "landmark_id": "landmark_starting_city_central_plaza",
+      "display_name": "Starting City Central Plaza",
+      "region_id": "region_starting_city",
+      "position": [
+        0,
+        0,
+        4550
+      ],
+      "reference_confidence": "confirmed_official"
+    },
+    {
+      "landmark_id": "landmark_current_outskirts_prototype",
+      "display_name": "Current 350 m Outskirts Prototype",
+      "region_id": "region_city_gate_outskirts",
+      "position": [
+        0,
+        0,
+        3835
+      ],
+      "reference_confidence": "project_confirmed"
+    },
+    {
+      "landmark_id": "landmark_south_road_crossroads",
+      "display_name": "South Road Crossroads",
+      "region_id": "region_city_gate_outskirts",
+      "position": [
+        0,
+        5,
+        3050
+      ],
+      "reference_confidence": "original_reconstruction"
+    },
+    {
+      "landmark_id": "landmark_rata_central_road",
+      "display_name": "Rata Central Road",
+      "region_id": "region_rata_plains",
+      "position": [
+        0,
+        10,
+        1800
+      ],
+      "reference_confidence": "reasonable_interpretation"
+    },
+    {
+      "landmark_id": "landmark_central_canyon_mouth",
+      "display_name": "Central Canyon Mouth",
+      "region_id": "region_rata_plains",
+      "position": [
+        0,
+        45,
+        650
+      ],
+      "reference_confidence": "reasonable_interpretation"
+    },
+    {
+      "landmark_id": "landmark_horunka_village",
+      "display_name": "Horunka Village",
+      "region_id": "region_horunka_woodlands",
+      "position": [
+        -2400,
+        30,
+        2400
+      ],
+      "reference_confidence": "confirmed_official"
+    },
+    {
+      "landmark_id": "landmark_horunka_old_growth",
+      "display_name": "Horunka Old Growth",
+      "region_id": "region_horunka_woodlands",
+      "position": [
+        -3000,
+        40,
+        1900
+      ],
+      "reference_confidence": "original_reconstruction"
+    },
+    {
+      "landmark_id": "landmark_western_cave_mouth",
+      "display_name": "Western Cave Mouth",
+      "region_id": "region_western_cave_hills",
+      "position": [
+        -3150,
+        70,
+        450
+      ],
+      "reference_confidence": "reasonable_interpretation"
+    },
+    {
+      "landmark_id": "landmark_east_great_lake",
+      "display_name": "East Great Lake",
+      "region_id": "region_east_lake_district",
+      "position": [
+        2750,
+        0,
+        2250
+      ],
+      "reference_confidence": "confirmed_official"
+    },
+    {
+      "landmark_id": "landmark_lake_causeway",
+      "display_name": "Lake Causeway",
+      "region_id": "region_east_lake_district",
+      "position": [
+        2250,
+        5,
+        1700
+      ],
+      "reference_confidence": "original_reconstruction"
+    },
+    {
+      "landmark_id": "landmark_medai_village",
+      "display_name": "Medai Village",
+      "region_id": "region_medai_ruins_route",
+      "position": [
+        2850,
+        45,
+        300
+      ],
+      "reference_confidence": "confirmed_official"
+    },
+    {
+      "landmark_id": "landmark_eastern_ruins_gate",
+      "display_name": "Eastern Ruins Gate",
+      "region_id": "region_medai_ruins_route",
+      "position": [
+        2500,
+        70,
+        -500
+      ],
+      "reference_confidence": "reasonable_interpretation"
+    },
+    {
+      "landmark_id": "landmark_central_canyon",
+      "display_name": "Central Canyon",
+      "region_id": "region_central_highlands",
+      "position": [
+        0,
+        110,
+        -650
+      ],
+      "reference_confidence": "confirmed_official"
+    },
+    {
+      "landmark_id": "landmark_ancient_ruins",
+      "display_name": "Ancient Ruins",
+      "region_id": "region_central_highlands",
+      "position": [
+        -600,
+        85,
+        -700
+      ],
+      "reference_confidence": "confirmed_official"
+    },
+    {
+      "landmark_id": "landmark_highland_bridge",
+      "display_name": "Highland Bridge",
+      "region_id": "region_central_highlands",
+      "position": [
+        500,
+        125,
+        -1150
+      ],
+      "reference_confidence": "original_reconstruction"
+    },
+    {
+      "landmark_id": "landmark_northern_pass",
+      "display_name": "Northern Pass",
+      "region_id": "region_northern_valleys",
+      "position": [
+        0,
+        150,
+        -2300
+      ],
+      "reference_confidence": "original_reconstruction"
+    },
+    {
+      "landmark_id": "landmark_three_valleys",
+      "display_name": "Three Valleys",
+      "region_id": "region_northern_valleys",
+      "position": [
+        -300,
+        145,
+        -2800
+      ],
+      "reference_confidence": "original_reconstruction"
+    },
+    {
+      "landmark_id": "landmark_tolbana_windmills",
+      "display_name": "Tolbana Windmills",
+      "region_id": "region_tolbana_vale",
+      "position": [
+        0,
+        55,
+        -3800
+      ],
+      "reference_confidence": "confirmed_official"
+    },
+    {
+      "landmark_id": "landmark_tolbana_fountain_square",
+      "display_name": "Tolbana Fountain Square",
+      "region_id": "region_tolbana_vale",
+      "position": [
+        0,
+        55,
+        -3780
+      ],
+      "reference_confidence": "confirmed_official"
+    },
+    {
+      "landmark_id": "landmark_first_floor_labyrinth_tower",
+      "display_name": "First Floor Labyrinth Tower",
+      "region_id": "region_floor_001_labyrinth",
+      "position": [
+        0,
+        220,
+        -4800
+      ],
+      "reference_confidence": "confirmed_official"
+    },
+    {
+      "landmark_id": "landmark_floor_001_boss_gate",
+      "display_name": "First Floor Boss Gate",
+      "region_id": "region_floor_001_labyrinth",
+      "position": [
+        0,
+        300,
+        -4870
+      ],
+      "reference_confidence": "confirmed_official"
+    },
+    {
+      "landmark_id": "landmark_stair_to_floor_002",
+      "display_name": "Stair to Floor 2",
+      "region_id": "region_floor_001_labyrinth",
+      "position": [
+        0,
+        330,
+        -4920
+      ],
+      "reference_confidence": "confirmed_official"
+    },
+    {
+      "landmark_id": "landmark_east_watch_hill",
+      "display_name": "East Watch Hill",
+      "region_id": "region_east_lake_district",
+      "position": [
+        1750,
+        55,
+        2450
+      ],
+      "reference_confidence": "original_reconstruction"
+    },
+    {
+      "landmark_id": "landmark_split_peak",
+      "display_name": "Split Peak",
+      "region_id": "region_western_cave_hills",
+      "position": [
+        -3500,
+        220,
+        -350
+      ],
+      "reference_confidence": "original_reconstruction"
+    },
+    {
+      "landmark_id": "landmark_west_rim_overlook",
+      "display_name": "West Rim Overlook",
+      "region_id": "region_western_rim_cliffs",
+      "position": [
+        -4400,
+        210,
+        -1200
+      ],
+      "reference_confidence": "original_reconstruction"
+    },
+    {
+      "landmark_id": "landmark_old_aqueduct",
+      "display_name": "Old Aqueduct",
+      "region_id": "region_medai_ruins_route",
+      "position": [
+        2300,
+        95,
+        -700
+      ],
+      "reference_confidence": "original_reconstruction"
+    },
+    {
+      "landmark_id": "landmark_broken_rim_bridge",
+      "display_name": "Broken Rim Bridge",
+      "region_id": "region_western_rim_cliffs",
+      "position": [
+        -4100,
+        180,
+        -2100
+      ],
+      "reference_confidence": "original_reconstruction"
+    },
+    {
+      "landmark_id": "landmark_eastern_marsh_delta",
+      "display_name": "Eastern Marsh Delta",
+      "region_id": "region_eastern_wetlands",
+      "position": [
+        3900,
+        0,
+        -800
+      ],
+      "reference_confidence": "original_reconstruction"
+    },
+    {
+      "landmark_id": "landmark_mirror_lake",
+      "display_name": "Mirror Lake",
+      "region_id": "region_eastern_wetlands",
+      "position": [
+        3650,
+        0,
+        -1550
+      ],
+      "reference_confidence": "original_reconstruction"
+    },
+    {
+      "landmark_id": "landmark_east_rim_falls",
+      "display_name": "East Rim Falls",
+      "region_id": "region_eastern_wetlands",
+      "position": [
+        4400,
+        25,
+        -1900
+      ],
+      "reference_confidence": "original_reconstruction"
+    },
+    {
+      "landmark_id": "landmark_tolbana_south_view",
+      "display_name": "Tolbana South View",
+      "region_id": "region_northern_valleys",
+      "position": [
+        0,
+        155,
+        -3150
+      ],
+      "reference_confidence": "reasonable_interpretation"
+    },
+    {
+      "landmark_id": "landmark_labyrinth_valley_view",
+      "display_name": "Labyrinth Valley View",
+      "region_id": "region_tolbana_vale",
+      "position": [
+        0,
+        75,
+        -4000
+      ],
+      "reference_confidence": "reasonable_interpretation"
+    },
+    {
+      "landmark_id": "landmark_labyrinth_approach",
+      "display_name": "Labyrinth Approach",
+      "region_id": "region_labyrinth_foothills",
+      "position": [
+        0,
+        120,
+        -4400
+      ],
+      "reference_confidence": "reasonable_interpretation"
+    }
+  ],
+  "spawn_markers": [
+    {
+      "spawn_id": "spawn_floor_001_player_start",
+      "marker_name": "PlayerSpawn",
+      "region_id": "region_city_gate_outskirts",
+      "position": [
+        0,
+        0.05,
+        3980
+      ],
+      "spawn_type": "player",
+      "status": "current_prototype_mapped"
+    },
+    {
+      "spawn_id": "spawn_floor_001_grasslands_001",
+      "marker_name": "GrasslandsEnemySpawn01",
+      "region_id": "region_city_gate_outskirts",
+      "position": [
+        -42,
+        0.05,
+        3890
+      ],
+      "spawn_type": "enemy",
+      "enemy_family": "wild_boar",
+      "status": "current_prototype_mapped"
+    },
+    {
+      "spawn_id": "spawn_floor_001_grasslands_002",
+      "marker_name": "GrasslandsEnemySpawn02",
+      "region_id": "region_city_gate_outskirts",
+      "position": [
+        48,
+        0.05,
+        3845
+      ],
+      "spawn_type": "enemy",
+      "enemy_family": "wild_boar",
+      "status": "current_prototype_mapped"
+    },
+    {
+      "spawn_id": "spawn_floor_001_grasslands_003",
+      "marker_name": "GrasslandsEnemySpawn03",
+      "region_id": "region_city_gate_outskirts",
+      "position": [
+        -38,
+        0.05,
+        3780
+      ],
+      "spawn_type": "enemy",
+      "enemy_family": "wild_boar",
+      "status": "current_prototype_mapped"
+    },
+    {
+      "spawn_id": "spawn_floor_001_horunka_future",
+      "marker_name": "FutureHorunkaEnemySpawn",
+      "region_id": "region_horunka_woodlands",
+      "position": [
+        -2750,
+        25,
+        1900
+      ],
+      "spawn_type": "enemy",
+      "status": "planned"
+    },
+    {
+      "spawn_id": "spawn_floor_001_forest_future",
+      "marker_name": "FutureForestEnemySpawn",
+      "region_id": "region_horunka_woodlands",
+      "position": [
+        -3000,
+        35,
+        1700
+      ],
+      "spawn_type": "enemy",
+      "status": "planned"
+    },
+    {
+      "spawn_id": "spawn_floor_001_ruins_miniboss_future",
+      "marker_name": "FutureRuinsMinibossSpawn",
+      "region_id": "region_central_highlands",
+      "position": [
+        -600,
+        85,
+        -700
+      ],
+      "spawn_type": "future_miniboss",
+      "status": "locked_future"
+    },
+    {
+      "spawn_id": "spawn_floor_001_labyrinth_entrance_future",
+      "marker_name": "FutureLabyrinthEntrance",
+      "region_id": "region_floor_001_labyrinth",
+      "position": [
+        0,
+        220,
+        -4700
+      ],
+      "spawn_type": "transition",
+      "status": "locked_future"
+    }
+  ],
+  "checkpoints": [
+    {
+      "checkpoint_id": "floor_001_starting_city_gate",
+      "display_name": "Starting City Gate Checkpoint",
+      "region_id": "region_city_gate_outskirts",
+      "position": [
+        7,
+        0.05,
+        3979
+      ],
+      "rotation_degrees": [
+        0,
+        0,
+        0
+      ],
+      "status": "current_prototype_mapped",
+      "safe_zone": true
+    },
+    {
+      "checkpoint_id": "floor_001_horunka",
+      "display_name": "Horunka Checkpoint",
+      "region_id": "region_horunka_woodlands",
+      "position": [
+        -2400,
+        30,
+        2400
+      ],
+      "rotation_degrees": [
+        0,
+        0,
+        0
+      ],
+      "status": "planned",
+      "safe_zone": true
+    },
+    {
+      "checkpoint_id": "floor_001_medai",
+      "display_name": "Medai Checkpoint",
+      "region_id": "region_medai_ruins_route",
+      "position": [
+        2850,
+        45,
+        300
+      ],
+      "rotation_degrees": [
+        0,
+        0,
+        0
+      ],
+      "status": "planned",
+      "safe_zone": true
+    },
+    {
+      "checkpoint_id": "floor_001_tolbana",
+      "display_name": "Tolbana Checkpoint",
+      "region_id": "region_tolbana_vale",
+      "position": [
+        0,
+        55,
+        -3800
+      ],
+      "rotation_degrees": [
+        0,
+        180,
+        0
+      ],
+      "status": "planned",
+      "safe_zone": true
+    }
+  ],
+  "streaming": {
+    "implementation_status": "design_only",
+    "chunk_size_m": 256,
+    "chunk_origin": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "chunk_coordinate_formula": {
+      "cx": "floor(x / 256)",
+      "cz": "floor(z / 256)"
+    },
+    "chunk_id_pattern": "floor_001_cx_{signed_3_digit}_cz_{signed_3_digit}",
+    "visual_preload_chebyshev_radius_chunks": 2,
+    "collision_active_chebyshev_radius_chunks": 1,
+    "navigation_active_chebyshev_radius_chunks": 1,
+    "actor_simulation_chebyshev_radius_chunks": 1,
+    "far_landmarks": "region-level low-detail proxies remain loaded independently of gameplay chunks",
+    "region_chunk_relationship": "A chunk has one primary region ID and may list overlap region IDs near authored borders.",
+    "persistent_object_key_pattern": "floor_id/region_id/chunk_id/persistent_placement_id",
+    "save_position_fields_future": [
+      "floor_id",
+      "region_id",
+      "chunk_id",
+      "position",
+      "rotation",
+      "fallback_spawn_id"
+    ],
+    "multiplayer_interest_rule": "Server authority owns actors; clients subscribe to their active chunk plus configured neighbour rings.",
+    "notes": [
+      "Streaming is not implemented in Milestone 12.",
+      "Navigation seams require border overlap or links between neighbouring chunk maps.",
+      "Spawn definitions remain data; runtime entities should not be saved as Node references."
+    ]
+  }
+}

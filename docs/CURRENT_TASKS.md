@@ -1,8 +1,8 @@
 # Current Tasks
 
 **Project:** Aincrad-Inspired RPG  
-**Current milestone:** M11 — Floor 1 Outskirts Greybox
-**Current phase:** Floor 1 outdoor greybox package created; local Godot verification remains
+**Current milestone:** M12 — Floor 1 Master Map and Scale Lock
+**Current phase:** Floor 1 reference audit, scale, master map, regions, chunks, and production plan locked; no gameplay or geometry changes
 **Last updated:** 2026-07-11
 
 ---
@@ -20,6 +20,10 @@
 ---
 
 ## 2. Current Milestone Goal
+
+**M12 current goal:** Lock the complete Floor 1 reference scale, coordinate system, region plan, future chunk grid, production order, SVG map, and machine-readable JSON without changing gameplay or 3D geometry.
+
+The M11 goal text below is retained as historical milestone context and remains relevant for regression testing, but it is no longer the active work scope.
 
 Create the first proper Floor 1 wilderness scene while preserving the reusable
 player, interaction, combat, progression, quest, inventory, economy, save,
@@ -915,7 +919,63 @@ M11 is complete after all local checks pass.
 
 ---
 
-## 15. Current Work Limit
+
+## 15. M12 — Floor 1 Master Map and Scale Lock
+
+### Reference and scale
+
+- [x] Read all existing project documentation before planning.
+- [x] Inspect `floor_001_outskirts.tscn` without modifying it.
+- [x] Separate confirmed official information, reasonable interpretation, and original reconstruction.
+- [x] Lock one Godot unit to one metre.
+- [x] Lock Floor 1 to a 10,000-metre diameter and 5,000-metre radius.
+- [x] Lock a 4,850-metre normal playable radius and 150-metre rim belt.
+- [x] Lock floor-centred coordinates with `+X` east and `-Z` north.
+- [x] Document player travel-time targets and settlement scale targets.
+- [x] Confirm that origin shifting is not currently required.
+
+### Master map and data
+
+- [x] Create the complete circular Floor 1 development reconstruction.
+- [x] Define fourteen stable regions and their neighbours.
+- [x] Define known and reconstructed settlements, roads, dungeons, landmarks, spawn markers, and checkpoints.
+- [x] Create `docs/floors/FLOOR_001_MASTER_MAP.svg`.
+- [x] Create valid machine-readable `data/floors/floor_001.json`.
+- [x] Mark confidence for major locations and measurements.
+
+### Current outskirts integration
+
+- [x] Map the 350-by-350-metre scene to the southern gate sector.
+- [x] Set its planning origin to `(0, 0, 3835)`.
+- [x] Document which parts can remain and which must be rebuilt or relocated.
+- [x] Keep the existing scene byte-identical during this milestone.
+
+### Chunk and production planning
+
+- [x] Lock a 256-by-256-metre outdoor streaming grid.
+- [x] Define chunk naming and coordinate rules.
+- [x] Define future visual, collision, navigation, actor, persistence, save, and multiplayer behavior.
+- [x] Create a phased production order from floor shell to Labyrinth exterior.
+- [x] Defer streaming implementation, terrain geometry, enemies, quests, final art, and additional floors.
+
+### Documentation and safety
+
+- [x] Update `PROJECT_BIBLE.md`.
+- [x] Update `TECHNICAL_ARCHITECTURE.md`.
+- [x] Update `CURRENT_TASKS.md`.
+- [x] Update `DECISION_LOG.md`.
+- [x] Preserve every gameplay, scene, project setting, and `.uid` file.
+- [ ] Review the SVG and JSON inside the local repository.
+- [ ] Make a focused local Git commit.
+
+M12 is complete when the planning artifacts are accepted as the source of truth for future Floor 1 production.
+
+---
+## 16. Current Work Limit
+
+During M12, do not modify gameplay code, project settings, scenes, terrain geometry, enemy placement, NPC placement, or save data. Only the required planning documents, SVG, JSON, and documentation updates are allowed.
+
+The M11 limits below are retained as additional production constraints:
 
 Do not add the following during M11:
 
@@ -931,11 +991,24 @@ slice systems and prepares stable markers and zone boundaries for later work.
 
 ---
 
-## 16. Next Milestone Preview
+## 17. Next Milestone Preview
 
-## M12 — Prototype Polish
+## M13 — Floor Shell and Streaming Prototype
 
-Planned tasks:
+Planned M13 tasks:
+
+- [ ] Create a data-driven empty Floor 1 root using the locked 10 km bounds.
+- [ ] Prototype the 256 m chunk coordinate grid with flat debug chunks only.
+- [ ] Add chunk-border collision and navigation seam tests.
+- [ ] Add a floor/region/chunk debug overlay.
+- [ ] Plan a versioned save migration for floor, region, and chunk IDs.
+- [ ] Keep both `test_world.tscn` and `floor_001_outskirts.tscn` available for regression.
+- [ ] Do not begin final terrain or art until the empty streaming prototype is stable.
+
+Begin M13 only after the M12 SVG, JSON, and scale decisions are reviewed and accepted.
+
+### Later M14 prototype-polish tasks retained from the previous roadmap
+
 
 - [ ] Complete a full start-to-finish Floor 1 playthrough and regression pass.
 - [ ] Improve combat, hit, quest, purchase, checkpoint, and loot feedback.
@@ -944,11 +1017,11 @@ Planned tasks:
 - [ ] Fix navigation, collision, UI overlap, and readability issues found locally.
 - [ ] Review which greybox zones should become future streamable chunks.
 
-Begin M12 only after M11 passes local testing.
+Begin M14 only after M13 is stable and the retained M11 local regression checks pass.
 
 ---
 
-## 17. Updated Milestone Order
+## 18. Updated Milestone Order
 
 ### M0 — Project Foundation
 
@@ -1001,17 +1074,21 @@ protection, and save version 4.
 Starting City gate, road, grasslands, forest, ruins, sealed labyrinth landmark,
 stable markers, boundary recovery, and the complete reusable gameplay loop.
 
-### M12 — Prototype Polish
+### M12 — Floor 1 Master Map and Scale Lock
+
+### M13 — Floor Shell and Streaming Prototype
+
+### M14 — Prototype Polish
 
 Feedback, audio, bug fixing, performance review, and full playthrough testing.
 
-### M13 — Multiplayer Technical Test
+### M15 — Multiplayer Technical Test
 
 Only after the complete local prototype works.
 
 ---
 
-## 18. Definition of Done for Any Task
+## 19. Definition of Done for Any Task
 
 A task is done when:
 
@@ -1027,7 +1104,23 @@ A task is done when:
 
 ---
 
-## 19. Next Action
+## 20. Next Action
+
+Review these Milestone 12 source-of-truth files before creating more Floor 1 geometry:
+
+```text
+docs/floors/FLOOR_001_REFERENCE_AUDIT.md
+docs/floors/FLOOR_001_SCALE_GUIDE.md
+docs/floors/FLOOR_001_MASTER_PLAN.md
+docs/floors/FLOOR_001_REGION_LIST.md
+docs/floors/FLOOR_001_PRODUCTION_ORDER.md
+docs/floors/FLOOR_001_MASTER_MAP.svg
+data/floors/floor_001.json
+```
+
+After acceptance, the next implementation milestone is the empty Floor 1 shell and 256 m streaming prototype.
+
+The older M11 local regression action remains below and should still be completed in Godot 4.7:
 
 Open the project in Godot 4.7 and complete the M11 test sequence in
 `docs/MILESTONE_11_SETUP.md`.
