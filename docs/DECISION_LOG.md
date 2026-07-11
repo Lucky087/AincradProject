@@ -2992,7 +2992,8 @@ Collision: 17 × 17 vertices
 
 After local Blender generation, verify GLB import orientation, scale, normals, and edge continuity in Godot before implementing streaming.
 
-<<<<<<< HEAD
+
+
 ---
 
 ## D-069 — Validate Blender Terrain in an Isolated F6 Scene
@@ -3148,8 +3149,8 @@ test loader so the existing Input Map remains unchanged.
 
 Approve the collision pipeline only after the player walks and jumps across all
 internal borders without large gaps or unstable steps.
-=======
->>>>>>> 2c744701438617b46e74c7e2b7c2899902d9bd61
+
+
 
 ---
 
@@ -3327,3 +3328,5 @@ unchanged. Handle test teleports locally with `Ctrl + Arrow`.
 Approve this architecture only after F6 testing confirms correct LOD counts,
 collision transitions, root unloading, no duplicate instances, and unchanged
 F5 gameplay.
+=======
+>>>>>>> 61eba00fefd3ea4dbb53cd012620dfa990f1e2e0
