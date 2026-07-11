@@ -1,0 +1,132 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://AincradProject/scripts/world/terrain_streaming_test.gd" id="1_test"]
+[ext_resource type="Script" path="res://AincradProject/scripts/world/floor_chunk_streamer.gd" id="2_streamer"]
+[ext_resource type="PackedScene" path="res://AincradProject/scenes/player/player.tscn" id="3_player"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_stream"]
+sky_top_color = Color(0.17, 0.42, 0.72, 1)
+sky_horizon_color = Color(0.75, 0.86, 0.96, 1)
+ground_bottom_color = Color(0.1, 0.13, 0.1, 1)
+ground_horizon_color = Color(0.52, 0.62, 0.53, 1)
+sun_angle_max = 18.0
+sun_curve = 0.08
+
+[sub_resource type="Sky" id="Sky_stream"]
+sky_material = SubResource("ProceduralSkyMaterial_stream")
+
+[sub_resource type="Environment" id="Environment_stream"]
+background_mode = 2
+sky = SubResource("Sky_stream")
+ambient_light_source = 3
+ambient_light_color = Color(0.76, 0.82, 0.9, 1)
+ambient_light_energy = 0.64
+fog_enabled = true
+fog_light_color = Color(0.7, 0.79, 0.86, 1)
+fog_light_energy = 0.55
+fog_density = 0.0008
+fog_sky_affect = 0.25
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_stream_fall"]
+size = Vector3(820, 20, 820)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_boundary"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.15, 0.8, 1, 0.16)
+emission_enabled = true
+emission = Color(0.08, 0.55, 0.9, 1)
+emission_energy_multiplier = 1.5
+cull_mode = 2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_boundary"]
+material = SubResource("StandardMaterial3D_boundary")
+size = Vector2(256, 256)
+subdivide_width = 1
+subdivide_depth = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stream_debug"]
+bg_color = Color(0.03, 0.04, 0.055, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.35, 0.72, 0.9, 0.85)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="TerrainStreamingTest" type="Node3D"]
+script = ExtResource("1_test")
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_stream")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+rotation_degrees = Vector3(-52, -28, 0)
+light_color = Color(1, 0.95, 0.84, 1)
+light_energy = 1.15
+shadow_enabled = true
+
+[node name="TerrainStreamer" type="Node3D" parent="."]
+script = ExtResource("2_streamer")
+lod0_radius_chunks = 0
+lod1_visual_radius_chunks = 1
+collision_radius_chunks = 1
+unload_radius_chunks = 2
+update_interval_seconds = 0.2
+maximum_new_requests_per_update = 6
+
+[node name="LoadedChunks" type="Node3D" parent="TerrainStreamer"]
+
+[node name="StreamingUpdateTimer" type="Timer" parent="TerrainStreamer"]
+wait_time = 0.2
+
+[node name="Player" parent="." instance=ExtResource("3_player")]
+position = Vector3(128, 13, 3712)
+
+[node name="BoundarySafety" type="Node3D" parent="."]
+
+[node name="FallRecoveryArea" type="Area3D" parent="BoundarySafety"]
+position = Vector3(128, -25, 3712)
+collision_layer = 0
+collision_mask = 1
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BoundarySafety/FallRecoveryArea"]
+shape = SubResource("BoxShape3D_stream_fall")
+
+[node name="DebugVisualization" type="Node3D" parent="."]
+
+[node name="CurrentChunkBoundary" type="MeshInstance3D" parent="DebugVisualization"]
+position = Vector3(128, 5.2, 3712)
+mesh = SubResource("PlaneMesh_boundary")
+cast_shadow = 0
+
+[node name="DebugUI" type="CanvasLayer" parent="."]
+layer = 60
+
+[node name="DebugPanel" type="PanelContainer" parent="DebugUI"]
+offset_left = 18.0
+offset_top = 18.0
+offset_right = 520.0
+offset_bottom = 490.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_stream_debug")
+
+[node name="MarginContainer" type="MarginContainer" parent="DebugUI/DebugPanel"]
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="DebugLabel" type="Label" parent="DebugUI/DebugPanel/MarginContainer"]
+text = "Loading Floor 1 runtime terrain streamer..."
+theme_override_colors/font_color = Color(0.9, 0.96, 1, 1)
+theme_override_font_sizes/font_size = 14
+
+[node name="DebugUpdateTimer" type="Timer" parent="DebugUI"]
+wait_time = 0.25
+autostart = true

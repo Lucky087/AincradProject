@@ -1260,3 +1260,80 @@ It does not change the normal game startup or implement world streaming.
 Proceed to an empty Floor 1 shell and streaming prototype only after the 13B
 scene proves correct scale, axes, visual seams, collision seams, and manifest
 placement in Godot 4.7.
+
+---
+
+## 23. Milestone 13C — Runtime Terrain Chunk Streaming Test
+
+**Status:** Streaming scene and reusable loader prepared; local Godot 4.7 verification required  
+**Date:** 2026-07-11
+
+This milestone adds an isolated runtime streaming test using only the nine
+existing terrain chunks. It does not change normal F5 gameplay or the 13B
+non-streaming regression scene.
+
+### Completed in the project package
+
+- [x] Preserve the complete outer `aincrad/`, `.godot/`, `AincradProject/`, and
+      `BlenderSource/` structure.
+- [x] Keep `terrain_chunk_test.tscn` and its loader unchanged.
+- [x] Create reusable `scripts/world/floor_chunk_streamer.gd`.
+- [x] Create isolated `scenes/world/terrain_streaming_test.tscn`.
+- [x] Create test coordinator `scripts/world/terrain_streaming_test.gd`.
+- [x] Build a manifest registry keyed by signed `Vector2i` grid coordinates.
+- [x] Use floor-based 256 m coordinate calculation for positive and negative
+      world positions.
+- [x] Select LOD0, LOD1, collision, retention, and unloading independently.
+- [x] Use default radii 0, 1, 1, and 2 chunks.
+- [x] Recalculate target sets only on chunk changes or explicit test updates.
+- [x] Poll loading through a 0.20-second Timer rather than every rendered frame.
+- [x] Queue unique threaded `PackedScene` requests.
+- [x] Prevent repeated requests for queued or loading paths.
+- [x] Ignore stale completed requests after the player leaves their target area.
+- [x] Preserve one stable root per active chunk ID.
+- [x] Preserve one visual node and one collision body per active root.
+- [x] Build physics only from dedicated collision GLBs.
+- [x] Remove visual and collision independently outside their radii.
+- [x] Remove chunk roots outside the unload radius.
+- [x] Add periodic debug counts and loaded stable IDs.
+- [x] Add one transparent current-cell boundary plane.
+- [x] Add local `Ctrl + Arrow` test teleports without changing Input Map.
+- [x] Add isolated fall recovery without changing saves or checkpoints.
+- [x] Create `docs/floors/FLOOR_001_CHUNK_STREAMING_TEST.md`.
+- [x] Preserve normal gameplay, player scripts, SaveManager, project settings,
+      existing `.uid` files, and all `.godot` contents.
+
+### Local Godot verification required
+
+- [ ] Open `scenes/world/terrain_streaming_test.tscn` in Godot 4.7.
+- [ ] Run it with F6.
+- [ ] Confirm the centre coordinate is `(0, 14)`.
+- [ ] Confirm one centre LOD0 chunk becomes active.
+- [ ] Confirm eight neighbouring LOD1 chunks become active.
+- [ ] Confirm nine collision chunks become active.
+- [ ] Confirm all loading requests eventually complete.
+- [ ] Walk east across X `256` and confirm the current grid becomes `(1, 14)`.
+- [ ] Walk west across X `0` and confirm floor-based negative coordinate logic.
+- [ ] Walk and jump across every active collision border.
+- [ ] Confirm no duplicate visual or collision nodes accumulate.
+- [ ] Use `Ctrl + Arrow` to test every generated chunk centre.
+- [ ] Confirm outward teleports report missing manifest coordinates safely.
+- [ ] Confirm roots beyond the unload radius are removed.
+- [ ] Fall below the test grid and confirm centre recovery.
+- [ ] Open and run `terrain_chunk_test.tscn` as the unchanged regression test.
+- [ ] Press F5 and confirm the normal game remains unchanged.
+
+### Explicitly not included
+
+- [x] No complete Floor 1 terrain.
+- [x] No additional Blender chunks.
+- [x] No production world streaming integration.
+- [x] No roads, cities, forests, rivers, navigation, enemies, or NPCs.
+- [x] No gameplay, player, SaveManager, main-scene, or project-setting changes.
+- [x] No multiplayer streaming.
+
+### Completion gate
+
+Do not expand the terrain batch until local Godot testing confirms correct
+signed coordinates, LOD transitions, independent collision, safe unloading,
+no duplicate instances, and unchanged normal gameplay.

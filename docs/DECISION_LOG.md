@@ -2992,6 +2992,7 @@ Collision: 17 × 17 vertices
 
 After local Blender generation, verify GLB import orientation, scale, normals, and edge continuity in Godot before implementing streaming.
 
+<<<<<<< HEAD
 ---
 
 ## D-069 — Validate Blender Terrain in an Isolated F6 Scene
@@ -3147,3 +3148,182 @@ test loader so the existing Input Map remains unchanged.
 
 Approve the collision pipeline only after the player walks and jumps across all
 internal borders without large gaps or unstable steps.
+=======
+>>>>>>> 2c744701438617b46e74c7e2b7c2899902d9bd61
+
+---
+
+## D-072 — Use Floor-Based Signed Coordinates and Chebyshev Streaming Rings
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Floor 1 uses a 256-metre signed grid that extends through negative and positive
+world coordinates. Runtime selection must match the Blender generator and the
+locked Floor 1 planning rules.
+
+### Decision
+
+Calculate player coordinates using:
+
+```text
+grid_x = floor(player_x / 256)
+grid_z = floor(player_z / 256)
+```
+
+Use Chebyshev grid distance for square streaming rings.
+
+Use these configurable test defaults:
+
+```text
+LOD0 radius:       0
+LOD1 radius:       1
+Collision radius:  1
+Unload radius:     2
+Update interval:   0.20 seconds
+```
+
+Recalculate the desired set only when the player changes chunks or a test action
+forces an immediate update.
+
+### Consequences
+
+- Negative coordinates match the production chunk grid.
+- The current chunk receives LOD0.
+- Immediate neighbours receive LOD1 and collision.
+- Selection cost is tied to chunk changes rather than render frames.
+- The same rule can consume a later full Floor 1 manifest.
+
+### Alternatives considered
+
+- Integer truncation toward zero.
+- Circular world-distance checks for each chunk.
+- Full manifest scans in `_process()`.
+- Hard-coded transforms for the nine test chunks.
+
+### Follow-up
+
+Verify negative-X boundary crossing locally before approving the coordinate
+system for a larger terrain dataset.
+
+---
+
+## D-073 — Stream Visual LOD and Collision as Independent Chunk Responsibilities
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+A neighbouring terrain chunk may need low-detail visuals and full collision at
+the same time. Treating one monolithic scene as both visual and physics content
+would prevent independent radii and obscure collision pipeline failures.
+
+### Decision
+
+Keep one stable root per active coordinate:
+
+```text
+chunk_id
+├── Visual
+└── Collision
+```
+
+Allow exactly one visual instance under `Visual`, selected as LOD0 or LOD1.
+
+Create exactly one `StaticBody3D` under `Collision`, using only the dedicated
+collision GLB.
+
+Remove or replace visual and collision independently. Remove the root only after
+it exceeds the unload radius.
+
+### Consequences
+
+- LOD switching does not recreate the chunk root.
+- Collision can remain active while LOD1 is displayed.
+- Collision can unload without changing visual selection.
+- Duplicate visual and physics nodes are prevented by coordinate-keyed records.
+- Final navigation and persistent-object containers can later join the same
+  stable root without changing its identity.
+
+### Alternatives considered
+
+- Use LOD0 as collision.
+- Use LOD1 as collision.
+- Load separate full chunk roots for each LOD.
+- Display LOD0 and LOD1 simultaneously and toggle visibility.
+
+### Follow-up
+
+Profile collision creation and border stability locally before increasing the
+collision radius or chunk count.
+
+---
+
+## D-074 — Use Threaded PackedScene Requests in an Isolated Streaming Test
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The 13B scene loads all resources synchronously and is useful as a fixed import
+regression test. Runtime streaming needs non-blocking requests, request
+deduplication, stale-result protection, and safe unloading without risking the
+normal game.
+
+### Decision
+
+Create a separate F6 scene and reusable streamer.
+
+Queue resources with:
+
+```text
+ResourceLoader.load_threaded_request()
+```
+
+Poll them on a Timer with:
+
+```text
+ResourceLoader.load_threaded_get_status()
+```
+
+Retrieve only completed resources with:
+
+```text
+ResourceLoader.load_threaded_get()
+```
+
+Do not request a path already queued or loading. Recheck its target when loading
+finishes, and discard stale results rather than recreating unwanted chunks.
+
+Keep `project.godot`, normal F5 startup, and the 13B non-streaming scene
+unchanged. Handle test teleports locally with `Ctrl + Arrow`.
+
+### Consequences
+
+- Initial terrain appears progressively instead of blocking one synchronous
+  startup pass.
+- Large-resource loading is no longer attempted every frame.
+- Missing paths fail individually.
+- In-progress requests cannot be cancelled by Godot, but stale results are
+  ignored.
+- The nine-chunk test remains separate from production gameplay and saves.
+
+### Alternatives considered
+
+- Replace the 13B loader with streaming logic.
+- Load synchronously whenever the player crosses a boundary.
+- Add permanent Input Map actions for test teleports.
+- Integrate the streamer into Floor 1 outskirts before technical approval.
+
+### Follow-up
+
+Approve this architecture only after F6 testing confirms correct LOD counts,
+collision transitions, root unloading, no duplicate instances, and unchanged
+F5 gameplay.
