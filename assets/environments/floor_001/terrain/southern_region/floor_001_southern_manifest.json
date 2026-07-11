@@ -1,0 +1,3426 @@
+{
+  "schema_version": 1,
+  "floor_id": "floor_001",
+  "dataset_id": "floor_001_southern_region_v1",
+  "generation_version": "14A.1",
+  "generation_status": "complete_blender_exports_generated",
+  "generated_utc": "2026-07-11T03:08:31.547841+00:00",
+  "terrain_seed": 140011,
+  "chunk_size_m": 256.0,
+  "chunk_range": {
+    "x_min": -3,
+    "x_max": 3,
+    "z_min": 11,
+    "z_max": 17,
+    "chunk_count": 49,
+    "centre_chunk_id": "floor_001_chunk_x+00_z+14"
+  },
+  "coordinate_system": {
+    "units_per_metre": 1.0,
+    "east": "+X",
+    "west": "-X",
+    "north": "-Z",
+    "south": "+Z",
+    "up": "+Y",
+    "blender_axis_conversion": "Mesh local +X maps to Godot +X; Blender local -Y maps to Godot +Z; Blender local +Z maps to Godot +Y."
+  },
+  "profile_data_path": "res://AincradProject/data/floors/floor_001_southern_terrain_profile.json",
+  "floor_plan_data_path": "res://AincradProject/data/floors/floor_001.json",
+  "blender_execution": {
+    "executed": true,
+    "exports_generated": true,
+    "blend_file_generated": true,
+    "expected_glb_count": 147,
+    "actual_glb_count": 147
+  },
+  "seam_validation": {
+    "passed": true,
+    "tolerance_metres": 1e-06,
+    "border_values_compared": 9660,
+    "shared_corner_values_compared": 324,
+    "cross_resolution_values_compared": 67522,
+    "placement_checks": 294,
+    "dimension_checks": 294,
+    "failures": []
+  },
+  "slope_validation": {
+    "maximum_sampled_ratio": 0.09895966098847264,
+    "maximum_safe_zone_ratio": 0.017429117066676714,
+    "maximum_road_corridor_ratio": 0.03365320106895009,
+    "configured_limits": {
+      "global_ratio": 0.34,
+      "beginner_combat_space_ratio": 0.2,
+      "safe_zone_ratio": 0.075,
+      "road_corridor_cross_slope_ratio": 0.065,
+      "validation_sample_spacing_m": 4.0
+    }
+  },
+  "reconstruction_status": {
+    "overall": "original_reconstruction_guided_by_locked_official_anchors",
+    "official_anchor_confidence": "high",
+    "route_shape_confidence": "medium",
+    "exact_contour_confidence": "low",
+    "production_status": "first_map_aware_southern_terrain_dataset"
+  },
+  "reference_warning": "The authored terrain contours are a project reconstruction and are not claimed as official Sword Art Online canon.",
+  "chunks": [
+    {
+      "chunk_id": "floor_001_chunk_x-03_z+11",
+      "grid_coordinates": {
+        "x": -3,
+        "z": 11
+      },
+      "global_position": [
+        -768.0,
+        0.0,
+        2816.0
+      ],
+      "bounds": {
+        "min_x": -768.0,
+        "max_x": -512.0,
+        "min_y": 10.671407442881778,
+        "max_y": 22.201933767986265,
+        "min_z": 2816.0,
+        "max_z": 3072.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_rata_plains",
+          "region_horunka_woodlands"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+11_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+11_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+11_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 10.671407442881778,
+          "maximum_height_m": 22.201933767986265
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 10.671407442881778,
+          "maximum_height_m": 22.201262894980054
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 10.671407442881778,
+          "maximum_height_m": 22.194103442597807
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-03_z+11"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x-02_z+11",
+      "grid_coordinates": {
+        "x": -2,
+        "z": 11
+      },
+      "global_position": [
+        -512.0,
+        0.0,
+        2816.0
+      ],
+      "bounds": {
+        "min_x": -512.0,
+        "max_x": -256.0,
+        "min_y": 10.544233193845319,
+        "max_y": 16.33600777234072,
+        "min_z": 2816.0,
+        "max_z": 3072.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_rata_plains"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+11_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+11_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+11_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 10.544233193845319,
+          "maximum_height_m": 16.33600777234072
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 10.546111699471002,
+          "maximum_height_m": 16.33600777234072
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 10.546111699471002,
+          "maximum_height_m": 16.33600777234072
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-02_z+11"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x-01_z+11",
+      "grid_coordinates": {
+        "x": -1,
+        "z": 11
+      },
+      "global_position": [
+        -256.0,
+        0.0,
+        2816.0
+      ],
+      "bounds": {
+        "min_x": -256.0,
+        "max_x": 0.0,
+        "min_y": 11.202724344871747,
+        "max_y": 15.795204736284143,
+        "min_z": 2816.0,
+        "max_z": 3072.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_rata_plains"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+11_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+11_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+11_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 11.202724344871747,
+          "maximum_height_m": 15.795204736284143
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 11.202724344871747,
+          "maximum_height_m": 15.776700385537481
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 11.202724344871747,
+          "maximum_height_m": 15.7736241101745
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-01_z+11"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+00_z+11",
+      "grid_coordinates": {
+        "x": 0,
+        "z": 11
+      },
+      "global_position": [
+        0.0,
+        0.0,
+        2816.0
+      ],
+      "bounds": {
+        "min_x": 0.0,
+        "max_x": 256.0,
+        "min_y": 12.221758251725442,
+        "max_y": 17.14063837374837,
+        "min_z": 2816.0,
+        "max_z": 3072.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_rata_plains"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+11_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+11_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+11_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 12.221758251725442,
+          "maximum_height_m": 17.14063837374837
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 12.239077816096083,
+          "maximum_height_m": 17.14063837374837
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 12.250338029637248,
+          "maximum_height_m": 17.14063837374837
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+00_z+11"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+01_z+11",
+      "grid_coordinates": {
+        "x": 1,
+        "z": 11
+      },
+      "global_position": [
+        256.0,
+        0.0,
+        2816.0
+      ],
+      "bounds": {
+        "min_x": 256.0,
+        "max_x": 512.0,
+        "min_y": 13.056914675420652,
+        "max_y": 17.356914636311625,
+        "min_z": 2816.0,
+        "max_z": 3072.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_rata_plains"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+11_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+11_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+11_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 13.056914675420652,
+          "maximum_height_m": 17.356914636311625
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 13.056914675420652,
+          "maximum_height_m": 17.353798180727335
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 13.066545201008038,
+          "maximum_height_m": 17.349797566770313
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+01_z+11"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+02_z+11",
+      "grid_coordinates": {
+        "x": 2,
+        "z": 11
+      },
+      "global_position": [
+        512.0,
+        0.0,
+        2816.0
+      ],
+      "bounds": {
+        "min_x": 512.0,
+        "max_x": 768.0,
+        "min_y": 3.656677807516383,
+        "max_y": 13.403860803671387,
+        "min_z": 2816.0,
+        "max_z": 3072.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_rata_plains",
+          "region_east_lake_district"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+11_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+11_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+11_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 3.656677807516383,
+          "maximum_height_m": 13.403860803671387
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 3.656677807516383,
+          "maximum_height_m": 13.403860803671387
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 3.656677807516383,
+          "maximum_height_m": 13.403860803671387
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+02_z+11"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+03_z+11",
+      "grid_coordinates": {
+        "x": 3,
+        "z": 11
+      },
+      "global_position": [
+        768.0,
+        0.0,
+        2816.0
+      ],
+      "bounds": {
+        "min_x": 768.0,
+        "max_x": 1024.0,
+        "min_y": 3.147679625113354,
+        "max_y": 7.540291774047271,
+        "min_z": 2816.0,
+        "max_z": 3072.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_rata_plains",
+          "region_east_lake_district"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+11_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+11_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+11_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 3.147679625113354,
+          "maximum_height_m": 7.540291774047271
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 3.1487191782438244,
+          "maximum_height_m": 7.540291774047271
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 3.1491410140580602,
+          "maximum_height_m": 7.540291774047271
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+03_z+11"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x-03_z+12",
+      "grid_coordinates": {
+        "x": -3,
+        "z": 12
+      },
+      "global_position": [
+        -768.0,
+        0.0,
+        3072.0
+      ],
+      "bounds": {
+        "min_x": -768.0,
+        "max_x": -512.0,
+        "min_y": 10.630219043682539,
+        "max_y": 21.855565481278862,
+        "min_z": 3072.0,
+        "max_z": 3328.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_horunka_woodlands"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+12_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+12_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+12_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 10.630219043682539,
+          "maximum_height_m": 21.855565481278862
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 10.630939547737825,
+          "maximum_height_m": 21.855565481278862
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 10.630939547737825,
+          "maximum_height_m": 21.855565481278862
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-03_z+12"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x-02_z+12",
+      "grid_coordinates": {
+        "x": -2,
+        "z": 12
+      },
+      "global_position": [
+        -512.0,
+        0.0,
+        3072.0
+      ],
+      "bounds": {
+        "min_x": -512.0,
+        "max_x": -256.0,
+        "min_y": 10.503427044502256,
+        "max_y": 14.332162593446844,
+        "min_z": 3072.0,
+        "max_z": 3328.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": []
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+12_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+12_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+12_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 10.503427044502256,
+          "maximum_height_m": 14.332162593446844
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 10.504420312664493,
+          "maximum_height_m": 14.332162593446844
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 10.504420312664493,
+          "maximum_height_m": 14.332162593446844
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-02_z+12"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x-01_z+12",
+      "grid_coordinates": {
+        "x": -1,
+        "z": 12
+      },
+      "global_position": [
+        -256.0,
+        0.0,
+        3072.0
+      ],
+      "bounds": {
+        "min_x": -256.0,
+        "max_x": 0.0,
+        "min_y": 9.810706939338832,
+        "max_y": 14.336696739141978,
+        "min_z": 3072.0,
+        "max_z": 3328.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": []
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+12_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+12_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+12_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 9.810706939338832,
+          "maximum_height_m": 14.336696739141978
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 9.810706939338832,
+          "maximum_height_m": 14.336696739141978
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 9.835884246534553,
+          "maximum_height_m": 14.245211664338518
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-01_z+12"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+00_z+12",
+      "grid_coordinates": {
+        "x": 0,
+        "z": 12
+      },
+      "global_position": [
+        0.0,
+        0.0,
+        3072.0
+      ],
+      "bounds": {
+        "min_x": 0.0,
+        "max_x": 256.0,
+        "min_y": 9.869177688765149,
+        "max_y": 15.131368319042126,
+        "min_z": 3072.0,
+        "max_z": 3328.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": []
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+12_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+12_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+12_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 9.869177688765149,
+          "maximum_height_m": 15.131368319042126
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 9.869177688765149,
+          "maximum_height_m": 15.131218045586722
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 9.869177688765149,
+          "maximum_height_m": 15.131218045586722
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+00_z+12"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+01_z+12",
+      "grid_coordinates": {
+        "x": 1,
+        "z": 12
+      },
+      "global_position": [
+        256.0,
+        0.0,
+        3072.0
+      ],
+      "bounds": {
+        "min_x": 256.0,
+        "max_x": 512.0,
+        "min_y": 7.818365393412071,
+        "max_y": 16.616886045708466,
+        "min_z": 3072.0,
+        "max_z": 3328.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": []
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+12_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+12_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+12_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 7.818365393412071,
+          "maximum_height_m": 16.616886045708466
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 7.818365393412071,
+          "maximum_height_m": 16.616886045708466
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 7.818365393412071,
+          "maximum_height_m": 16.610349463238148
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+01_z+12"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+02_z+12",
+      "grid_coordinates": {
+        "x": 2,
+        "z": 12
+      },
+      "global_position": [
+        512.0,
+        0.0,
+        3072.0
+      ],
+      "bounds": {
+        "min_x": 512.0,
+        "max_x": 768.0,
+        "min_y": 2.7117153695644256,
+        "max_y": 13.258834390115997,
+        "min_z": 3072.0,
+        "max_z": 3328.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_east_lake_district"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+12_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+12_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+12_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 2.7117153695644256,
+          "maximum_height_m": 13.258834390115997
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 2.7128044142768926,
+          "maximum_height_m": 13.258834390115997
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 2.714700605704745,
+          "maximum_height_m": 13.258834390115997
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+02_z+12"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+03_z+12",
+      "grid_coordinates": {
+        "x": 3,
+        "z": 12
+      },
+      "global_position": [
+        768.0,
+        0.0,
+        3072.0
+      ],
+      "bounds": {
+        "min_x": 768.0,
+        "max_x": 1024.0,
+        "min_y": 2.2522944523792554,
+        "max_y": 4.112970488835606,
+        "min_z": 3072.0,
+        "max_z": 3328.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_east_lake_district"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+12_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+12_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+12_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 2.2522944523792554,
+          "maximum_height_m": 4.112970488835606
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 2.254261788906169,
+          "maximum_height_m": 4.111910729354085
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 2.254261788906169,
+          "maximum_height_m": 4.111392128849752
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+03_z+12"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x-03_z+13",
+      "grid_coordinates": {
+        "x": -3,
+        "z": 13
+      },
+      "global_position": [
+        -768.0,
+        0.0,
+        3328.0
+      ],
+      "bounds": {
+        "min_x": -768.0,
+        "max_x": -512.0,
+        "min_y": 9.91948229376699,
+        "max_y": 16.048826797032135,
+        "min_z": 3328.0,
+        "max_z": 3584.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_horunka_woodlands"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+13_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+13_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+13_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 9.91948229376699,
+          "maximum_height_m": 16.048826797032135
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 9.923262226777531,
+          "maximum_height_m": 16.048826797032135
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 9.923262226777531,
+          "maximum_height_m": 16.048826797032135
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-03_z+13"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x-02_z+13",
+      "grid_coordinates": {
+        "x": -2,
+        "z": 13
+      },
+      "global_position": [
+        -512.0,
+        0.0,
+        3328.0
+      ],
+      "bounds": {
+        "min_x": -512.0,
+        "max_x": -256.0,
+        "min_y": 9.8867986406601,
+        "max_y": 14.36020192794479,
+        "min_z": 3328.0,
+        "max_z": 3584.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": []
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+13_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+13_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+13_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 9.8867986406601,
+          "maximum_height_m": 14.36020192794479
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 9.8867986406601,
+          "maximum_height_m": 14.36020192794479
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 9.8867986406601,
+          "maximum_height_m": 14.36020192794479
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-02_z+13"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x-01_z+13",
+      "grid_coordinates": {
+        "x": -1,
+        "z": 13
+      },
+      "global_position": [
+        -256.0,
+        0.0,
+        3328.0
+      ],
+      "bounds": {
+        "min_x": -256.0,
+        "max_x": 0.0,
+        "min_y": 8.112927778190715,
+        "max_y": 12.018198624585928,
+        "min_z": 3328.0,
+        "max_z": 3584.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": []
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+13_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+13_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+13_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 8.112927778190715,
+          "maximum_height_m": 12.018198624585928
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 8.114535807299909,
+          "maximum_height_m": 12.017396874011817
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 8.114535807299909,
+          "maximum_height_m": 12.017396874011817
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-01_z+13"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+00_z+13",
+      "grid_coordinates": {
+        "x": 0,
+        "z": 13
+      },
+      "global_position": [
+        0.0,
+        0.0,
+        3328.0
+      ],
+      "bounds": {
+        "min_x": 0.0,
+        "max_x": 256.0,
+        "min_y": 8.053491296151606,
+        "max_y": 13.173944277606523,
+        "min_z": 3328.0,
+        "max_z": 3584.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": []
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+13_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+13_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+13_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 8.053491296151606,
+          "maximum_height_m": 13.173944277606523
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 8.058153941237467,
+          "maximum_height_m": 13.173944277606523
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 8.060623886781418,
+          "maximum_height_m": 13.173944277606523
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+00_z+13"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+01_z+13",
+      "grid_coordinates": {
+        "x": 1,
+        "z": 13
+      },
+      "global_position": [
+        256.0,
+        0.0,
+        3328.0
+      ],
+      "bounds": {
+        "min_x": 256.0,
+        "max_x": 512.0,
+        "min_y": 6.237754343175375,
+        "max_y": 13.458253208359242,
+        "min_z": 3328.0,
+        "max_z": 3584.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": []
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+13_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+13_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+13_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 6.237754343175375,
+          "maximum_height_m": 13.458253208359242
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 6.237836104392125,
+          "maximum_height_m": 13.458253208359242
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 6.240783037981025,
+          "maximum_height_m": 13.454459872416372
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+01_z+13"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+02_z+13",
+      "grid_coordinates": {
+        "x": 2,
+        "z": 13
+      },
+      "global_position": [
+        512.0,
+        0.0,
+        3328.0
+      ],
+      "bounds": {
+        "min_x": 512.0,
+        "max_x": 768.0,
+        "min_y": 3.2013047458984114,
+        "max_y": 8.630938232395964,
+        "min_z": 3328.0,
+        "max_z": 3584.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_east_lake_district"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+13_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+13_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+13_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 3.2013047458984114,
+          "maximum_height_m": 8.630938232395964
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 3.2017757784400755,
+          "maximum_height_m": 8.630938232395964
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 3.2024997120863237,
+          "maximum_height_m": 8.630938232395964
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+02_z+13"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+03_z+13",
+      "grid_coordinates": {
+        "x": 3,
+        "z": 13
+      },
+      "global_position": [
+        768.0,
+        0.0,
+        3328.0
+      ],
+      "bounds": {
+        "min_x": 768.0,
+        "max_x": 1024.0,
+        "min_y": 2.9610204771683857,
+        "max_y": 3.8800490676940425,
+        "min_z": 3328.0,
+        "max_z": 3584.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_east_lake_district"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+13_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+13_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+13_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 2.9610204771683857,
+          "maximum_height_m": 3.8800490676940425
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 2.9610275224580334,
+          "maximum_height_m": 3.8800490676940425
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 2.9619085775654033,
+          "maximum_height_m": 3.8800490676940425
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+03_z+13"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x-03_z+14",
+      "grid_coordinates": {
+        "x": -3,
+        "z": 14
+      },
+      "global_position": [
+        -768.0,
+        0.0,
+        3584.0
+      ],
+      "bounds": {
+        "min_x": -768.0,
+        "max_x": -512.0,
+        "min_y": 9.923262226777531,
+        "max_y": 15.318346783767332,
+        "min_z": 3584.0,
+        "max_z": 3840.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_horunka_woodlands"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+14_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+14_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+14_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 9.923262226777531,
+          "maximum_height_m": 15.318346783767332
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 9.923262226777531,
+          "maximum_height_m": 15.313279215856426
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 9.923262226777531,
+          "maximum_height_m": 15.313279215856426
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-03_z+14"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x-02_z+14",
+      "grid_coordinates": {
+        "x": -2,
+        "z": 14
+      },
+      "global_position": [
+        -512.0,
+        0.0,
+        3584.0
+      ],
+      "bounds": {
+        "min_x": -512.0,
+        "max_x": -256.0,
+        "min_y": 8.712424492794002,
+        "max_y": 11.92207842096274,
+        "min_z": 3584.0,
+        "max_z": 3840.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": []
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+14_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+14_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+14_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 8.712424492794002,
+          "maximum_height_m": 11.92207842096274
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 8.712424492794002,
+          "maximum_height_m": 11.92207842096274
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 8.715083139037826,
+          "maximum_height_m": 11.92207842096274
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-02_z+14"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x-01_z+14",
+      "grid_coordinates": {
+        "x": -1,
+        "z": 14
+      },
+      "global_position": [
+        -256.0,
+        0.0,
+        3584.0
+      ],
+      "bounds": {
+        "min_x": -256.0,
+        "max_x": 0.0,
+        "min_y": 8.07856894465468,
+        "max_y": 9.8867986406601,
+        "min_z": 3584.0,
+        "max_z": 3840.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": []
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+14_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+14_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+14_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 8.07856894465468,
+          "maximum_height_m": 9.8867986406601
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 8.081850174653214,
+          "maximum_height_m": 9.8867986406601
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 8.081850174653214,
+          "maximum_height_m": 9.8867986406601
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-01_z+14"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+00_z+14",
+      "grid_coordinates": {
+        "x": 0,
+        "z": 14
+      },
+      "global_position": [
+        0.0,
+        0.0,
+        3584.0
+      ],
+      "bounds": {
+        "min_x": 0.0,
+        "max_x": 256.0,
+        "min_y": 8.052959671416131,
+        "max_y": 9.476520698026867,
+        "min_z": 3584.0,
+        "max_z": 3840.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": []
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+14_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+14_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+14_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 8.052959671416131,
+          "maximum_height_m": 9.476520698026867
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 8.053991695486916,
+          "maximum_height_m": 9.476520698026867
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 8.060623886781418,
+          "maximum_height_m": 9.476520698026867
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+00_z+14"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+01_z+14",
+      "grid_coordinates": {
+        "x": 1,
+        "z": 14
+      },
+      "global_position": [
+        256.0,
+        0.0,
+        3584.0
+      ],
+      "bounds": {
+        "min_x": 256.0,
+        "max_x": 512.0,
+        "min_y": 7.894604207861105,
+        "max_y": 10.28457359629883,
+        "min_z": 3584.0,
+        "max_z": 3840.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": []
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+14_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+14_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+14_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 7.894604207861105,
+          "maximum_height_m": 10.28457359629883
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 7.894604207861105,
+          "maximum_height_m": 10.28457359629883
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 7.894604207861105,
+          "maximum_height_m": 10.28457359629883
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+01_z+14"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+02_z+14",
+      "grid_coordinates": {
+        "x": 2,
+        "z": 14
+      },
+      "global_position": [
+        512.0,
+        0.0,
+        3584.0
+      ],
+      "bounds": {
+        "min_x": 512.0,
+        "max_x": 768.0,
+        "min_y": 3.5870532542792626,
+        "max_y": 9.099144991959454,
+        "min_z": 3584.0,
+        "max_z": 3840.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_east_lake_district"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+14_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+14_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+14_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 3.5870532542792626,
+          "maximum_height_m": 9.099144991959454
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 3.5870532542792626,
+          "maximum_height_m": 9.09729230383045
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 3.5870532542792626,
+          "maximum_height_m": 9.096525099960308
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+02_z+14"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+03_z+14",
+      "grid_coordinates": {
+        "x": 3,
+        "z": 14
+      },
+      "global_position": [
+        768.0,
+        0.0,
+        3584.0
+      ],
+      "bounds": {
+        "min_x": 768.0,
+        "max_x": 1024.0,
+        "min_y": 1.8365625215549468,
+        "max_y": 4.376575003414421,
+        "min_z": 3584.0,
+        "max_z": 3840.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_east_lake_district"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+14_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+14_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+14_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 1.8365625215549468,
+          "maximum_height_m": 4.376575003414421
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 1.8365625215549468,
+          "maximum_height_m": 4.376575003414421
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 1.8365625215549468,
+          "maximum_height_m": 4.37114349677362
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+03_z+14"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x-03_z+15",
+      "grid_coordinates": {
+        "x": -3,
+        "z": 15
+      },
+      "global_position": [
+        -768.0,
+        0.0,
+        3840.0
+      ],
+      "bounds": {
+        "min_x": -768.0,
+        "max_x": -512.0,
+        "min_y": 3.2284860988462674,
+        "max_y": 14.887635695308688,
+        "min_z": 3840.0,
+        "max_z": 4096.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_horunka_woodlands"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+15_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+15_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+15_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 3.2284860988462674,
+          "maximum_height_m": 14.887635695308688
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 3.2337586940607124,
+          "maximum_height_m": 14.887635695308688
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 3.2337586940607124,
+          "maximum_height_m": 14.887635695308688
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-03_z+15"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x-02_z+15",
+      "grid_coordinates": {
+        "x": -2,
+        "z": 15
+      },
+      "global_position": [
+        -512.0,
+        0.0,
+        3840.0
+      ],
+      "bounds": {
+        "min_x": -512.0,
+        "max_x": -256.0,
+        "min_y": 5.216788197282534,
+        "max_y": 11.544679441899905,
+        "min_z": 3840.0,
+        "max_z": 4096.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": []
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+15_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+15_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+15_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 5.216788197282534,
+          "maximum_height_m": 11.544679441899905
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 5.216788197282534,
+          "maximum_height_m": 11.544679441899905
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 5.216788197282534,
+          "maximum_height_m": 11.544679441899905
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-02_z+15"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x-01_z+15",
+      "grid_coordinates": {
+        "x": -1,
+        "z": 15
+      },
+      "global_position": [
+        -256.0,
+        0.0,
+        3840.0
+      ],
+      "bounds": {
+        "min_x": -256.0,
+        "max_x": 0.0,
+        "min_y": 8.506994752711641,
+        "max_y": 9.185432193033728,
+        "min_z": 3840.0,
+        "max_z": 4096.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": []
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+15_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+15_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+15_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 8.506994752711641,
+          "maximum_height_m": 9.185432193033728
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 8.506994752711641,
+          "maximum_height_m": 9.184704711214208
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 8.507900981255451,
+          "maximum_height_m": 9.184704711214208
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-01_z+15"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+00_z+15",
+      "grid_coordinates": {
+        "x": 0,
+        "z": 15
+      },
+      "global_position": [
+        0.0,
+        0.0,
+        3840.0
+      ],
+      "bounds": {
+        "min_x": 0.0,
+        "max_x": 256.0,
+        "min_y": 8.261922758453382,
+        "max_y": 9.185432193033728,
+        "min_z": 3840.0,
+        "max_z": 4096.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": []
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+15_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+15_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+15_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 8.261922758453382,
+          "maximum_height_m": 9.185432193033728
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 8.261922758453382,
+          "maximum_height_m": 9.184704711214208
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 8.261922758453382,
+          "maximum_height_m": 9.184704711214208
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+00_z+15"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+01_z+15",
+      "grid_coordinates": {
+        "x": 1,
+        "z": 15
+      },
+      "global_position": [
+        256.0,
+        0.0,
+        3840.0
+      ],
+      "bounds": {
+        "min_x": 256.0,
+        "max_x": 512.0,
+        "min_y": 6.346528427311179,
+        "max_y": 9.173705896410505,
+        "min_z": 3840.0,
+        "max_z": 4096.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": []
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+15_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+15_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+15_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 6.346528427311179,
+          "maximum_height_m": 9.173705896410505
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 6.346528427311179,
+          "maximum_height_m": 9.173705896410505
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 6.346528427311179,
+          "maximum_height_m": 9.168351523213795
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+01_z+15"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+02_z+15",
+      "grid_coordinates": {
+        "x": 2,
+        "z": 15
+      },
+      "global_position": [
+        512.0,
+        0.0,
+        3840.0
+      ],
+      "bounds": {
+        "min_x": 512.0,
+        "max_x": 768.0,
+        "min_y": 1.498969297351623,
+        "max_y": 7.894604207861105,
+        "min_z": 3840.0,
+        "max_z": 4096.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_east_lake_district"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+15_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+15_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+15_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 1.498969297351623,
+          "maximum_height_m": 7.894604207861105
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 1.498969297351623,
+          "maximum_height_m": 7.894604207861105
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 1.498969297351623,
+          "maximum_height_m": 7.894604207861105
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+02_z+15"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+03_z+15",
+      "grid_coordinates": {
+        "x": 3,
+        "z": 15
+      },
+      "global_position": [
+        768.0,
+        0.0,
+        3840.0
+      ],
+      "bounds": {
+        "min_x": 768.0,
+        "max_x": 1024.0,
+        "min_y": 0.2056162712287788,
+        "max_y": 3.5870532542792626,
+        "min_z": 3840.0,
+        "max_z": 4096.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_east_lake_district"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+15_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+15_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+15_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 0.2056162712287788,
+          "maximum_height_m": 3.5870532542792626
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 0.2056162712287788,
+          "maximum_height_m": 3.5870532542792626
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 0.2056162712287788,
+          "maximum_height_m": 3.5870532542792626
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+03_z+15"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x-03_z+16",
+      "grid_coordinates": {
+        "x": -3,
+        "z": 16
+      },
+      "global_position": [
+        -768.0,
+        0.0,
+        4096.0
+      ],
+      "bounds": {
+        "min_x": -768.0,
+        "max_x": -512.0,
+        "min_y": 0.7279100890690675,
+        "max_y": 6.054211104411915,
+        "min_z": 4096.0,
+        "max_z": 4352.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_horunka_woodlands",
+          "region_starting_city"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+16_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+16_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+16_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 0.7279100890690675,
+          "maximum_height_m": 6.054211104411915
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 0.7286214876507386,
+          "maximum_height_m": 6.054211104411915
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 0.7444358463096306,
+          "maximum_height_m": 6.054211104411915
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-03_z+16"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x-02_z+16",
+      "grid_coordinates": {
+        "x": -2,
+        "z": 16
+      },
+      "global_position": [
+        -512.0,
+        0.0,
+        4096.0
+      ],
+      "bounds": {
+        "min_x": -512.0,
+        "max_x": -256.0,
+        "min_y": 4.339862238683775,
+        "max_y": 8.516734654842013,
+        "min_z": 4096.0,
+        "max_z": 4352.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_starting_city"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+16_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+16_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+16_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 4.339862238683775,
+          "maximum_height_m": 8.516734654842013
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 4.339862238683775,
+          "maximum_height_m": 8.516734654842013
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 4.339862238683775,
+          "maximum_height_m": 8.516734654842013
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-02_z+16"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x-01_z+16",
+      "grid_coordinates": {
+        "x": -1,
+        "z": 16
+      },
+      "global_position": [
+        -256.0,
+        0.0,
+        4096.0
+      ],
+      "bounds": {
+        "min_x": -256.0,
+        "max_x": 0.0,
+        "min_y": 6.6107057824965,
+        "max_y": 9.075151858262174,
+        "min_z": 4096.0,
+        "max_z": 4352.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_starting_city"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+16_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+16_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+16_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 6.6107057824965,
+          "maximum_height_m": 9.075151858262174
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 6.6107057824965,
+          "maximum_height_m": 9.074972723981737
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 6.6107057824965,
+          "maximum_height_m": 9.074817988769304
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-01_z+16"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+00_z+16",
+      "grid_coordinates": {
+        "x": 0,
+        "z": 16
+      },
+      "global_position": [
+        0.0,
+        0.0,
+        4096.0
+      ],
+      "bounds": {
+        "min_x": 0.0,
+        "max_x": 256.0,
+        "min_y": 6.809022691844866,
+        "max_y": 9.074817988769304,
+        "min_z": 4096.0,
+        "max_z": 4352.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_starting_city"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+16_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+16_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+16_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 6.809022691844866,
+          "maximum_height_m": 9.074817988769304
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 6.809476194620137,
+          "maximum_height_m": 9.074817988769304
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 6.809476194620137,
+          "maximum_height_m": 9.074817988769304
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+00_z+16"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+01_z+16",
+      "grid_coordinates": {
+        "x": 1,
+        "z": 16
+      },
+      "global_position": [
+        256.0,
+        0.0,
+        4096.0
+      ],
+      "bounds": {
+        "min_x": 256.0,
+        "max_x": 512.0,
+        "min_y": 5.499892745893895,
+        "max_y": 8.261922758453382,
+        "min_z": 4096.0,
+        "max_z": 4352.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_starting_city"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+16_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+16_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+16_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 5.499892745893895,
+          "maximum_height_m": 8.261922758453382
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 5.499892745893895,
+          "maximum_height_m": 8.261922758453382
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 5.50312992692196,
+          "maximum_height_m": 8.261922758453382
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+01_z+16"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+02_z+16",
+      "grid_coordinates": {
+        "x": 2,
+        "z": 16
+      },
+      "global_position": [
+        512.0,
+        0.0,
+        4096.0
+      ],
+      "bounds": {
+        "min_x": 512.0,
+        "max_x": 768.0,
+        "min_y": 0.42914745658156056,
+        "max_y": 6.346528427311179,
+        "min_z": 4096.0,
+        "max_z": 4352.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_east_lake_district",
+          "region_starting_city"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+16_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+16_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+16_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 0.42914745658156056,
+          "maximum_height_m": 6.346528427311179
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 0.42914745658156056,
+          "maximum_height_m": 6.346528427311179
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 0.42914745658156056,
+          "maximum_height_m": 6.346528427311179
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+02_z+16"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+03_z+16",
+      "grid_coordinates": {
+        "x": 3,
+        "z": 16
+      },
+      "global_position": [
+        768.0,
+        0.0,
+        4096.0
+      ],
+      "bounds": {
+        "min_x": 768.0,
+        "max_x": 1024.0,
+        "min_y": -1.5890707395099914,
+        "max_y": 1.498969297351623,
+        "min_z": 4096.0,
+        "max_z": 4352.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_east_lake_district",
+          "region_starting_city"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+16_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+16_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+16_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": -1.5890707395099914,
+          "maximum_height_m": 1.498969297351623
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": -1.5890707395099914,
+          "maximum_height_m": 1.498969297351623
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": -1.5890707395099914,
+          "maximum_height_m": 1.498969297351623
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+03_z+16"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x-03_z+17",
+      "grid_coordinates": {
+        "x": -3,
+        "z": 17
+      },
+      "global_position": [
+        -768.0,
+        0.0,
+        4352.0
+      ],
+      "bounds": {
+        "min_x": -768.0,
+        "max_x": -512.0,
+        "min_y": 2.3053418819442992,
+        "max_y": 12.93009344352312,
+        "min_z": 4352.0,
+        "max_z": 4608.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_horunka_woodlands",
+          "region_starting_city"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+17_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+17_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-03_z+17_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 2.3053418819442992,
+          "maximum_height_m": 12.93009344352312
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 2.3053418819442992,
+          "maximum_height_m": 12.93009344352312
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 2.3053418819442992,
+          "maximum_height_m": 12.925133979031374
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-03_z+17"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x-02_z+17",
+      "grid_coordinates": {
+        "x": -2,
+        "z": 17
+      },
+      "global_position": [
+        -512.0,
+        0.0,
+        4352.0
+      ],
+      "bounds": {
+        "min_x": -512.0,
+        "max_x": -256.0,
+        "min_y": 6.026561187257773,
+        "max_y": 9.887161052608441,
+        "min_z": 4352.0,
+        "max_z": 4608.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_starting_city"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+17_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+17_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-02_z+17_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 6.026561187257773,
+          "maximum_height_m": 9.887161052608441
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 6.0282362583218205,
+          "maximum_height_m": 9.886686331909853
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 6.0282362583218205,
+          "maximum_height_m": 9.884058031985715
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-02_z+17"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x-01_z+17",
+      "grid_coordinates": {
+        "x": -1,
+        "z": 17
+      },
+      "global_position": [
+        -256.0,
+        0.0,
+        4352.0
+      ],
+      "bounds": {
+        "min_x": -256.0,
+        "max_x": 0.0,
+        "min_y": 6.328048751577703,
+        "max_y": 7.2079561326674435,
+        "min_z": 4352.0,
+        "max_z": 4608.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_starting_city"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+17_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+17_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x-01_z+17_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 6.328048751577703,
+          "maximum_height_m": 7.2079561326674435
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 6.328048751577703,
+          "maximum_height_m": 7.207857408639052
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 6.328048751577703,
+          "maximum_height_m": 7.206108022527899
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x-01_z+17"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+00_z+17",
+      "grid_coordinates": {
+        "x": 0,
+        "z": 17
+      },
+      "global_position": [
+        0.0,
+        0.0,
+        4352.0
+      ],
+      "bounds": {
+        "min_x": 0.0,
+        "max_x": 256.0,
+        "min_y": 5.77154758485438,
+        "max_y": 7.246365034134321,
+        "min_z": 4352.0,
+        "max_z": 4608.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_starting_city"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+17_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+17_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+00_z+17_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 5.77154758485438,
+          "maximum_height_m": 7.246365034134321
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 5.7722762242725985,
+          "maximum_height_m": 7.245966425295341
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 5.7733656001448885,
+          "maximum_height_m": 7.245664616497948
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+00_z+17"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+01_z+17",
+      "grid_coordinates": {
+        "x": 1,
+        "z": 17
+      },
+      "global_position": [
+        256.0,
+        0.0,
+        4352.0
+      ],
+      "bounds": {
+        "min_x": 256.0,
+        "max_x": 512.0,
+        "min_y": 4.2165853288274455,
+        "max_y": 7.581993292391478,
+        "min_z": 4352.0,
+        "max_z": 4608.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_starting_city"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+17_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+17_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+01_z+17_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": 4.2165853288274455,
+          "maximum_height_m": 7.581993292391478
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": 4.2165853288274455,
+          "maximum_height_m": 7.5817424541630105
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": 4.2165853288274455,
+          "maximum_height_m": 7.5817424541630105
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+01_z+17"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+02_z+17",
+      "grid_coordinates": {
+        "x": 2,
+        "z": 17
+      },
+      "global_position": [
+        512.0,
+        0.0,
+        4352.0
+      ],
+      "bounds": {
+        "min_x": 512.0,
+        "max_x": 768.0,
+        "min_y": -1.2406486430741683,
+        "max_y": 5.532085196953169,
+        "min_z": 4352.0,
+        "max_z": 4608.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_east_lake_district",
+          "region_starting_city"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+17_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+17_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+02_z+17_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": -1.2406486430741683,
+          "maximum_height_m": 5.532085196953169
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": -1.2406486430741683,
+          "maximum_height_m": 5.532085196953169
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": -1.2406486430741683,
+          "maximum_height_m": 5.532085196953169
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+02_z+17"
+    },
+    {
+      "chunk_id": "floor_001_chunk_x+03_z+17",
+      "grid_coordinates": {
+        "x": 3,
+        "z": 17
+      },
+      "global_position": [
+        768.0,
+        0.0,
+        4352.0
+      ],
+      "bounds": {
+        "min_x": 768.0,
+        "max_x": 1024.0,
+        "min_y": -2.981706335150489,
+        "max_y": 0.42914745658156056,
+        "min_z": 4352.0,
+        "max_z": 4608.0
+      },
+      "region_membership": {
+        "primary_region_id": "region_city_gate_outskirts",
+        "overlap_region_ids": [
+          "region_east_lake_district",
+          "region_starting_city"
+        ]
+      },
+      "lod_paths": {
+        "lod0": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+17_lod0.glb",
+        "lod1": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+17_lod1.glb"
+      },
+      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_chunk_x+03_z+17_collision.glb",
+      "export_files_present_when_manifest_written": {
+        "lod0": true,
+        "lod1": true,
+        "collision": true
+      },
+      "meshes": {
+        "lod0": {
+          "resolution": [
+            65,
+            65
+          ],
+          "vertex_count": 4225,
+          "triangle_count": 8192,
+          "minimum_height_m": -2.981706335150489,
+          "maximum_height_m": 0.42914745658156056
+        },
+        "lod1": {
+          "resolution": [
+            33,
+            33
+          ],
+          "vertex_count": 1089,
+          "triangle_count": 2048,
+          "minimum_height_m": -2.981706335150489,
+          "maximum_height_m": 0.42914745658156056
+        },
+        "collision": {
+          "resolution": [
+            17,
+            17
+          ],
+          "vertex_count": 289,
+          "triangle_count": 512,
+          "minimum_height_m": -2.981706335150489,
+          "maximum_height_m": 0.42914745658156056
+        }
+      },
+      "stable_object_name_prefix": "floor_001_chunk_x+03_z+17"
+    }
+  ]
+}

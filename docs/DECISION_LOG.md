@@ -3330,3 +3330,178 @@ collision transitions, root unloading, no duplicate instances, and unchanged
 F5 gameplay.
 =======
 >>>>>>> 61eba00fefd3ea4dbb53cd012620dfa990f1e2e0
+
+---
+
+## D-075 — Store Southern Terrain Authorship in a Separate Validated Profile
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Milestone 14A needs a real terrain shape around the Starting City gate, but the
+exact contours are project reconstruction rather than official canon. Keeping
+plateau, road, transition, drainage, and slope decisions only inside a Python
+script would make them difficult to audit, revise, or reuse.
+
+### Decision
+
+Create:
+
+```text
+AincradProject/data/floors/floor_001_southern_terrain_profile.json
+```
+
+Use it as the data source for:
+
+- The 7 × 7 chunk range.
+- Terrain seed and height limits.
+- City-gate plateau and safe-zone limits.
+- Northbound road control points and corridor widths.
+- Beginner-grassland variation.
+- Western woodland and eastern lowland masks.
+- Drainage depressions and authored height controls.
+- Maximum sampled slope limits.
+- Region overlap rules.
+- Reference and reconstruction confidence.
+
+The Blender generator must validate both this profile and the locked
+`floor_001.json` before generation.
+
+### Consequences
+
+- Important terrain decisions are reviewable without reading Python.
+- Future neighbouring terrain can share boundary data and versioned decisions.
+- Exact contours remain clearly labelled as reconstruction.
+- Silent scale or axis drift causes generation to stop.
+- Profile schema changes require corresponding generator and documentation
+  updates.
+
+### Alternatives considered
+
+- Hard-code every terrain decision in the Blender script.
+- Add 14A-specific contour data directly to the complete Floor 1 master JSON.
+- Generate terrain from uncontrolled procedural noise only.
+
+### Follow-up
+
+Reuse or explicitly migrate profile boundary controls when producing adjacent
+southern datasets.
+
+---
+
+## D-076 — Use One Global Height Function for All Southern Chunks and LODs
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+Forty-nine chunks, three mesh resolutions, and future neighbouring datasets
+must share exact borders. Per-chunk random generation or independent LOD
+sampling rules would create visible cracks, collision gaps, or footprint drift.
+
+### Decision
+
+Sample terrain from one deterministic function using global Floor 1 X/Z
+coordinates.
+
+Generate LOD0 at 4 metre spacing. Derive LOD1 and collision samples from the
+matching global LOD0 points at 8 and 16 metre spacing. Validate:
+
+- Every east/west border.
+- Every north/south border.
+- Shared corners.
+- Cross-resolution vertex alignment.
+- Exact 256 metre footprints.
+- Expected global placement.
+- Configured terrain, safe-zone, and road-corridor slopes.
+
+Stop before export if any validation fails.
+
+### Consequences
+
+- Shared borders receive identical heights.
+- Lower resolutions align with LOD0 exactly.
+- Future chunks can continue from the same coordinate function.
+- Authored plateau and road masks override noise consistently across chunk
+  boundaries.
+- Changing the height function can affect every chunk and must be versioned and
+  revalidated.
+
+### Alternatives considered
+
+- Generate each chunk independently and weld it afterward.
+- Copy only border rows between chunks.
+- Use separate height functions for render and collision meshes.
+- Allow LODs to use unrelated vertex positions.
+
+### Follow-up
+
+In Milestone 14B, verify the exported GLBs preserve the same alignment after
+Godot import and runtime placement.
+
+---
+
+## D-077 — Permit an Explicit Pending Manifest When Blender Is Unavailable
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The delivery environment can validate Python and terrain mathematics but does
+not include Blender. Milestone 14A requires a manifest path and full chunk
+records, while also forbidding fake GLBs and fake `.blend` files.
+
+### Decision
+
+Allow the generator to run with ordinary Python in a mathematical preflight
+mode.
+
+Preflight may create the real manifest path and generation log only when they
+state clearly:
+
+```text
+generation_status = preflight_validated_blender_export_pending
+blender executed = false
+exports generated = false
+```
+
+The manifest includes all 49 planned chunk records, computed heights, mesh
+counts, paths, region memberships, and validation results. It also records
+whether each expected export file actually exists.
+
+Do not create GLBs or `floor_001_southern_terrain.blend` outside Blender.
+
+A successful local Blender run overwrites the manifest status with:
+
+```text
+complete_blender_exports_generated
+```
+
+only after all 147 GLBs exist.
+
+### Consequences
+
+- The required data path exists and is machine-readable before local Blender
+  execution.
+- No placeholder mesh file can be mistaken for a real export.
+- Tools can distinguish preflight planning data from completed production
+  output.
+- Local completion remains mandatory before Godot integration approval.
+
+### Alternatives considered
+
+- Omit the manifest entirely until Blender runs.
+- Create empty GLBs or an empty `.blend` file.
+- Mark preflight output as complete despite missing exports.
+
+### Follow-up
+
+Milestone 14B must reject a manifest whose generation status is still pending
+or whose expected GLB files are absent.

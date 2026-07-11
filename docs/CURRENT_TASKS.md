@@ -1,8 +1,8 @@
 # Current Tasks
 
 **Project:** Aincrad-Inspired RPG  
-**Current milestone:** M12 — Floor 1 Master Map and Scale Lock
-**Current phase:** Floor 1 reference audit, scale, master map, regions, chunks, and production plan locked; no gameplay or geometry changes
+**Current milestone:** M14A — Actual Southern Floor 1 Terrain Generation
+**Current phase:** Map-aware 7 × 7 southern terrain generator and mathematical preflight complete; local Blender 5.1.2 export and inspection required
 **Last updated:** 2026-07-11
 
 ---
@@ -21,7 +21,11 @@
 
 ## 2. Current Milestone Goal
 
-**M12 current goal:** Lock the complete Floor 1 reference scale, coordinate system, region plan, future chunk grid, production order, SVG map, and machine-readable JSON without changing gameplay or 3D geometry.
+**M14A current goal:** Generate the first data-driven, map-aware southern Floor 1 terrain dataset around the Starting City gate while preserving all existing terrain tests, gameplay systems, scenes, `.uid` files, and the complete uploaded folder structure.
+
+The delivered package contains the complete Blender generator, terrain-profile JSON, preflight manifest, generation log, documentation, and handoff. Blender was unavailable in the delivery environment, so the real 147 GLBs and `floor_001_southern_terrain.blend` must be generated locally in Blender 5.1.2 before M14A receives final local approval.
+
+**M12 historical goal:** Lock the complete Floor 1 reference scale, coordinate system, region plan, future chunk grid, production order, SVG map, and machine-readable JSON without changing gameplay or 3D geometry.
 
 The M11 goal text below is retained as historical milestone context and remains relevant for regression testing, but it is no longer the active work scope.
 
@@ -1337,3 +1341,79 @@ non-streaming regression scene.
 Do not expand the terrain batch until local Godot testing confirms correct
 signed coordinates, LOD transitions, independent collision, safe unloading,
 no duplicate instances, and unchanged normal gameplay.
+
+
+---
+
+## 24. Milestone 14A — Actual Southern Floor 1 Terrain Generation
+
+**Status:** Complete implementation and mathematical preflight delivered; local Blender 5.1.2 generation required  
+**Date:** 2026-07-11
+
+### Completed in the project package
+
+- [x] Preserve the complete outer `aincrad/`, `.godot/`, `AincradProject/`, and `BlenderSource/` structure.
+- [x] Preserve all existing nine-chunk GLBs, imports, manifest, Blender generator, source file, Godot tests, gameplay scenes, scripts, and `.uid` files.
+- [x] Create `data/floors/floor_001_southern_terrain_profile.json`.
+- [x] Store the city-gate plateau, safe-zone limits, road control points, terrain transitions, drainage, height controls, slope limits, seed, confidence, and chunk range in profile data.
+- [x] Create `BlenderSource/floor_001/scripts/generate_floor_001_southern_terrain.py`.
+- [x] Support Blender 5.1.2 with practical Blender 4.x exporter fallback.
+- [x] Include `PROJECT_ROOT_OVERRIDE: str = r""`.
+- [x] Generate exactly 49 logical chunks for X `-3…+3` and Z `+11…+17`.
+- [x] Use one deterministic global-coordinate height function.
+- [x] Create 65 × 65 LOD0, 33 × 33 LOD1, and 17 × 17 collision grids.
+- [x] Protect the city-gate plateau and future northbound road corridor from uncontrolled noise.
+- [x] Create gradual western woodland and eastern lowland transition masks.
+- [x] Add Blender-safe generated collections and non-exported validation markers.
+- [x] Add four simple placeholder terrain materials.
+- [x] Stop rather than delete an untagged conflicting generated collection or material.
+- [x] Validate east/west borders, north/south borders, shared corners, dimensions, placement, cross-resolution alignment, and configured slopes.
+- [x] Pass mathematical seam validation for all 49 chunks.
+- [x] Create the explicit preflight manifest with 49 chunk records and pending-export status.
+- [x] Create the preflight generation log without pretending Blender executed.
+- [x] Create `docs/floors/FLOOR_001_SOUTHERN_TERRAIN_GENERATION.md`.
+- [x] Create `docs/handoffs/HANDOFF_MILESTONE_14A.md`.
+- [x] Keep normal F5 gameplay and all existing test scenes unchanged.
+
+### Mathematical validation completed
+
+- [x] Python syntax compilation passed.
+- [x] Both Floor 1 JSON files parse and validate.
+- [x] Exactly 49 chunk coordinates are produced.
+- [x] Border values compared: 9,660.
+- [x] Shared-corner values compared: 324.
+- [x] Cross-resolution values compared: 67,522.
+- [x] Placement checks passed: 294.
+- [x] Dimension checks passed: 294.
+- [x] Maximum sampled slope ratio: 0.098960.
+- [x] Maximum safe-zone slope ratio: 0.017429.
+- [x] Maximum road-corridor slope ratio: 0.033653.
+- [x] `SOUTHERN TERRAIN SEAM VALIDATION PASSED`.
+
+### Local Blender 5.1.2 verification required
+
+- [ ] Open and run `generate_floor_001_southern_terrain.py` in Blender 5.1.2.
+- [ ] Confirm the generator creates only `Floor001SouthernTerrain` and its four child collections.
+- [ ] Confirm 49 LOD0, 49 LOD1, and 49 collision objects are created.
+- [ ] Confirm all generated objects measure exactly 256 × 256 metres horizontally.
+- [ ] Confirm the gate plateau, road corridor, western ridges, eastern lowlands, and northern continuation look intentional.
+- [ ] Confirm the Blender console prints `SOUTHERN TERRAIN SEAM VALIDATION PASSED`.
+- [ ] Confirm exactly 147 GLBs are exported.
+- [ ] Confirm `floor_001_southern_terrain.blend` is created.
+- [ ] Confirm the manifest status changes to `complete_blender_exports_generated`.
+- [ ] Confirm the generation log reports Blender execution and exports as true.
+- [ ] Open Godot 4.7 and allow the new GLBs to import.
+- [ ] Run the unchanged 13B and 13C terrain regression scenes.
+- [ ] Run F5 and confirm normal gameplay remains unchanged.
+
+### Explicitly not included
+
+- [x] No Starting City buildings, wall, or gate model.
+- [x] No road meshes, bridges, trees, rocks, grass, rivers, or water.
+- [x] No enemies, NPCs, navigation meshes, or final materials.
+- [x] No full Floor 1 and no Floors 2–100.
+- [x] No gameplay, player, UI, SaveManager, project setting, main-scene, or existing-test changes.
+
+### Completion gate and next milestone
+
+M14A remains locally unapproved until Blender 5.1.2 creates and validates the real 147 GLBs and source `.blend`. After the complete local checklist passes, proceed to **Milestone 14B — Southern Terrain Godot Import and 7 × 7 Streaming Validation** in a separate F6 test scene.
