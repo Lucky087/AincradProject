@@ -1043,6 +1043,5 @@ Death and checkpoint:         Respawn at floor_001_starting_city_gate
 Save/load:                    Valid position restore plus out-of-bounds fallback
 Fall recovery:                Below-map volume returns player safely
 Debug scene:                  test_world.tscn remains manually playable
-```
 
 Run the complete M1–M10 regression checklist before considering M11 complete.
