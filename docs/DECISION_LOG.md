@@ -3505,3 +3505,154 @@ only after all 147 GLBs exist.
 
 Milestone 14B must reject a manifest whose generation status is still pending
 or whose expected GLB files are absent.
+
+---
+
+## D-078 — Extend the Existing Streamer with Opt-In Manifest Expectations
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The original nine-chunk runtime test already has a reusable threaded streamer,
+but the completed southern manifest uses nested LOD paths and requires stronger
+validation. Copying the whole system would create two diverging implementations
+and make later fixes harder.
+
+### Decision
+
+Keep `floor_chunk_streamer.gd` as the single reusable implementation.
+
+Add backward-compatible support for:
+
+- Flat `lod0_path` and `lod1_path` entries.
+- Nested `lod_paths.lod0` and `lod_paths.lod1` entries.
+- Optional expected dataset ID.
+- Optional expected chunk count.
+- Optional exact grid range.
+- Optional completed Blender-export requirement.
+- Optional actual GLB count.
+- Optional required seam result.
+- Optional one-time resource-path and import validation.
+
+All new expectations default to disabled. The original nine-chunk scene keeps
+its current manifest, public API, and behaviour. The southern scene enables the
+strict values through exported properties.
+
+### Consequences
+
+- One streaming implementation serves both tests.
+- The southern scene can reject incomplete data before runtime loading.
+- Future datasets can declare their own expectations without hard-coding a new
+  streamer.
+- The streamer file becomes larger and must remain carefully regression tested.
+- Existing public methods and debug keys must remain stable.
+
+### Alternatives considered
+
+- Duplicate the streamer into a southern-specific script.
+- Rewrite the original manifest into the southern schema.
+- Hard-code the southern dataset directly in the streamer.
+- Validate only in the scene controller after the streamer has already loaded.
+
+### Follow-up
+
+Run both the original nine-chunk streaming scene and the southern scene after
+any future streamer modification.
+
+---
+
+## D-079 — Keep Visual LOD and Dedicated Collision Independent During Safe Placement
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The southern test must teleport across a 7 × 7 dataset while collision is
+streamed independently. Blindly placing the player at a fixed Y value could put
+the player inside terrain or allow a fall before the collision GLB finishes
+loading.
+
+### Decision
+
+For initial spawn, debug teleports, and fall recovery:
+
+1. Read the target chunk's height bounds from the manifest.
+2. Suspend only the test player's physics process above the recorded maximum.
+3. Force an immediate streaming target recalculation.
+4. Wait for the target chunk's dedicated collision body.
+5. Raycast downward against terrain collision layer 1.
+6. Place the same player on the hit surface and clear velocity.
+7. Restore normal player physics.
+
+If collision does not become active, keep the player suspended and display an
+error. Never substitute LOD0 or LOD1 as hidden collision.
+
+### Consequences
+
+- Debug teleports do not depend on guessed Y coordinates.
+- The player cannot fall while target collision is still pending.
+- Collision remains independently testable from visual LOD.
+- Runtime validation requires Godot physics and cannot be fully proven by static
+  file inspection.
+
+### Alternatives considered
+
+- Place every teleport at manifest `max_y + 8` and let gravity decide.
+- Add invisible temporary floors.
+- Use LOD0 meshes as collision during loading.
+- Modify the player respawn or checkpoint systems.
+
+### Follow-up
+
+During local F6 testing, verify raycast placement at the gate, north, west,
+east, and centre markers.
+
+---
+
+## D-080 — Retain Visited Resources Only in the Isolated Southern Test Cache
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The documented 14B route repeatedly teleports between distant areas and returns
+to the gate. Re-requesting identical GLBs every time would distort load counters
+and make the validation route less responsive. Permanently retaining every
+resource is not yet an approved production memory policy.
+
+### Decision
+
+Add an exported `retain_loaded_resources_in_memory` option to the reusable
+streamer.
+
+- Default it to false so the existing nine-chunk scene keeps its prior cache
+  release behaviour.
+- Enable it only on `floor_001_southern_streaming_test.tscn`.
+- Continue unloading runtime visual nodes, collision bodies, and distant roots.
+- Report cached resource count in the debug snapshot.
+
+### Consequences
+
+- Returning through the 14B test route avoids repeated file requests.
+- Node and physics unloading remain observable.
+- The isolated test cache can grow with the number of visited resources.
+- A bounded production cache or eviction strategy is still required before a
+  full-floor production streamer is approved.
+
+### Alternatives considered
+
+- Clear every resource immediately after node removal.
+- Keep all resources permanently in every scene.
+- Implement a full LRU cache during this technical milestone.
+
+### Follow-up
+
+Measure memory locally during 14B and select a production cache budget in or
+after Milestone 14C.

@@ -1417,3 +1417,91 @@ no duplicate instances, and unchanged normal gameplay.
 ### Completion gate and next milestone
 
 M14A remains locally unapproved until Blender 5.1.2 creates and validates the real 147 GLBs and source `.blend`. After the complete local checklist passes, proceed to **Milestone 14B — Southern Terrain Godot Import and 7 × 7 Streaming Validation** in a separate F6 test scene.
+
+---
+
+## 25. Milestone 14B — Southern Terrain Godot Import and 7 × 7 Streaming Validation
+
+**Status:** Implementation and static validation complete; local Godot 4.7 F6 approval required  
+**Date:** 2026-07-11
+
+The uploaded 14B archive already contains the completed Milestone 14A Blender
+outputs: 49 LOD0 GLBs, 49 LOD1 GLBs, 49 collision GLBs, and a manifest reporting
+147 completed exports with passed seam validation.
+
+### Completed in the project package
+
+- [x] Preserve the complete outer `aincrad/`, `.godot/`, `AincradProject/`, and
+      `BlenderSource/` structure.
+- [x] Keep normal F5 startup, player, SaveManager, gameplay systems, project
+      settings, and both earlier terrain test scenes unchanged.
+- [x] Create `scenes/world/floor_001_southern_streaming_test.tscn`.
+- [x] Create `scripts/world/floor_001_southern_streaming_test.gd`.
+- [x] Reuse `scripts/world/floor_chunk_streamer.gd` instead of duplicating the
+      streaming system.
+- [x] Preserve every existing public streamer method and signal.
+- [x] Preserve the original nine-chunk default manifest and default settings.
+- [x] Add backward-compatible support for nested southern `lod_paths`.
+- [x] Add opt-in dataset ID, chunk count, grid range, export completion, GLB
+      count, seam, and resource-path expectations.
+- [x] Reject a pending or incomplete Blender manifest with a clear status.
+- [x] Register exactly 49 southern chunk records.
+- [x] Validate exactly 49 unique LOD0, 49 unique LOD1, and 49 unique collision
+      paths.
+- [x] Validate all 147 GLBs exist and have Godot import records.
+- [x] Use LOD0 radius 1, LOD1 visual radius 2, collision radius 1, unload radius
+      3, and a 0.20-second update interval.
+- [x] Use threaded ResourceLoader requests and a controlled queue.
+- [x] Retain visited southern resources in the isolated test cache to avoid
+      repeated requests during the documented route.
+- [x] Keep collision independent from visual LOD.
+- [x] Reuse the existing `player.tscn` without modifying it.
+- [x] Add manifest-derived safe placement and downward collision raycasts.
+- [x] Add F1 gate, F2 north, F3 west, F4 east, and F9 centre teleports.
+- [x] Add local B-key boundary toggling without Input Map changes.
+- [x] Add test-only fall recovery without save or checkpoint changes.
+- [x] Add current and nearby loaded chunk boundary lines with one mesh per group.
+- [x] Add periodic debug counts, loaded IDs, cache size, load/unload counters,
+      failures, and recent streaming update duration.
+- [x] Create `docs/floors/FLOOR_001_SOUTHERN_STREAMING_TEST.md`.
+- [x] Create `docs/handoffs/HANDOFF_MILESTONE_14B.md`.
+- [x] Pass GDScript parser/linter checks.
+- [x] Pass static manifest, GLB, path, structure, and preservation validation.
+
+### Local Godot 4.7 verification required
+
+- [ ] Open `floor_001_southern_streaming_test.tscn` and run it with F6.
+- [ ] Confirm dataset ID `floor_001_southern_region_v1`.
+- [ ] Confirm manifest validation shows PASSED.
+- [ ] Confirm 49/49 chunks register.
+- [ ] Confirm pending requests reach zero and failed requests remain zero.
+- [ ] Confirm the same player lands safely on the city-gate collision.
+- [ ] Confirm movement, sprint, jump, camera, and controls remain normal.
+- [ ] Walk north across Z 3584, 3328, and 3072.
+- [ ] Confirm nearby chunks become LOD0 and the outer visible ring becomes LOD1.
+- [ ] Confirm collision follows radius 1 independently from LOD.
+- [ ] Confirm distant visuals, collisions, and roots unload correctly.
+- [ ] Confirm no duplicate roots, visual nodes, or StaticBody3D nodes accumulate.
+- [ ] Test F3 western transition.
+- [ ] Test F4 eastern transition.
+- [ ] Test F2 northern continuation edge.
+- [ ] Return with F1 and confirm safe placement and cache reuse.
+- [ ] Toggle boundary visualization with B.
+- [ ] Trigger fall recovery and confirm no progression or save changes.
+- [ ] Run unchanged `terrain_chunk_test.tscn`.
+- [ ] Run unchanged `terrain_streaming_test.tscn`.
+- [ ] Press F5 and confirm the normal game remains unchanged.
+
+### Explicitly not included
+
+- [x] No roads, city wall, gate model, buildings, trees, grass, rocks, rivers,
+      lakes, enemies, NPCs, navigation meshes, or final materials.
+- [x] No normal-game Floor 1 integration.
+- [x] No full Floor 1 or Floors 2–100.
+- [x] No multiplayer streaming.
+
+### Completion gate and next milestone
+
+Do not create the production shell until the complete 14B F6 route and both
+regression scenes pass locally. After approval, proceed to **Milestone 14C —
+Southern Terrain Acceptance and Empty Floor 1 Production Shell**.

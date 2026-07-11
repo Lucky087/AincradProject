@@ -1,0 +1,156 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://AincradProject/scripts/world/floor_001_southern_streaming_test.gd" id="1_test"]
+[ext_resource type="Script" path="res://AincradProject/scripts/world/floor_chunk_streamer.gd" id="2_streamer"]
+[ext_resource type="PackedScene" path="res://AincradProject/scenes/player/player.tscn" id="3_player"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_southern"]
+sky_top_color = Color(0.12, 0.35, 0.68, 1)
+sky_horizon_color = Color(0.72, 0.86, 0.98, 1)
+ground_bottom_color = Color(0.08, 0.11, 0.08, 1)
+ground_horizon_color = Color(0.5, 0.61, 0.48, 1)
+sun_angle_max = 16.0
+sun_curve = 0.07
+
+[sub_resource type="Sky" id="Sky_southern"]
+sky_material = SubResource("ProceduralSkyMaterial_southern")
+
+[sub_resource type="Environment" id="Environment_southern"]
+background_mode = 2
+sky = SubResource("Sky_southern")
+ambient_light_source = 3
+ambient_light_color = Color(0.76, 0.83, 0.92, 1)
+ambient_light_energy = 0.7
+fog_enabled = true
+fog_light_color = Color(0.72, 0.81, 0.88, 1)
+fog_light_energy = 0.55
+fog_density = 0.00045
+fog_sky_affect = 0.22
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_southern_fall"]
+size = Vector3(2200, 36, 2200)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_southern_debug"]
+bg_color = Color(0.025, 0.032, 0.045, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.32, 0.78, 0.94, 0.9)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[node name="Floor001SouthernStreamingTest" type="Node3D"]
+script = ExtResource("1_test")
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_southern")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(0.866025, 0.353553, -0.353553, 0, 0.707107, 0.707107, 0.5, -0.612372, 0.612372, 0, 0, 0)
+light_color = Color(1, 0.95, 0.84, 1)
+light_energy = 1.2
+shadow_enabled = true
+directional_shadow_max_distance = 1200.0
+
+[node name="TerrainStreamer" type="Node3D" parent="."]
+script = ExtResource("2_streamer")
+manifest_path = "res://AincradProject/assets/environments/floor_001/terrain/southern_region/floor_001_southern_manifest.json"
+lod0_radius_chunks = 1
+lod1_visual_radius_chunks = 2
+collision_radius_chunks = 1
+unload_radius_chunks = 3
+update_interval_seconds = 0.2
+maximum_new_requests_per_update = 8
+use_sub_threads = true
+retain_loaded_resources_in_memory = true
+expected_dataset_id = "floor_001_southern_region_v1"
+expected_chunk_count = 49
+enforce_expected_grid_range = true
+expected_grid_min = Vector2i(-3, 11)
+expected_grid_max = Vector2i(3, 17)
+require_complete_blender_exports = true
+expected_actual_glb_count = 147
+require_seam_validation_passed = true
+validate_manifest_resource_paths = true
+
+[node name="LoadedChunks" type="Node3D" parent="TerrainStreamer"]
+
+[node name="StreamingUpdateTimer" type="Timer" parent="TerrainStreamer"]
+wait_time = 0.2
+
+[node name="Player" parent="." instance=ExtResource("3_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 60, 3835)
+
+[node name="SpawnMarkers" type="Node3D" parent="."]
+
+[node name="CityGateSpawn" type="Marker3D" parent="SpawnMarkers"]
+position = Vector3(0, 0, 3835)
+
+[node name="NorthernTestSpawn" type="Marker3D" parent="SpawnMarkers"]
+position = Vector3(20, 0, 2840)
+
+[node name="WesternTestSpawn" type="Marker3D" parent="SpawnMarkers"]
+position = Vector3(-700, 0, 3400)
+
+[node name="EasternTestSpawn" type="Marker3D" parent="SpawnMarkers"]
+position = Vector3(880, 0, 3400)
+
+[node name="CentreChunkSpawn" type="Marker3D" parent="SpawnMarkers"]
+position = Vector3(128, 0, 3712)
+
+[node name="BoundarySafety" type="Node3D" parent="."]
+
+[node name="FallRecoveryArea" type="Area3D" parent="BoundarySafety"]
+position = Vector3(128, -72, 3712)
+collision_layer = 0
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BoundarySafety/FallRecoveryArea"]
+shape = SubResource("BoxShape3D_southern_fall")
+
+[node name="DebugVisualization" type="Node3D" parent="."]
+
+[node name="CurrentChunkBoundary" type="MeshInstance3D" parent="DebugVisualization"]
+cast_shadow = 0
+
+[node name="LoadedChunkBoundaries" type="MeshInstance3D" parent="DebugVisualization"]
+cast_shadow = 0
+
+[node name="DebugUI" type="CanvasLayer" parent="."]
+layer = 60
+
+[node name="DebugPanel" type="PanelContainer" parent="DebugUI"]
+offset_left = 18.0
+offset_top = 18.0
+offset_right = 835.0
+offset_bottom = 690.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_southern_debug")
+
+[node name="MarginContainer" type="MarginContainer" parent="DebugUI/DebugPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="DebugUI/DebugPanel/MarginContainer"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="DebugLabel" type="Label" parent="DebugUI/DebugPanel/MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.91, 0.97, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "Validating Floor 1 southern terrain manifest..."
+autowrap_mode = 2
+
+[node name="DebugUpdateTimer" type="Timer" parent="DebugUI"]
+wait_time = 0.25
+autostart = true

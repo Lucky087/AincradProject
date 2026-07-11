@@ -67,6 +67,18 @@ const INVALID_GRID_COORDINATE: Vector2i = Vector2i(2147483647, 2147483647)
 @export_range(0.05, 2.0, 0.05) var update_interval_seconds: float = 0.20
 @export_range(1, 32, 1) var maximum_new_requests_per_update: int = 6
 @export var use_sub_threads: bool = false
+@export var retain_loaded_resources_in_memory: bool = false
+
+@export_category("Optional Manifest Expectations")
+@export var expected_dataset_id: String = ""
+@export_range(0, 512, 1) var expected_chunk_count: int = 0
+@export var enforce_expected_grid_range: bool = false
+@export var expected_grid_min: Vector2i = Vector2i.ZERO
+@export var expected_grid_max: Vector2i = Vector2i.ZERO
+@export var require_complete_blender_exports: bool = false
+@export_range(0, 4096, 1) var expected_actual_glb_count: int = 0
+@export var require_seam_validation_passed: bool = false
+@export var validate_manifest_resource_paths: bool = false
 
 var _player: CharacterBody3D = null
 var _loaded_chunks: Node3D = null
@@ -74,6 +86,9 @@ var _update_timer: Timer = null
 
 var _manifest_ready: bool = false
 var _manifest_status: String = "Manifest not loaded"
+var _manifest_validation_result: String = "NOT RUN"
+var _manifest_dataset_id: String = ""
+var _manifest_generation_status: String = ""
 var _manifest_seams_passed: bool = false
 var _chunk_size_metres: float = 256.0
 var _centre_grid_coordinate: Vector2i = Vector2i.ZERO
@@ -95,6 +110,12 @@ var _current_chunk_id: StringName = &""
 var _current_coordinate_exists: bool = false
 var _force_recalculation: bool = true
 var _setup_is_valid: bool = false
+
+var _last_streaming_update_duration_ms: float = 0.0
+var _recent_streaming_update_duration_ms: float = 0.0
+var _streaming_update_count: int = 0
+var _completed_load_count: int = 0
+var _unload_count: int = 0
 
 
 func _ready() -> void:
@@ -177,6 +198,30 @@ func get_centre_chunk_id() -> StringName:
 	return _centre_chunk_id
 
 
+func get_manifest_dataset_id() -> String:
+	return _manifest_dataset_id
+
+
+func get_manifest_validation_result() -> String:
+	return _manifest_validation_result
+
+
+func is_collision_active_at(grid_coordinate: Vector2i) -> bool:
+	if not _active_chunks.has(grid_coordinate):
+		return false
+	var record: Dictionary = _active_chunks[grid_coordinate]
+	var collision_node: Node = record.get("collision_node") as Node
+	return bool(record.get("collision_active", false)) and is_instance_valid(collision_node)
+
+
+func get_loaded_grid_coordinates() -> Array[Vector2i]:
+	var coordinates: Array[Vector2i] = []
+	for coordinate_value: Variant in _active_chunks.keys():
+		if coordinate_value is Vector2i:
+			coordinates.append(coordinate_value)
+	return coordinates
+
+
 func get_spawn_position_for_chunk(
 	grid_coordinate: Vector2i, height_above_chunk: float = 8.0
 ) -> Vector3:
@@ -197,11 +242,11 @@ func get_debug_snapshot() -> Dictionary:
 	var lod1_count: int = 0
 	var collision_count: int = 0
 	var loaded_ids: Array[String] = []
+	var loaded_coordinates: Array[Vector2i] = []
 
-	for record_value: Variant in _active_chunks.values():
-		if not record_value is Dictionary:
-			continue
-		var record: Dictionary = record_value
+	for coordinate_value: Variant in _active_chunks.keys():
+		var coordinate: Vector2i = coordinate_value
+		var record: Dictionary = _active_chunks[coordinate]
 		var visual_lod: int = int(record.get("visual_lod", VisualLod.NONE))
 		if visual_lod == VisualLod.LOD0:
 			lod0_count += 1
@@ -210,11 +255,15 @@ func get_debug_snapshot() -> Dictionary:
 		if bool(record.get("collision_active", false)):
 			collision_count += 1
 		loaded_ids.append(String(record.get("chunk_id", "")))
+		loaded_coordinates.append(coordinate)
 
 	loaded_ids.sort()
 	return {
 		"manifest_ready": _manifest_ready,
 		"manifest_status": _manifest_status,
+		"manifest_validation_result": _manifest_validation_result,
+		"manifest_dataset_id": _manifest_dataset_id,
+		"manifest_generation_status": _manifest_generation_status,
 		"manifest_seams_passed": _manifest_seams_passed,
 		"registry_chunk_count": _registry_by_grid.size(),
 		"chunk_size_metres": _chunk_size_metres,
@@ -226,9 +275,19 @@ func get_debug_snapshot() -> Dictionary:
 		"lod0_chunk_count": lod0_count,
 		"lod1_chunk_count": lod1_count,
 		"collision_chunk_count": collision_count,
+		"pending_load_count": _request_queue.size() + _threaded_requests.size(),
 		"loading_request_count": _request_queue.size() + _threaded_requests.size(),
+		"queued_load_count": _request_queue.size(),
+		"threaded_load_count": _threaded_requests.size(),
 		"failed_load_count": _failed_paths.size(),
+		"cached_resource_count": _resource_cache.size(),
+		"completed_load_count": _completed_load_count,
+		"unload_count": _unload_count,
+		"last_streaming_update_duration_ms": _last_streaming_update_duration_ms,
+		"recent_streaming_update_duration_ms": _recent_streaming_update_duration_ms,
+		"streaming_update_count": _streaming_update_count,
 		"loaded_chunk_ids": loaded_ids,
+		"loaded_grid_coordinates": loaded_coordinates,
 	}
 
 
@@ -237,17 +296,25 @@ func _on_streaming_update_timer_timeout() -> void:
 
 
 func _update_streaming_cycle() -> void:
+	var update_started_usec: int = Time.get_ticks_usec()
 	_poll_threaded_requests()
 
-	if _player == null:
-		return
+	if _player != null:
+		var player_grid: Vector2i = get_grid_coordinate(_player.global_position)
+		if _force_recalculation or player_grid != _current_grid_coordinate:
+			_force_recalculation = false
+			_recalculate_targets(player_grid)
 
-	var player_grid: Vector2i = get_grid_coordinate(_player.global_position)
-	if _force_recalculation or player_grid != _current_grid_coordinate:
-		_force_recalculation = false
-		_recalculate_targets(player_grid)
+		_start_queued_requests()
 
-	_start_queued_requests()
+	_last_streaming_update_duration_ms = float(Time.get_ticks_usec() - update_started_usec) / 1000.0
+	_streaming_update_count += 1
+	if _streaming_update_count == 1:
+		_recent_streaming_update_duration_ms = _last_streaming_update_duration_ms
+	else:
+		_recent_streaming_update_duration_ms = lerpf(
+			_recent_streaming_update_duration_ms, _last_streaming_update_duration_ms, 0.18
+		)
 
 
 func _recalculate_targets(player_grid: Vector2i) -> void:
@@ -476,6 +543,7 @@ func _poll_threaded_requests() -> void:
 		if load_status == ResourceLoader.THREAD_LOAD_LOADED:
 			var loaded_resource: Resource = ResourceLoader.load_threaded_get(resource_path)
 			if loaded_resource is PackedScene:
+				_completed_load_count += 1
 				if _request_is_still_relevant(request):
 					_resource_cache[resource_path] = loaded_resource
 					_apply_loaded_resource(
@@ -646,7 +714,7 @@ func _remove_visual(coordinate: Vector2i) -> void:
 		return
 	var record: Dictionary = _active_chunks[coordinate]
 	var previous_lod: int = int(record.get("visual_lod", VisualLod.NONE))
-	if _registry_by_grid.has(coordinate):
+	if not retain_loaded_resources_in_memory and _registry_by_grid.has(coordinate):
 		var entry: Dictionary = _registry_by_grid[coordinate]
 		if previous_lod == VisualLod.LOD0:
 			_resource_cache.erase(String(entry.get("lod0_path", "")))
@@ -667,7 +735,7 @@ func _remove_collision(coordinate: Vector2i) -> void:
 	if not _active_chunks.has(coordinate):
 		return
 	var record: Dictionary = _active_chunks[coordinate]
-	if _registry_by_grid.has(coordinate):
+	if not retain_loaded_resources_in_memory and _registry_by_grid.has(coordinate):
 		var entry: Dictionary = _registry_by_grid[coordinate]
 		_resource_cache.erase(String(entry.get("collision_path", "")))
 	var collision_node: Node = record.get("collision_node") as Node
@@ -699,6 +767,7 @@ func _unload_chunk(coordinate: Vector2i) -> void:
 		chunk_root.queue_free()
 
 	_active_chunks.erase(coordinate)
+	_unload_count += 1
 	print("FloorChunkStreamer unloaded chunk at grid %s." % _format_grid(coordinate))
 
 
@@ -792,16 +861,25 @@ func _load_manifest() -> Dictionary:
 
 
 func _build_registry(manifest: Dictionary) -> bool:
+	_manifest_validation_result = "FAILED"
+	_manifest_dataset_id = String(manifest.get("dataset_id", ""))
+	_manifest_generation_status = String(manifest.get("generation_status", ""))
+
 	if String(manifest.get("floor_id", "")) != EXPECTED_FLOOR_ID:
 		_manifest_status = "Unexpected floor ID"
 		_warn("FloorChunkStreamer manifest floor_id must be floor_001.")
 		return false
 
-	if not _is_number(manifest.get("units_per_metre")):
+	var units_value: Variant = manifest.get("units_per_metre")
+	if not _is_number(units_value):
+		var coordinate_system_value: Variant = manifest.get("coordinate_system")
+		if coordinate_system_value is Dictionary:
+			units_value = (coordinate_system_value as Dictionary).get("units_per_metre")
+	if not _is_number(units_value):
 		_manifest_status = "Missing unit scale"
 		_warn("FloorChunkStreamer manifest is missing units_per_metre.")
 		return false
-	if not is_equal_approx(float(manifest["units_per_metre"]), EXPECTED_UNITS_PER_METRE):
+	if not is_equal_approx(float(units_value), EXPECTED_UNITS_PER_METRE):
 		_manifest_status = "Incorrect unit scale"
 		_warn("FloorChunkStreamer requires one Godot unit per metre.")
 		return false
@@ -821,6 +899,13 @@ func _build_registry(manifest: Dictionary) -> bool:
 		_manifest_status = "Chunk list is missing"
 		_warn("FloorChunkStreamer manifest chunks must be a non-empty Array.")
 		return false
+	if expected_chunk_count > 0 and (chunks_value as Array).size() != expected_chunk_count:
+		_manifest_status = "Unexpected manifest chunk record count"
+		_warn(
+			"FloorChunkStreamer expected %d chunk records but found %d."
+			% [expected_chunk_count, (chunks_value as Array).size()]
+		)
+		return false
 
 	_registry_by_grid.clear()
 	_grid_by_chunk_id.clear()
@@ -828,7 +913,7 @@ func _build_registry(manifest: Dictionary) -> bool:
 		if not entry_value is Dictionary:
 			_warn("FloorChunkStreamer skipped a non-Dictionary chunk entry.")
 			continue
-		var entry: Dictionary = entry_value
+		var entry: Dictionary = _normalise_registry_entry(entry_value as Dictionary)
 		if not _validate_registry_entry(entry):
 			continue
 
@@ -837,52 +922,198 @@ func _build_registry(manifest: Dictionary) -> bool:
 		var chunk_id: StringName = StringName(String(entry["chunk_id"]))
 		if _registry_by_grid.has(coordinate):
 			_warn(
-				(
-					"FloorChunkStreamer duplicate grid coordinate %s was skipped."
-					% _format_grid(coordinate)
-				)
+				"FloorChunkStreamer duplicate grid coordinate %s was skipped."
+				% _format_grid(coordinate)
 			)
 			continue
 		if _grid_by_chunk_id.has(chunk_id):
 			_warn("FloorChunkStreamer duplicate chunk ID %s was skipped." % chunk_id)
 			continue
 
-		_registry_by_grid[coordinate] = entry.duplicate(true)
+		_registry_by_grid[coordinate] = entry
 		_grid_by_chunk_id[chunk_id] = coordinate
 
 	if _registry_by_grid.is_empty():
 		_manifest_status = "No valid chunk entries"
 		_warn("FloorChunkStreamer found no valid chunks in the manifest.")
 		return false
+	if expected_chunk_count > 0 and _registry_by_grid.size() != expected_chunk_count:
+		_manifest_status = "Valid chunk registration count mismatch"
+		_warn(
+			"FloorChunkStreamer registered %d valid chunks but expected %d."
+			% [_registry_by_grid.size(), expected_chunk_count]
+		)
+		return false
 
+	var seam_value: Variant = manifest.get("seam_validation")
+	_manifest_seams_passed = false
+	if seam_value is Dictionary:
+		_manifest_seams_passed = bool((seam_value as Dictionary).get("passed", false))
+	if not _manifest_seams_passed:
+		_warn("FloorChunkStreamer manifest reports failed or missing seam validation.")
+	if require_seam_validation_passed and not _manifest_seams_passed:
+		_manifest_status = "Required seam validation did not pass"
+		return false
+
+	if not _validate_manifest_expectations(manifest):
+		return false
+
+	var centre_was_set: bool = false
 	var test_grid_value: Variant = manifest.get("test_grid")
 	if test_grid_value is Dictionary:
-		var test_grid: Dictionary = test_grid_value
-		var centre_value: Variant = test_grid.get("centre_chunk")
+		var centre_value: Variant = (test_grid_value as Dictionary).get("centre_chunk")
 		if centre_value is Dictionary:
 			var centre_data: Dictionary = centre_value
 			if _is_number(centre_data.get("x")) and _is_number(centre_data.get("z")):
 				_centre_grid_coordinate = Vector2i(int(centre_data["x"]), int(centre_data["z"]))
 				_centre_chunk_id = StringName(String(centre_data.get("chunk_id", "")))
+				centre_was_set = _registry_by_grid.has(_centre_grid_coordinate)
 
-	if not _registry_by_grid.has(_centre_grid_coordinate):
+	if not centre_was_set:
+		var chunk_range_value: Variant = manifest.get("chunk_range")
+		if chunk_range_value is Dictionary:
+			var centre_id: StringName = StringName(
+				String((chunk_range_value as Dictionary).get("centre_chunk_id", ""))
+			)
+			if _grid_by_chunk_id.has(centre_id):
+				_centre_chunk_id = centre_id
+				_centre_grid_coordinate = _grid_by_chunk_id[centre_id]
+				centre_was_set = true
+
+	if not centre_was_set:
 		_centre_grid_coordinate = _registry_by_grid.keys()[0]
 		_centre_chunk_id = get_chunk_id_at(_centre_grid_coordinate)
 
-	var seam_value: Variant = manifest.get("seam_validation")
-	_manifest_seams_passed = false
-	if seam_value is Dictionary:
-		var seam_data: Dictionary = seam_value
-		_manifest_seams_passed = bool(seam_data.get("passed", false))
-	if not _manifest_seams_passed:
-		_warn("FloorChunkStreamer manifest reports failed or missing seam validation.")
-
+	_manifest_validation_result = "PASSED"
+	_manifest_status = "Manifest registry ready"
 	print(
-		(
-			"FloorChunkStreamer registry built: %d chunks, %.1f m cells, centre %s."
-			% [_registry_by_grid.size(), _chunk_size_metres, _centre_chunk_id]
-		)
+		"FloorChunkStreamer registry built: %d chunks, %.1f m cells, centre %s."
+		% [_registry_by_grid.size(), _chunk_size_metres, _centre_chunk_id]
 	)
+	return true
+
+
+func _normalise_registry_entry(source_entry: Dictionary) -> Dictionary:
+	var entry: Dictionary = source_entry.duplicate(true)
+	var lod_paths_value: Variant = entry.get("lod_paths")
+	if lod_paths_value is Dictionary:
+		var lod_paths: Dictionary = lod_paths_value
+		if String(entry.get("lod0_path", "")).is_empty():
+			entry["lod0_path"] = String(lod_paths.get("lod0", ""))
+		if String(entry.get("lod1_path", "")).is_empty():
+			entry["lod1_path"] = String(lod_paths.get("lod1", ""))
+	return entry
+
+
+func _validate_manifest_expectations(manifest: Dictionary) -> bool:
+	if not expected_dataset_id.is_empty() and _manifest_dataset_id != expected_dataset_id:
+		_manifest_status = "Unexpected dataset ID"
+		_warn(
+			"FloorChunkStreamer expected dataset_id %s but found %s."
+			% [expected_dataset_id, _manifest_dataset_id]
+		)
+		return false
+
+	if enforce_expected_grid_range:
+		var actual_min: Vector2i = Vector2i(2147483647, 2147483647)
+		var actual_max: Vector2i = Vector2i(-2147483647, -2147483647)
+		for coordinate_value: Variant in _registry_by_grid.keys():
+			var coordinate: Vector2i = coordinate_value
+			actual_min.x = mini(actual_min.x, coordinate.x)
+			actual_min.y = mini(actual_min.y, coordinate.y)
+			actual_max.x = maxi(actual_max.x, coordinate.x)
+			actual_max.y = maxi(actual_max.y, coordinate.y)
+		if actual_min != expected_grid_min or actual_max != expected_grid_max:
+			_manifest_status = "Unexpected grid range"
+			_warn(
+				"FloorChunkStreamer expected grid %s through %s but found %s through %s."
+				% [
+					_format_grid(expected_grid_min),
+					_format_grid(expected_grid_max),
+					_format_grid(actual_min),
+					_format_grid(actual_max),
+				]
+			)
+			return false
+
+	if require_complete_blender_exports:
+		if _manifest_generation_status != "complete_blender_exports_generated":
+			_manifest_status = "Blender exports are pending"
+			_warn(
+				"FloorChunkStreamer cannot load this dataset because Blender exports are not complete. "
+				+ "Manifest status: %s" % _manifest_generation_status
+			)
+			return false
+		var execution_value: Variant = manifest.get("blender_execution")
+		if not execution_value is Dictionary:
+			_manifest_status = "Missing Blender execution record"
+			_warn("FloorChunkStreamer expected a blender_execution object.")
+			return false
+		var execution: Dictionary = execution_value
+		if not bool(execution.get("executed", false)) or not bool(
+			execution.get("exports_generated", false)
+		):
+			_manifest_status = "Blender export flags are incomplete"
+			_warn("FloorChunkStreamer manifest does not confirm generated Blender exports.")
+			return false
+		var actual_glb_count: int = int(execution.get("actual_glb_count", -1))
+		if expected_actual_glb_count > 0 and actual_glb_count != expected_actual_glb_count:
+			_manifest_status = "Unexpected actual GLB count"
+			_warn(
+				"FloorChunkStreamer expected %d GLBs but manifest reports %d."
+				% [expected_actual_glb_count, actual_glb_count]
+			)
+			return false
+
+	var lod0_paths: Dictionary = {}
+	var lod1_paths: Dictionary = {}
+	var collision_paths: Dictionary = {}
+	var all_unique_paths: Dictionary = {}
+	for entry_value: Variant in _registry_by_grid.values():
+		var entry: Dictionary = entry_value
+		var lod0_path: String = String(entry.get("lod0_path", ""))
+		var lod1_path: String = String(entry.get("lod1_path", ""))
+		var collision_path: String = String(entry.get("collision_path", ""))
+		for resource_path: String in [lod0_path, lod1_path, collision_path]:
+			if all_unique_paths.has(resource_path):
+				_manifest_status = "Duplicate terrain resource path"
+				_warn("FloorChunkStreamer found a duplicate LOD or collision resource path.")
+				return false
+			all_unique_paths[resource_path] = true
+		lod0_paths[lod0_path] = true
+		lod1_paths[lod1_path] = true
+		collision_paths[collision_path] = true
+
+	if (
+		lod0_paths.size() != _registry_by_grid.size()
+		or lod1_paths.size() != _registry_by_grid.size()
+		or collision_paths.size() != _registry_by_grid.size()
+	):
+		_manifest_status = "Terrain path count mismatch"
+		_warn("FloorChunkStreamer terrain path counts do not match registered chunks.")
+		return false
+
+	if validate_manifest_resource_paths:
+		var all_paths: Array[String] = []
+		for path_value: Variant in lod0_paths.keys():
+			all_paths.append(String(path_value))
+		for path_value: Variant in lod1_paths.keys():
+			all_paths.append(String(path_value))
+		for path_value: Variant in collision_paths.keys():
+			all_paths.append(String(path_value))
+		for resource_path: String in all_paths:
+			if not FileAccess.file_exists(resource_path):
+				_manifest_status = "Manifest resource file is missing"
+				_warn("FloorChunkStreamer manifest path does not exist: %s" % resource_path)
+				return false
+			if not ResourceLoader.exists(resource_path, "PackedScene"):
+				_manifest_status = "Manifest resource is not imported"
+				_warn(
+					"FloorChunkStreamer resource has not imported as PackedScene: %s"
+					% resource_path
+				)
+				return false
+
 	return true
 
 
