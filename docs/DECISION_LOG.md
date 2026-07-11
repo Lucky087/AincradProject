@@ -2991,3 +2991,159 @@ Collision: 17 × 17 vertices
 ### Follow-up
 
 After local Blender generation, verify GLB import orientation, scale, normals, and edge continuity in Godot before implementing streaming.
+
+---
+
+## D-069 — Validate Blender Terrain in an Isolated F6 Scene
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The 13A export batch must be tested in Godot without changing the normal game,
+the existing Floor 1 outskirts, or current gameplay systems.
+
+### Decision
+
+Create a separate manual-run scene:
+
+```text
+res://AincradProject/scenes/world/terrain_chunk_test.tscn
+```
+
+Run it with F6. Keep `project.godot`, `scenes/main.tscn`,
+`scenes/world/test_world.tscn`, and
+`world/floors/floor_001/floor_001_outskirts.tscn` unchanged.
+
+Reuse the existing player scene rather than creating a test-only player or UI
+copy.
+
+### Consequences
+
+- Terrain import can fail or be iterated without risking the normal game.
+- Existing player scale, movement, camera, and jumping become the test tools.
+- F5 remains the normal Floor 1 prototype.
+- Local verification must explicitly run the current scene with F6.
+
+### Alternatives considered
+
+- Replace the normal main scene temporarily.
+- Add the terrain grid to the existing test world.
+- Add terrain directly to Floor 1 outskirts before import validation.
+
+### Follow-up
+
+Keep this scene as an import and regression test when later streaming code is
+introduced.
+
+---
+
+## D-070 — Treat Manifest Positions as Godot-Space Corner Origins
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The Blender generator exported each chunk at a local corner origin and recorded
+its intended Godot placement. Applying a second custom axis conversion in Godot
+would rotate or mirror already converted glTF content.
+
+### Decision
+
+Load each visual and collision GLB beneath one stable chunk root and assign:
+
+```text
+chunk_root.position = manifest.global_position
+```
+
+Interpret the manifest values directly as Godot coordinates:
+
+```text
+X = east/west
+Y = height
+Z = north/south
+```
+
+Validate each position against:
+
+```text
+X = grid_x × 256
+Z = grid_z × 256
+```
+
+Do not swap axes, negate Z, bake nine manual positions, or apply per-chunk
+scales.
+
+### Consequences
+
+- The generated corner-origin convention remains data-driven.
+- Neighboring chunk origins are exactly 256 metres apart.
+- Scale or orientation failures remain visible instead of being hidden by
+  manual scene corrections.
+- The manifest remains suitable for a later streaming loader.
+
+### Alternatives considered
+
+- Enter all nine transforms manually in the `.tscn` file.
+- Negate manifest Z again after Godot import.
+- Export and load chunks with baked global transforms.
+
+### Follow-up
+
+If local Godot testing reveals an exporter/importer axis defect, correct the
+single documented pipeline rule and regenerate the batch rather than patching
+individual chunks.
+
+---
+
+## D-071 — Build Physics Only From Dedicated Collision GLBs
+
+**Date:** 2026-07-11  
+**Status:** Accepted  
+**Decision owner:** Lead developer
+
+### Context
+
+The terrain batch contains separate 65-by-65 LOD0, 33-by-33 LOD1, and
+17-by-17 collision meshes. Using render geometry for physics would defeat the
+pipeline test and obscure failures in the collision exports.
+
+### Decision
+
+For each chunk:
+
+1. Load the dedicated `_collision.glb`.
+2. Find its imported `MeshInstance3D` nodes.
+3. Create trimesh `Shape3D` resources from those meshes.
+4. Place the shapes under a `StaticBody3D` in the chunk's `Collision` container.
+5. Remove the temporary collision visual instance.
+
+Never create collision from LOD1. Do not silently substitute LOD0 when a
+collision file is missing.
+
+Load LOD0 and LOD1 as visual-only nodes. Use direct F4 handling in the isolated
+test loader so the existing Input Map remains unchanged.
+
+### Consequences
+
+- Collision cost is tested using the intended 17-by-17 exports.
+- A missing or invalid collision GLB produces a visible warning and test gap.
+- Render and physics responsibilities stay separate.
+- The test scene can compare both visual LODs without implementing final
+  distance-based LOD selection.
+
+### Alternatives considered
+
+- Generate collision from LOD0 at runtime.
+- Use LOD1 for collision.
+- Modify every GLB import setting to auto-create collision.
+- Add a permanent Input Map action before the debug toggle is accepted.
+
+### Follow-up
+
+Approve the collision pipeline only after the player walks and jumps across all
+internal borders without large gaps or unstable steps.

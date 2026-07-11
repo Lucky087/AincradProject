@@ -1,0 +1,97 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://AincradProject/scripts/world/terrain_chunk_test_loader.gd" id="1_loader"]
+[ext_resource type="PackedScene" path="res://AincradProject/scenes/player/player.tscn" id="2_player"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_test"]
+sky_top_color = Color(0.19, 0.43, 0.72, 1)
+sky_horizon_color = Color(0.73, 0.84, 0.94, 1)
+ground_bottom_color = Color(0.11, 0.14, 0.12, 1)
+ground_horizon_color = Color(0.52, 0.61, 0.54, 1)
+sun_angle_max = 18.0
+sun_curve = 0.08
+
+[sub_resource type="Sky" id="Sky_test"]
+sky_material = SubResource("ProceduralSkyMaterial_test")
+
+[sub_resource type="Environment" id="Environment_test"]
+background_mode = 2
+sky = SubResource("Sky_test")
+ambient_light_source = 3
+ambient_light_color = Color(0.75, 0.8, 0.88, 1)
+ambient_light_energy = 0.62
+fog_enabled = true
+fog_light_color = Color(0.69, 0.77, 0.84, 1)
+fog_light_energy = 0.55
+fog_density = 0.0008
+fog_sky_affect = 0.25
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fall_recovery"]
+size = Vector3(820, 20, 820)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_debug"]
+bg_color = Color(0.035, 0.045, 0.06, 0.88)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.45, 0.65, 0.82, 0.8)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="TerrainChunkTest" type="Node3D"]
+script = ExtResource("1_loader")
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_test")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+rotation_degrees = Vector3(-52, -28, 0)
+light_color = Color(1, 0.95, 0.84, 1)
+light_energy = 1.15
+shadow_enabled = true
+
+[node name="TerrainChunks" type="Node3D" parent="."]
+
+[node name="BoundarySafety" type="Node3D" parent="."]
+
+[node name="FallRecoveryArea" type="Area3D" parent="BoundarySafety"]
+position = Vector3(128, -25, 3712)
+collision_layer = 0
+collision_mask = 1
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BoundarySafety/FallRecoveryArea"]
+shape = SubResource("BoxShape3D_fall_recovery")
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector3(128, 10.75, 3712)
+
+[node name="DebugUI" type="CanvasLayer" parent="."]
+layer = 60
+
+[node name="DebugPanel" type="PanelContainer" parent="DebugUI"]
+offset_left = 18.0
+offset_top = 18.0
+offset_right = 410.0
+offset_bottom = 252.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_debug")
+
+[node name="MarginContainer" type="MarginContainer" parent="DebugUI/DebugPanel"]
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="DebugLabel" type="Label" parent="DebugUI/DebugPanel/MarginContainer"]
+text = "Loading Floor 1 terrain manifest..."
+theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
+theme_override_font_sizes/font_size = 15
+
+[node name="DebugUpdateTimer" type="Timer" parent="DebugUI"]
+wait_time = 0.25
+autostart = true

@@ -1196,3 +1196,67 @@ This milestone is inserted before the Floor 1 shell and streaming implementation
 ### Next milestone after local approval
 
 Proceed to **M13B — Floor Shell and Streaming Prototype** only after the generated chunks import at correct scale, orientation, and seams in Godot.
+
+---
+
+## 22. Milestone 13B — Godot Terrain-Chunk Import Test
+
+**Status:** Test scene and loader prepared; local Godot 4.7 verification required  
+**Date:** 2026-07-11
+
+This milestone validates the real 13A GLB exports inside an isolated Godot scene.
+It does not change the normal game startup or implement world streaming.
+
+### Completed in the project package
+
+- [x] Read the generated terrain manifest.
+- [x] Validate Floor 1 ID, one-metre units, 256 m chunk size, centre chunk, and chunk count.
+- [x] Create `scenes/world/terrain_chunk_test.tscn`.
+- [x] Create `scripts/world/terrain_chunk_test_loader.gd`.
+- [x] Reuse the existing player scene and its active camera.
+- [x] Load all valid LOD0 GLBs from manifest paths.
+- [x] Load all valid LOD1 GLBs and keep them hidden by default.
+- [x] Add an F4 debug toggle without modifying `project.godot`.
+- [x] Place chunk roots from manifest `global_position` values.
+- [x] Validate that grid coordinates and manifest positions agree.
+- [x] Build `StaticBody3D` collision only from dedicated collision GLBs.
+- [x] Organize LOD0, LOD1, and collision beneath each stable chunk root.
+- [x] Add a periodic debug display without `_process()`.
+- [x] Add a test-scene-only fall-recovery volume.
+- [x] Continue safely when an individual GLB is missing.
+- [x] Create `docs/floors/FLOOR_001_GODOT_TERRAIN_TEST.md`.
+- [x] Preserve the normal game, test world, outskirts, SaveManager, and project settings.
+- [x] Preserve every existing `.uid`, `.godot`, and imported asset file.
+
+### Local Godot verification required
+
+- [ ] Allow Godot 4.7 to finish importing all 27 GLBs.
+- [ ] Open `scenes/world/terrain_chunk_test.tscn`.
+- [ ] Run the current scene with F6.
+- [ ] Confirm nine LOD0 chunks load.
+- [ ] Confirm nine LOD1 chunks load.
+- [ ] Confirm nine collision chunks load.
+- [ ] Confirm the debug panel reports the expected centre chunk.
+- [ ] Confirm the debug panel reports manifest seams as passed.
+- [ ] Confirm the complete area is approximately 768 by 768 metres.
+- [ ] Confirm the player scale is correct at one unit per metre.
+- [ ] Walk and jump across every internal chunk border.
+- [ ] Confirm no visible terrain cracks or major collision gaps.
+- [ ] Press F4 and compare LOD0 and LOD1 alignment.
+- [ ] Fall below the terrain and confirm safe recovery.
+- [ ] Run the normal game with F5 and confirm it is unchanged.
+
+### Explicitly not included
+
+- [x] No final distance-based LOD system.
+- [x] No runtime world streaming.
+- [x] No navigation meshes.
+- [x] No complete Floor 1 terrain.
+- [x] No roads, forests, buildings, enemies, or NPCs.
+- [x] No gameplay, player, SaveManager, main-scene, or project-setting changes.
+
+### Next step after local approval
+
+Proceed to an empty Floor 1 shell and streaming prototype only after the 13B
+scene proves correct scale, axes, visual seams, collision seams, and manifest
+placement in Godot 4.7.

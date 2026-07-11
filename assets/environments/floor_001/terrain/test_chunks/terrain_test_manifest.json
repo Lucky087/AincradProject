@@ -6,483 +6,483 @@
   "chunk_size_m": 256.0,
   "units_per_metre": 1.0,
   "coordinate_system": {
-    "east": "+X",
-    "west": "-X",
-    "north": "-Z",
-    "south": "+Z",
-    "up": "+Y",
-    "blender_axis_conversion": "Mesh local X maps to Godot +X; Blender local -Y maps to Godot +Z; Blender local Z maps to Godot +Y."
+	"east": "+X",
+	"west": "-X",
+	"north": "-Z",
+	"south": "+Z",
+	"up": "+Y",
+	"blender_axis_conversion": "Mesh local X maps to Godot +X; Blender local -Y maps to Godot +Z; Blender local Z maps to Godot +Y."
   },
   "test_grid": {
-    "planned_outskirts_reference_position": [
-      0.0,
-      0.0,
-      3835.0
-    ],
-    "centre_chunk": {
-      "x": 0,
-      "z": 14,
-      "chunk_id": "floor_001_chunk_x+00_z+14"
-    },
-    "grid_radius_chunks": 1,
-    "chunk_count": 9
+	"planned_outskirts_reference_position": [
+	  0.0,
+	  0.0,
+	  3835.0
+	],
+	"centre_chunk": {
+	  "x": 0,
+	  "z": 14,
+	  "chunk_id": "floor_001_chunk_x+00_z+14"
+	},
+	"grid_radius_chunks": 1,
+	"chunk_count": 9
   },
   "seam_validation": {
-    "passed": true,
-    "tolerance_metres": 1e-06,
-    "compared_values": 1472,
-    "failures": []
+	"passed": true,
+	"tolerance_metres": 1e-06,
+	"compared_values": 1472,
+	"failures": []
   },
   "chunks": [
-    {
-      "chunk_id": "floor_001_chunk_x-01_z+13",
-      "grid_coordinates": {
-        "x": -1,
-        "z": 13
-      },
-      "global_position": [
-        -256.0,
-        0.0,
-        3328.0
-      ],
-      "local_origin_rule": "minimum_x_minimum_z_corner",
-      "bounds": {
-        "min_x": -256.0,
-        "max_x": 0.0,
-        "min_y": 3.4104878691592244,
-        "max_y": 5.285340935248484,
-        "min_z": 3328.0,
-        "max_z": 3584.0
-      },
-      "lod0_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x-01_z+13_lod0.glb",
-      "lod1_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x-01_z+13_lod1.glb",
-      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x-01_z+13_collision.glb",
-      "meshes": {
-        "lod0": {
-          "resolution": [
-            65,
-            65
-          ],
-          "vertex_count": 4225,
-          "triangle_count": 8192
-        },
-        "lod1": {
-          "resolution": [
-            33,
-            33
-          ],
-          "vertex_count": 1089,
-          "triangle_count": 2048
-        },
-        "collision": {
-          "resolution": [
-            17,
-            17
-          ],
-          "vertex_count": 289,
-          "triangle_count": 512
-        }
-      }
-    },
-    {
-      "chunk_id": "floor_001_chunk_x+00_z+13",
-      "grid_coordinates": {
-        "x": 0,
-        "z": 13
-      },
-      "global_position": [
-        0.0,
-        0.0,
-        3328.0
-      ],
-      "local_origin_rule": "minimum_x_minimum_z_corner",
-      "bounds": {
-        "min_x": 0.0,
-        "max_x": 256.0,
-        "min_y": 4.066368204863839,
-        "max_y": 7.0709212626279125,
-        "min_z": 3328.0,
-        "max_z": 3584.0
-      },
-      "lod0_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+00_z+13_lod0.glb",
-      "lod1_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+00_z+13_lod1.glb",
-      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+00_z+13_collision.glb",
-      "meshes": {
-        "lod0": {
-          "resolution": [
-            65,
-            65
-          ],
-          "vertex_count": 4225,
-          "triangle_count": 8192
-        },
-        "lod1": {
-          "resolution": [
-            33,
-            33
-          ],
-          "vertex_count": 1089,
-          "triangle_count": 2048
-        },
-        "collision": {
-          "resolution": [
-            17,
-            17
-          ],
-          "vertex_count": 289,
-          "triangle_count": 512
-        }
-      }
-    },
-    {
-      "chunk_id": "floor_001_chunk_x+01_z+13",
-      "grid_coordinates": {
-        "x": 1,
-        "z": 13
-      },
-      "global_position": [
-        256.0,
-        0.0,
-        3328.0
-      ],
-      "local_origin_rule": "minimum_x_minimum_z_corner",
-      "bounds": {
-        "min_x": 256.0,
-        "max_x": 512.0,
-        "min_y": 4.7611849307445056,
-        "max_y": 7.97128104848291,
-        "min_z": 3328.0,
-        "max_z": 3584.0
-      },
-      "lod0_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+01_z+13_lod0.glb",
-      "lod1_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+01_z+13_lod1.glb",
-      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+01_z+13_collision.glb",
-      "meshes": {
-        "lod0": {
-          "resolution": [
-            65,
-            65
-          ],
-          "vertex_count": 4225,
-          "triangle_count": 8192
-        },
-        "lod1": {
-          "resolution": [
-            33,
-            33
-          ],
-          "vertex_count": 1089,
-          "triangle_count": 2048
-        },
-        "collision": {
-          "resolution": [
-            17,
-            17
-          ],
-          "vertex_count": 289,
-          "triangle_count": 512
-        }
-      }
-    },
-    {
-      "chunk_id": "floor_001_chunk_x-01_z+14",
-      "grid_coordinates": {
-        "x": -1,
-        "z": 14
-      },
-      "global_position": [
-        -256.0,
-        0.0,
-        3584.0
-      ],
-      "local_origin_rule": "minimum_x_minimum_z_corner",
-      "bounds": {
-        "min_x": -256.0,
-        "max_x": 0.0,
-        "min_y": 3.717002205292167,
-        "max_y": 4.511651700797894,
-        "min_z": 3584.0,
-        "max_z": 3840.0
-      },
-      "lod0_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x-01_z+14_lod0.glb",
-      "lod1_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x-01_z+14_lod1.glb",
-      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x-01_z+14_collision.glb",
-      "meshes": {
-        "lod0": {
-          "resolution": [
-            65,
-            65
-          ],
-          "vertex_count": 4225,
-          "triangle_count": 8192
-        },
-        "lod1": {
-          "resolution": [
-            33,
-            33
-          ],
-          "vertex_count": 1089,
-          "triangle_count": 2048
-        },
-        "collision": {
-          "resolution": [
-            17,
-            17
-          ],
-          "vertex_count": 289,
-          "triangle_count": 512
-        }
-      }
-    },
-    {
-      "chunk_id": "floor_001_chunk_x+00_z+14",
-      "grid_coordinates": {
-        "x": 0,
-        "z": 14
-      },
-      "global_position": [
-        0.0,
-        0.0,
-        3584.0
-      ],
-      "local_origin_rule": "minimum_x_minimum_z_corner",
-      "bounds": {
-        "min_x": 0.0,
-        "max_x": 256.0,
-        "min_y": 3.717002205292167,
-        "max_y": 4.7611849307445056,
-        "min_z": 3584.0,
-        "max_z": 3840.0
-      },
-      "lod0_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+00_z+14_lod0.glb",
-      "lod1_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+00_z+14_lod1.glb",
-      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+00_z+14_collision.glb",
-      "meshes": {
-        "lod0": {
-          "resolution": [
-            65,
-            65
-          ],
-          "vertex_count": 4225,
-          "triangle_count": 8192
-        },
-        "lod1": {
-          "resolution": [
-            33,
-            33
-          ],
-          "vertex_count": 1089,
-          "triangle_count": 2048
-        },
-        "collision": {
-          "resolution": [
-            17,
-            17
-          ],
-          "vertex_count": 289,
-          "triangle_count": 512
-        }
-      }
-    },
-    {
-      "chunk_id": "floor_001_chunk_x+01_z+14",
-      "grid_coordinates": {
-        "x": 1,
-        "z": 14
-      },
-      "global_position": [
-        256.0,
-        0.0,
-        3584.0
-      ],
-      "local_origin_rule": "minimum_x_minimum_z_corner",
-      "bounds": {
-        "min_x": 256.0,
-        "max_x": 512.0,
-        "min_y": 4.2449404511439175,
-        "max_y": 6.483961998279414,
-        "min_z": 3584.0,
-        "max_z": 3840.0
-      },
-      "lod0_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+01_z+14_lod0.glb",
-      "lod1_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+01_z+14_lod1.glb",
-      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+01_z+14_collision.glb",
-      "meshes": {
-        "lod0": {
-          "resolution": [
-            65,
-            65
-          ],
-          "vertex_count": 4225,
-          "triangle_count": 8192
-        },
-        "lod1": {
-          "resolution": [
-            33,
-            33
-          ],
-          "vertex_count": 1089,
-          "triangle_count": 2048
-        },
-        "collision": {
-          "resolution": [
-            17,
-            17
-          ],
-          "vertex_count": 289,
-          "triangle_count": 512
-        }
-      }
-    },
-    {
-      "chunk_id": "floor_001_chunk_x-01_z+15",
-      "grid_coordinates": {
-        "x": -1,
-        "z": 15
-      },
-      "global_position": [
-        -256.0,
-        0.0,
-        3840.0
-      ],
-      "local_origin_rule": "minimum_x_minimum_z_corner",
-      "bounds": {
-        "min_x": -256.0,
-        "max_x": 0.0,
-        "min_y": 3.3677434170556664,
-        "max_y": 4.108842373518949,
-        "min_z": 3840.0,
-        "max_z": 4096.0
-      },
-      "lod0_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x-01_z+15_lod0.glb",
-      "lod1_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x-01_z+15_lod1.glb",
-      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x-01_z+15_collision.glb",
-      "meshes": {
-        "lod0": {
-          "resolution": [
-            65,
-            65
-          ],
-          "vertex_count": 4225,
-          "triangle_count": 8192
-        },
-        "lod1": {
-          "resolution": [
-            33,
-            33
-          ],
-          "vertex_count": 1089,
-          "triangle_count": 2048
-        },
-        "collision": {
-          "resolution": [
-            17,
-            17
-          ],
-          "vertex_count": 289,
-          "triangle_count": 512
-        }
-      }
-    },
-    {
-      "chunk_id": "floor_001_chunk_x+00_z+15",
-      "grid_coordinates": {
-        "x": 0,
-        "z": 15
-      },
-      "global_position": [
-        0.0,
-        0.0,
-        3840.0
-      ],
-      "local_origin_rule": "minimum_x_minimum_z_corner",
-      "bounds": {
-        "min_x": 0.0,
-        "max_x": 256.0,
-        "min_y": 3.359881129840751,
-        "max_y": 4.2449404511439175,
-        "min_z": 3840.0,
-        "max_z": 4096.0
-      },
-      "lod0_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+00_z+15_lod0.glb",
-      "lod1_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+00_z+15_lod1.glb",
-      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+00_z+15_collision.glb",
-      "meshes": {
-        "lod0": {
-          "resolution": [
-            65,
-            65
-          ],
-          "vertex_count": 4225,
-          "triangle_count": 8192
-        },
-        "lod1": {
-          "resolution": [
-            33,
-            33
-          ],
-          "vertex_count": 1089,
-          "triangle_count": 2048
-        },
-        "collision": {
-          "resolution": [
-            17,
-            17
-          ],
-          "vertex_count": 289,
-          "triangle_count": 512
-        }
-      }
-    },
-    {
-      "chunk_id": "floor_001_chunk_x+01_z+15",
-      "grid_coordinates": {
-        "x": 1,
-        "z": 15
-      },
-      "global_position": [
-        256.0,
-        0.0,
-        3840.0
-      ],
-      "local_origin_rule": "minimum_x_minimum_z_corner",
-      "bounds": {
-        "min_x": 256.0,
-        "max_x": 512.0,
-        "min_y": 4.129767403061111,
-        "max_y": 6.114008634584181,
-        "min_z": 3840.0,
-        "max_z": 4096.0
-      },
-      "lod0_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+01_z+15_lod0.glb",
-      "lod1_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+01_z+15_lod1.glb",
-      "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+01_z+15_collision.glb",
-      "meshes": {
-        "lod0": {
-          "resolution": [
-            65,
-            65
-          ],
-          "vertex_count": 4225,
-          "triangle_count": 8192
-        },
-        "lod1": {
-          "resolution": [
-            33,
-            33
-          ],
-          "vertex_count": 1089,
-          "triangle_count": 2048
-        },
-        "collision": {
-          "resolution": [
-            17,
-            17
-          ],
-          "vertex_count": 289,
-          "triangle_count": 512
-        }
-      }
-    }
+	{
+	  "chunk_id": "floor_001_chunk_x-01_z+13",
+	  "grid_coordinates": {
+		"x": -1,
+		"z": 13
+	  },
+	  "global_position": [
+		-256.0,
+		0.0,
+		3328.0
+	  ],
+	  "local_origin_rule": "minimum_x_minimum_z_corner",
+	  "bounds": {
+		"min_x": -256.0,
+		"max_x": 0.0,
+		"min_y": 3.4104878691592244,
+		"max_y": 5.285340935248484,
+		"min_z": 3328.0,
+		"max_z": 3584.0
+	  },
+	  "lod0_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x-01_z+13_lod0.glb",
+	  "lod1_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x-01_z+13_lod1.glb",
+	  "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x-01_z+13_collision.glb",
+	  "meshes": {
+		"lod0": {
+		  "resolution": [
+			65,
+			65
+		  ],
+		  "vertex_count": 4225,
+		  "triangle_count": 8192
+		},
+		"lod1": {
+		  "resolution": [
+			33,
+			33
+		  ],
+		  "vertex_count": 1089,
+		  "triangle_count": 2048
+		},
+		"collision": {
+		  "resolution": [
+			17,
+			17
+		  ],
+		  "vertex_count": 289,
+		  "triangle_count": 512
+		}
+	  }
+	},
+	{
+	  "chunk_id": "floor_001_chunk_x+00_z+13",
+	  "grid_coordinates": {
+		"x": 0,
+		"z": 13
+	  },
+	  "global_position": [
+		0.0,
+		0.0,
+		3328.0
+	  ],
+	  "local_origin_rule": "minimum_x_minimum_z_corner",
+	  "bounds": {
+		"min_x": 0.0,
+		"max_x": 256.0,
+		"min_y": 4.066368204863839,
+		"max_y": 7.0709212626279125,
+		"min_z": 3328.0,
+		"max_z": 3584.0
+	  },
+	  "lod0_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+00_z+13_lod0.glb",
+	  "lod1_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+00_z+13_lod1.glb",
+	  "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+00_z+13_collision.glb",
+	  "meshes": {
+		"lod0": {
+		  "resolution": [
+			65,
+			65
+		  ],
+		  "vertex_count": 4225,
+		  "triangle_count": 8192
+		},
+		"lod1": {
+		  "resolution": [
+			33,
+			33
+		  ],
+		  "vertex_count": 1089,
+		  "triangle_count": 2048
+		},
+		"collision": {
+		  "resolution": [
+			17,
+			17
+		  ],
+		  "vertex_count": 289,
+		  "triangle_count": 512
+		}
+	  }
+	},
+	{
+	  "chunk_id": "floor_001_chunk_x+01_z+13",
+	  "grid_coordinates": {
+		"x": 1,
+		"z": 13
+	  },
+	  "global_position": [
+		256.0,
+		0.0,
+		3328.0
+	  ],
+	  "local_origin_rule": "minimum_x_minimum_z_corner",
+	  "bounds": {
+		"min_x": 256.0,
+		"max_x": 512.0,
+		"min_y": 4.7611849307445056,
+		"max_y": 7.97128104848291,
+		"min_z": 3328.0,
+		"max_z": 3584.0
+	  },
+	  "lod0_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+01_z+13_lod0.glb",
+	  "lod1_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+01_z+13_lod1.glb",
+	  "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+01_z+13_collision.glb",
+	  "meshes": {
+		"lod0": {
+		  "resolution": [
+			65,
+			65
+		  ],
+		  "vertex_count": 4225,
+		  "triangle_count": 8192
+		},
+		"lod1": {
+		  "resolution": [
+			33,
+			33
+		  ],
+		  "vertex_count": 1089,
+		  "triangle_count": 2048
+		},
+		"collision": {
+		  "resolution": [
+			17,
+			17
+		  ],
+		  "vertex_count": 289,
+		  "triangle_count": 512
+		}
+	  }
+	},
+	{
+	  "chunk_id": "floor_001_chunk_x-01_z+14",
+	  "grid_coordinates": {
+		"x": -1,
+		"z": 14
+	  },
+	  "global_position": [
+		-256.0,
+		0.0,
+		3584.0
+	  ],
+	  "local_origin_rule": "minimum_x_minimum_z_corner",
+	  "bounds": {
+		"min_x": -256.0,
+		"max_x": 0.0,
+		"min_y": 3.717002205292167,
+		"max_y": 4.511651700797894,
+		"min_z": 3584.0,
+		"max_z": 3840.0
+	  },
+	  "lod0_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x-01_z+14_lod0.glb",
+	  "lod1_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x-01_z+14_lod1.glb",
+	  "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x-01_z+14_collision.glb",
+	  "meshes": {
+		"lod0": {
+		  "resolution": [
+			65,
+			65
+		  ],
+		  "vertex_count": 4225,
+		  "triangle_count": 8192
+		},
+		"lod1": {
+		  "resolution": [
+			33,
+			33
+		  ],
+		  "vertex_count": 1089,
+		  "triangle_count": 2048
+		},
+		"collision": {
+		  "resolution": [
+			17,
+			17
+		  ],
+		  "vertex_count": 289,
+		  "triangle_count": 512
+		}
+	  }
+	},
+	{
+	  "chunk_id": "floor_001_chunk_x+00_z+14",
+	  "grid_coordinates": {
+		"x": 0,
+		"z": 14
+	  },
+	  "global_position": [
+		0.0,
+		0.0,
+		3584.0
+	  ],
+	  "local_origin_rule": "minimum_x_minimum_z_corner",
+	  "bounds": {
+		"min_x": 0.0,
+		"max_x": 256.0,
+		"min_y": 3.717002205292167,
+		"max_y": 4.7611849307445056,
+		"min_z": 3584.0,
+		"max_z": 3840.0
+	  },
+	  "lod0_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+00_z+14_lod0.glb",
+	  "lod1_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+00_z+14_lod1.glb",
+	  "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+00_z+14_collision.glb",
+	  "meshes": {
+		"lod0": {
+		  "resolution": [
+			65,
+			65
+		  ],
+		  "vertex_count": 4225,
+		  "triangle_count": 8192
+		},
+		"lod1": {
+		  "resolution": [
+			33,
+			33
+		  ],
+		  "vertex_count": 1089,
+		  "triangle_count": 2048
+		},
+		"collision": {
+		  "resolution": [
+			17,
+			17
+		  ],
+		  "vertex_count": 289,
+		  "triangle_count": 512
+		}
+	  }
+	},
+	{
+	  "chunk_id": "floor_001_chunk_x+01_z+14",
+	  "grid_coordinates": {
+		"x": 1,
+		"z": 14
+	  },
+	  "global_position": [
+		256.0,
+		0.0,
+		3584.0
+	  ],
+	  "local_origin_rule": "minimum_x_minimum_z_corner",
+	  "bounds": {
+		"min_x": 256.0,
+		"max_x": 512.0,
+		"min_y": 4.2449404511439175,
+		"max_y": 6.483961998279414,
+		"min_z": 3584.0,
+		"max_z": 3840.0
+	  },
+	  "lod0_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+01_z+14_lod0.glb",
+	  "lod1_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+01_z+14_lod1.glb",
+	  "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+01_z+14_collision.glb",
+	  "meshes": {
+		"lod0": {
+		  "resolution": [
+			65,
+			65
+		  ],
+		  "vertex_count": 4225,
+		  "triangle_count": 8192
+		},
+		"lod1": {
+		  "resolution": [
+			33,
+			33
+		  ],
+		  "vertex_count": 1089,
+		  "triangle_count": 2048
+		},
+		"collision": {
+		  "resolution": [
+			17,
+			17
+		  ],
+		  "vertex_count": 289,
+		  "triangle_count": 512
+		}
+	  }
+	},
+	{
+	  "chunk_id": "floor_001_chunk_x-01_z+15",
+	  "grid_coordinates": {
+		"x": -1,
+		"z": 15
+	  },
+	  "global_position": [
+		-256.0,
+		0.0,
+		3840.0
+	  ],
+	  "local_origin_rule": "minimum_x_minimum_z_corner",
+	  "bounds": {
+		"min_x": -256.0,
+		"max_x": 0.0,
+		"min_y": 3.3677434170556664,
+		"max_y": 4.108842373518949,
+		"min_z": 3840.0,
+		"max_z": 4096.0
+	  },
+	  "lod0_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x-01_z+15_lod0.glb",
+	  "lod1_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x-01_z+15_lod1.glb",
+	  "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x-01_z+15_collision.glb",
+	  "meshes": {
+		"lod0": {
+		  "resolution": [
+			65,
+			65
+		  ],
+		  "vertex_count": 4225,
+		  "triangle_count": 8192
+		},
+		"lod1": {
+		  "resolution": [
+			33,
+			33
+		  ],
+		  "vertex_count": 1089,
+		  "triangle_count": 2048
+		},
+		"collision": {
+		  "resolution": [
+			17,
+			17
+		  ],
+		  "vertex_count": 289,
+		  "triangle_count": 512
+		}
+	  }
+	},
+	{
+	  "chunk_id": "floor_001_chunk_x+00_z+15",
+	  "grid_coordinates": {
+		"x": 0,
+		"z": 15
+	  },
+	  "global_position": [
+		0.0,
+		0.0,
+		3840.0
+	  ],
+	  "local_origin_rule": "minimum_x_minimum_z_corner",
+	  "bounds": {
+		"min_x": 0.0,
+		"max_x": 256.0,
+		"min_y": 3.359881129840751,
+		"max_y": 4.2449404511439175,
+		"min_z": 3840.0,
+		"max_z": 4096.0
+	  },
+	  "lod0_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+00_z+15_lod0.glb",
+	  "lod1_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+00_z+15_lod1.glb",
+	  "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+00_z+15_collision.glb",
+	  "meshes": {
+		"lod0": {
+		  "resolution": [
+			65,
+			65
+		  ],
+		  "vertex_count": 4225,
+		  "triangle_count": 8192
+		},
+		"lod1": {
+		  "resolution": [
+			33,
+			33
+		  ],
+		  "vertex_count": 1089,
+		  "triangle_count": 2048
+		},
+		"collision": {
+		  "resolution": [
+			17,
+			17
+		  ],
+		  "vertex_count": 289,
+		  "triangle_count": 512
+		}
+	  }
+	},
+	{
+	  "chunk_id": "floor_001_chunk_x+01_z+15",
+	  "grid_coordinates": {
+		"x": 1,
+		"z": 15
+	  },
+	  "global_position": [
+		256.0,
+		0.0,
+		3840.0
+	  ],
+	  "local_origin_rule": "minimum_x_minimum_z_corner",
+	  "bounds": {
+		"min_x": 256.0,
+		"max_x": 512.0,
+		"min_y": 4.129767403061111,
+		"max_y": 6.114008634584181,
+		"min_z": 3840.0,
+		"max_z": 4096.0
+	  },
+	  "lod0_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+01_z+15_lod0.glb",
+	  "lod1_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+01_z+15_lod1.glb",
+	  "collision_path": "res://AincradProject/assets/environments/floor_001/terrain/test_chunks/floor_001_chunk_x+01_z+15_collision.glb",
+	  "meshes": {
+		"lod0": {
+		  "resolution": [
+			65,
+			65
+		  ],
+		  "vertex_count": 4225,
+		  "triangle_count": 8192
+		},
+		"lod1": {
+		  "resolution": [
+			33,
+			33
+		  ],
+		  "vertex_count": 1089,
+		  "triangle_count": 2048
+		},
+		"collision": {
+		  "resolution": [
+			17,
+			17
+		  ],
+		  "vertex_count": 289,
+		  "triangle_count": 512
+		}
+	  }
+	}
   ]
 }
